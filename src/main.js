@@ -1,5 +1,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import './styles/base.css'
+import './styles/motion.css'
+import { reveal } from './directives/reveal.js'
 
-createApp(App).mount('#app')
+createApp(App).directive('reveal', reveal).mount('#app')

@@ -8,7 +8,7 @@ const columns = [
 </script>
 
 <template>
-  <section id="parcours" class="parcours">
+  <section id="parcours" class="parcours" v-reveal>
     <div class="container">
       <h2>Parcours</h2>
       <div class="grid">

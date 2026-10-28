@@ -3,7 +3,7 @@ import { LINKS } from '../data/contact.js'
 </script>
 
 <template>
-  <section id="contact" class="contact">
+  <section id="contact" class="contact" v-reveal>
     <div class="container">
       <h2>Travaillons ensemble</h2>
       <p>Alternance en 2026, mission freelance ou simple question : écris-moi.</p>

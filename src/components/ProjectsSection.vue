@@ -30,7 +30,7 @@ onBeforeUnmount(() => clearInterval(timer))
 </script>
 
 <template>
-  <section id="projets" class="projects">
+  <section id="projets" class="projects" v-reveal>
     <div class="container">
       <h2>Projets</h2>
       <div class="chips" role="group" aria-label="Filtrer par catégorie">

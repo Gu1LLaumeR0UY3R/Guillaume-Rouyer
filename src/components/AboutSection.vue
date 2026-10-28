@@ -3,7 +3,7 @@ import { FACTS, SKILLS } from '../data/skills.js'
 </script>
 
 <template>
-  <section id="apropos" class="about">
+  <section id="apropos" class="about" v-reveal>
     <div class="container">
       <h2>À propos</h2>
       <div class="grid">
