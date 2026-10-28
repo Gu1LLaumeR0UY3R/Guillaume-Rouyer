@@ -2,6 +2,7 @@
 import AppHeader from './components/AppHeader.vue'
 import HeroSection from './components/HeroSection.vue'
 import ProjectsSection from './components/ProjectsSection.vue'
+import AboutSection from './components/AboutSection.vue'
 </script>
 
 <template>
@@ -10,5 +11,6 @@ import ProjectsSection from './components/ProjectsSection.vue'
   <main id="contenu">
     <HeroSection />
     <ProjectsSection />
+    <AboutSection />
   </main>
 </template>
