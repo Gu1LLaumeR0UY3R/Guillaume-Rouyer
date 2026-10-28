@@ -9,13 +9,14 @@ import { FACTS, SKILLS } from '../data/skills.js'
       <div class="grid">
         <div>
           <p>
-            Je suis développeur junior, principalement intéressé par les nouvelles technologies. Curieux et autodidacte,
-            j'aime comprendre comment les choses fonctionnent, des API REST aux apps mobiles, jusqu'à l'auto-hébergement
-            d'une IA locale sur mon propre serveur Proxmox.
+            Je suis développeur junior, passionné par les nouvelles technologies. Autodidacte et curieux, j'aime comprendre
+            comment les choses fonctionnent, des API REST aux applications mobiles, jusqu'à l'auto-hébergement d'une IA
+            locale sur mon propre serveur Proxmox.
           </p>
           <p>
-            Je cherche une alternance en 2026, en parallèle de mon Bachelor Concepteur Développeur d'Applications
-            (Full Stack &amp; Cybersécurité).
+            Je me forme au Bachelor Concepteur Développeur d'Applications (Full Stack &amp; Cybersécurité), après un BTS SIO
+            option SLAM. J'aime autant construire l'interface que l'infrastructure qui la fait tourner : PHP et Laravel,
+            Python et FastAPI, Vue.js, React Native, Docker.
           </p>
           <ul class="facts"><li v-for="f in FACTS" :key="f">{{ f }}</li></ul>
         </div>

@@ -6,7 +6,7 @@ import { LINKS } from '../data/contact.js'
   <section id="contact" class="contact" v-reveal>
     <div class="container">
       <h2>Travaillons ensemble</h2>
-      <p>Alternance en 2026, mission freelance ou simple question : écris-moi.</p>
+      <p>Un projet, une mission ou une simple question : écris-moi.</p>
       <div class="cta">
         <a
           v-for="l in LINKS"

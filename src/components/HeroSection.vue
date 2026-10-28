@@ -5,7 +5,7 @@ import MeadowField from './MeadowField.vue'
 <template>
   <section id="accueil" class="hero">
     <div class="container">
-      <p class="badge">Recherche d'alternance 2026 · Bachelor Concepteur Développeur d'Applications</p>
+      <p class="badge">Bachelor Concepteur Développeur d'Applications · Full Stack &amp; Cybersécurité</p>
       <h1>Développeur Web &amp; PHP, <span>full stack</span>.</h1>
       <p class="lead">
         Guillaume Rouyer, développeur junior curieux et autodidacte. Des API REST aux apps mobiles,
