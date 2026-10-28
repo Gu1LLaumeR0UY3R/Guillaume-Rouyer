@@ -3,6 +3,7 @@ import AppHeader from './components/AppHeader.vue'
 import HeroSection from './components/HeroSection.vue'
 import ProjectsSection from './components/ProjectsSection.vue'
 import AboutSection from './components/AboutSection.vue'
+import TimelineSection from './components/TimelineSection.vue'
 </script>
 
 <template>
@@ -12,5 +13,6 @@ import AboutSection from './components/AboutSection.vue'
     <HeroSection />
     <ProjectsSection />
     <AboutSection />
+    <TimelineSection />
   </main>
 </template>
