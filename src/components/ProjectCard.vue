@@ -9,15 +9,18 @@ defineProps({ project: { type: Object, required: true } })
     <h3>{{ project.name }}</h3>
     <p>{{ project.desc }}</p>
     <ul class="stack"><li v-for="s in project.stack" :key="s">{{ s }}</li></ul>
-    <a
-      v-if="project.repo"
-      class="link"
-      :href="project.repo"
-      target="_blank"
-      rel="noopener"
-      :aria-label="`Voir le code de ${project.name} sur GitHub`"
-    >Voir le code sur GitHub →</a>
-    <p v-else class="note">{{ project.note || 'Code non public' }}</p>
+    <div class="links">
+      <RouterLink v-if="project.featured" class="link" :to="`/projets/${project.slug}`">Voir le projet →</RouterLink>
+      <a
+        v-if="project.repo"
+        class="link"
+        :href="project.repo"
+        target="_blank"
+        rel="noopener"
+        :aria-label="`Voir le code de ${project.name} sur GitHub`"
+      >Voir le code sur GitHub →</a>
+      <p v-else class="note">{{ project.note || 'Code non public' }}</p>
+    </div>
   </article>
 </template>
 
@@ -30,6 +33,7 @@ p{margin:0;color:var(--muted)}
 .status{align-self:flex-start;padding:3px 10px;border-radius:999px;background:var(--deep);color:#d9ffe6;font-size:12px}
 .stack{display:flex;flex-wrap:wrap;gap:6px;margin:auto 0 0;padding:0;list-style:none}
 .stack li{padding:4px 10px;border:1px solid var(--line);border-radius:999px;font-size:13px}
+.links{display:flex;flex-direction:column;gap:6px}
 .link{color:var(--green);font-weight:600;text-decoration:none}
 .link:hover{text-decoration:underline}
 .note{font-size:14px}
