@@ -1,6 +1,5 @@
 export const NAV = [
-  { id: 'projets', label: 'Projets' },
-  { id: 'apropos', label: 'À propos' },
-  { id: 'parcours', label: 'Parcours' },
-  { id: 'contact', label: 'Contact' },
+  { to: '/projets', label: 'Projets' },
+  { to: '/a-propos', label: 'À propos' },
+  { to: '/contact', label: 'Contact' },
 ]

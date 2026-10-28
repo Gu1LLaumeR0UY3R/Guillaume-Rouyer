@@ -22,7 +22,8 @@ import { LINKS } from '../data/contact.js'
 </template>
 
 <style scoped>
-.contact{background:var(--deep);color:#f3fbf5;text-align:center}
+.contact{display:flex;align-items:center;min-height:60vh;background:var(--deep);color:#f3fbf5;text-align:center}
+.container{width:100%}
 p{margin:0 0 28px;color:#b8d8c2}
 .cta{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}
 .light{background:#39ff88;border-color:#39ff88;color:#052e16}

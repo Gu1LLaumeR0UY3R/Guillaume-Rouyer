@@ -12,7 +12,7 @@ import MeadowField from './MeadowField.vue'
         jusqu'à une IA locale auto-hébergée sur mon propre serveur Proxmox.
       </p>
       <div class="cta">
-        <a class="btn btn-primary" href="#projets">Voir mes projets</a>
+        <RouterLink class="btn btn-primary" to="/projets">Voir mes projets</RouterLink>
         <a class="btn btn-ghost" href="https://github.com/Gu1LLaumeR0UY3R" rel="noopener">GitHub</a>
       </div>
       <MeadowField />

@@ -5,10 +5,10 @@ import ThemeToggle from './ThemeToggle.vue'
 
 <template>
   <header class="site-header">
-    <a class="brand" href="#accueil">Er1gon<span>359</span></a>
+    <RouterLink class="brand" to="/">Er1gon<span>359</span></RouterLink>
     <nav aria-label="Navigation principale">
       <ul>
-        <li v-for="item in NAV" :key="item.id"><a :href="`#${item.id}`">{{ item.label }}</a></li>
+        <li v-for="item in NAV" :key="item.to"><RouterLink :to="item.to">{{ item.label }}</RouterLink></li>
         <li><ThemeToggle /></li>
       </ul>
     </nav>
@@ -21,5 +21,6 @@ import ThemeToggle from './ThemeToggle.vue'
 .brand span{color:var(--green)}
 ul{display:flex;gap:22px;flex-wrap:wrap;align-items:center;margin:0;padding:0;list-style:none}
 li a{font-size:15px;text-decoration:none}
-li a:hover{color:var(--green)}
+li a:hover,li a.router-link-active{color:var(--green)}
+li a.router-link-active{font-weight:600}
 </style>
