@@ -1,4 +1,6 @@
 <script setup>
+import { projectLink } from '../data/projects.js'
+
 defineProps({ project: { type: Object, required: true } })
 </script>
 
@@ -10,7 +12,7 @@ defineProps({ project: { type: Object, required: true } })
     <p>{{ project.desc }}</p>
     <ul class="stack"><li v-for="s in project.stack" :key="s">{{ s }}</li></ul>
     <div class="links">
-      <RouterLink v-if="project.featured" class="link" :to="`/projets/${project.slug}`">Voir le projet →</RouterLink>
+      <RouterLink v-if="project.featured" class="link" :to="projectLink(project)">Voir le projet →</RouterLink>
       <a
         v-if="project.repo"
         class="link"

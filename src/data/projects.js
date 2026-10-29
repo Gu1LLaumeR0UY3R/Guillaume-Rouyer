@@ -2,6 +2,9 @@
 // Les projets « featured » apparaissent sur l'accueil et ont une page dédiée (voir projectDetails.js).
 const GH = 'https://github.com/Gu1LLaumeR0UY3R'
 
+// Adresse ouverte quand on clique sur un projet : le tableau SpiderNet s'ouvre directement, sans page intermédiaire.
+export const projectLink = (p) => p.board || `/projets/${p.slug}`
+
 export const TAGS = ['Tout', 'Web', 'Mobile', 'IA', 'API', '3D']
 
 export const PROJECTS = [
@@ -10,6 +13,7 @@ export const PROJECTS = [
     accent: 'linear-gradient(135deg,#0b0b14,#1a1038 55%,#c4162a)',
     desc: "Signalement et suivi d'incidents urbains géolocalisés, inspiré de l'appli de Ganke. Rôles citoyen, héros et admin, SQL spatial PostGIS. Projet de fan non officiel.",
     stack: ['Symfony 7.4', 'PHP 8.3', 'PostgreSQL', 'PostGIS', 'Docker'], repo: `${GH}/Spider-net`,
+    board: '/projets/spidernet/tableau',
   },
   {
     slug: 'goodnight', featured: true, name: 'Goodnight', tag: 'Web',

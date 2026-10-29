@@ -48,9 +48,9 @@ watchEffect(() => {
 .back:hover{opacity:1;text-decoration:underline}
 .status{padding:3px 12px;border-radius:999px;background:rgba(255,255,255,.18);font-size:13px}
 h1{font-size:clamp(40px,7vw,64px)}
-.lead{max-width:62ch;margin:0;font-size:clamp(17px,2vw,20px)}
+.lead{max-width:62ch;margin:0;font-size:clamp(17px,2vw,20px);color:rgba(255,255,255,.88)}
 .stack{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0;list-style:none}
-.stack li{padding:4px 12px;border:1px solid rgba(255,255,255,.45);border-radius:999px;font-size:14px}
+.stack li{color:#fff;padding:4px 12px;border:1px solid rgba(255,255,255,.45);border-radius:999px;font-size:14px}
 .main{display:inline-flex;align-items:center;min-height:44px;padding:0 24px;border-radius:12px;background:#fff;color:#0b1f14;font-weight:600;text-decoration:none}
 .body{max-width:860px;padding-top:40px;padding-bottom:72px}
 .notice{padding:14px 18px;border:1px dashed var(--green);border-radius:12px;background:var(--card);color:var(--fg)}

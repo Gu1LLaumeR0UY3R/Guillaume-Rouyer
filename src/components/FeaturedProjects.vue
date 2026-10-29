@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { PROJECTS } from '../data/projects.js'
+import { PROJECTS, projectLink } from '../data/projects.js'
 
 const featured = computed(() => PROJECTS.filter((p) => p.featured))
 </script>
@@ -11,7 +11,7 @@ const featured = computed(() => PROJECTS.filter((p) => p.featured))
       <h2>Projets phares</h2>
       <p class="intro">Les projets dont je suis le plus fier, avec leur histoire et leurs choix techniques.</p>
       <div class="grid">
-        <RouterLink v-for="(p, i) in featured" :key="p.slug" class="card" :class="{ big: i === 0 }" :to="`/projets/${p.slug}`">
+        <RouterLink v-for="(p, i) in featured" :key="p.slug" class="card" :class="{ big: i === 0 }" :to="projectLink(p)">
           <div class="banner" :style="{ background: p.accent }">
             <span v-if="p.status" class="status">{{ p.status }}</span>
             <h3>{{ p.name }}</h3>

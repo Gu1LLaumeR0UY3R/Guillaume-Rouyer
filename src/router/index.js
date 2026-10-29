@@ -6,6 +6,8 @@ const routes = [
   { path: '/projets', name: 'projects', component: () => import('../views/ProjectsView.vue'), meta: { title: 'Projets' } },
   { path: '/a-propos', name: 'about', component: () => import('../views/AboutView.vue'), meta: { title: 'À propos' } },
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue'), meta: { title: 'Contact' } },
+  { path: '/projets/spidernet', redirect: '/projets/spidernet/tableau' },
+  { path: '/projets/spidernet/tableau', name: 'spidernet-board', component: () => import('../views/SpiderNetBoardView.vue'), meta: { title: "SpiderNet, tableau d'enquête", fullscreen: true } },
   { path: '/projets/:slug', name: 'project', component: () => import('../views/ProjectView.vue'), meta: { title: 'Projet' } },
   { path: '/mentions-legales', name: 'legal', component: () => import('../views/LegalView.vue'), meta: { title: 'Mentions légales' } },
   { path: '/confidentialite', name: 'privacy', component: () => import('../views/PrivacyView.vue'), meta: { title: 'Confidentialité' } },
