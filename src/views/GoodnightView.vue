@@ -1,14 +1,19 @@
 <script setup>
+import { ref } from 'vue'
+import { useScrollVar } from '../composables/useScrollVar.js'
 import CaseHero from '../components/case/CaseHero.vue'
 import ProductIntro from '../components/case/ProductIntro.vue'
 import JourneySteps from '../components/case/JourneySteps.vue'
 import InterfaceFocus from '../components/case/InterfaceFocus.vue'
 import TechSection from '../components/case/TechSection.vue'
 import CaseCta from '../components/case/CaseCta.vue'
+
+const root = ref(null)
+useScrollVar(root)
 </script>
 
 <template>
-  <div class="case">
+  <div ref="root" class="case">
     <CaseHero />
     <ProductIntro />
     <JourneySteps />

@@ -22,7 +22,7 @@ const src = computed(() => urls[props.name])
 
 <style scoped>
 .slot{position:relative;margin:0;overflow:hidden;border-radius:14px;background:#e9e3d6}
-img{display:block;width:100%;height:100%;object-fit:cover;}
+img{display:block;width:100%;height:100%;object-fit:cover;transition:transform 1s cubic-bezier(.2,.7,.2,1);}
 .ph{position:absolute;inset:0;display:grid;align-content:center;gap:10px;padding:12%;background:linear-gradient(145deg,#efe9dc,#ddd5c5)}
 .ph span{display:block;height:9px;border-radius:99px;background:rgba(36,38,34,.1)}
 .l1{width:55%}

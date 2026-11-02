@@ -24,5 +24,5 @@ p{margin:0 0 28px;color:#e3e0d3}
 .btn{display:inline-flex;align-items:center;min-height:48px;padding:0 26px;border-radius:999px;font-weight:600;text-decoration:none}
 .main{background:#f5f1e9;color:#242622}
 .ghost{border:1px solid rgba(245,241,233,.6);color:#f5f1e9}
-
+.btn{transition:transform .25s}.btn:hover{transform:translateY(-2px)}
 </style>

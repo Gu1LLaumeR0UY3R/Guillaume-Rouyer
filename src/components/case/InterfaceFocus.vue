@@ -37,5 +37,9 @@ h2{margin:0 0 14px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif)}
 .role{color:var(--olive);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
 h3{margin:6px 0 0;font:600 22px var(--serif)}
 .more{margin:8px 0 0;color:var(--muted);font-size:15px}
-
+.card{transition:transform .4s}.card:hover{transform:translateY(-4px)}
+.card:hover :deep(img){transform:scale(1.05)}
+.more{max-height:0;opacity:0;overflow:hidden;transition:max-height .4s ease,opacity .4s ease}
+.card:hover .more,.card:focus-within .more{max-height:8em;opacity:1}
+@media (hover:none){.more{max-height:none;opacity:1}}
 </style>

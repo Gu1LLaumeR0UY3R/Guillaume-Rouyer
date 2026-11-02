@@ -58,5 +58,10 @@ h1{margin:0 0 20px;font:600 clamp(56px,9vw,104px)/.95 var(--serif);letter-spacin
 .cta{display:inline-flex;align-items:center;gap:12px;min-height:48px;padding:0 24px;border-radius:999px;background:var(--ink);color:var(--cream);font-size:15px;font-weight:600;text-decoration:none;transition:transform .25s}
 .cta:hover{transform:translateY(-2px)}
 .counter{position:absolute;left:clamp(20px,5vw,48px);bottom:24px;margin:0;font-size:13px;letter-spacing:.12em}
-
+.content>*{opacity:0;transform:translateY(26px);animation:rise 1s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i,0)*.12s + .15s)}
+.content>:nth-child(1){--i:0}.content>:nth-child(2){--i:1}.content>:nth-child(3){--i:2}.content>:nth-child(4){--i:3}.content>:nth-child(5){--i:4}.content>:nth-child(6){--i:5}
+.bg{animation:reveal 1.6s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes reveal{from{opacity:0;transform:scale(1.06)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.content>*{opacity:1;transform:none;animation:none}.bg{animation:none}}
 </style>

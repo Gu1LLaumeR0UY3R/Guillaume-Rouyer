@@ -40,5 +40,7 @@ h2{margin:0 0 20px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif)}
 .phone{position:absolute;left:0;bottom:0;width:clamp(96px,26%,140px)}
 .phone .screen{overflow:hidden;border:7px solid #1d1f1c;border-radius:24px;background:#1d1f1c;box-shadow:0 24px 44px -20px rgba(36,38,34,.55)}
 .screen :deep(.slot){border-radius:0}
-
+.laptop{transform:translateY(clamp(-48px,calc(var(--scroll,0)*-.04px),0px))}
+.phone{transform:translateY(clamp(-90px,calc(var(--scroll,0)*-.08px),0px))}
+@media (prefers-reduced-motion:reduce){.laptop,.phone{transform:none}}
 </style>

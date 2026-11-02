@@ -34,5 +34,6 @@ h2{margin:0;font:500 clamp(28px,3.4vw,38px)/1.15 var(--serif)}
 .ico{display:grid;place-items:center;width:52px;height:52px;margin-bottom:18px;border-radius:50%;background:var(--sand)}
 h3{margin:0 0 8px;font:600 20px var(--serif)}
 .steps p{margin:0;color:var(--muted);font-size:15px}
-
+.steps li{transition:transform .35s}.steps li:hover{transform:translateY(-4px)}
+.ico{transition:background .35s,color .35s}.steps li:hover .ico{background:var(--ink);color:var(--cream)}
 </style>
