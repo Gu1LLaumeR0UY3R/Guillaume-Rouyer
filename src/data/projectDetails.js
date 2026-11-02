@@ -73,18 +73,50 @@ export const DETAILS = {
     ],
   },
   goodnight: {
-    lead: "Plateforme immobilière complète en PHP, avec trois rôles d'utilisateurs, des indicateurs de suivi et un calendrier.",
+    lead: "Plateforme de location de biens immobiliers développée en binôme, en PHP avec une architecture MVC écrite à la main. Trois espaces : locataire, propriétaire et administrateur.",
     sections: [
       {
-        title: 'Points clés',
+        title: 'Trois espaces',
         points: [
-          'Architecture MVC en PHP',
-          "3 rôles d'utilisateurs",
-          'Tableaux de bord avec KPI (Chart.js)',
-          'Calendrier avec FullCalendar',
-          'Sécurité : requêtes préparées PDO et protection contre les failles XSS',
-          '174 commits',
+          'Locataire : recherche de biens, carte, réservation, favoris, commentaires et notes, profil personnalisable',
+          'Propriétaire : gestion des biens, calendrier, blocages de dates, tarifs par saison, tableau de bord avec KPI et graphiques',
+          'Administrateur : validation des biens, modération, utilisateurs, rôles, types de biens et saisons',
         ],
+      },
+      {
+        title: 'Fonctionnalités',
+        points: [
+          'Validation des biens avant publication ; une modification critique remet le bien en attente',
+          'Signalements et modération',
+          'Commentaires et notes, un par locataire et par bien',
+          "Notifications avec une cloche dans la barre de navigation, compteur interrogé toutes les 30 secondes",
+          'Statistiques du propriétaire : réservations et revenus superposés sur un graphique à deux axes',
+          'Profils avec cadres déblocables',
+          'Thèmes jour et nuit',
+        ],
+      },
+      {
+        title: 'Technique',
+        points: [
+          'PHP 7.4+ avec une architecture MVC maison et PDO',
+          'MySQL',
+          'JavaScript sans framework',
+          'FullCalendar, Chart.js et Mapbox GL JS',
+        ],
+      },
+      {
+        title: 'Sécurité',
+        points: [
+          'Requêtes préparées PDO et mots de passe hachés',
+          'Contrôle des rôles sur les routes sensibles',
+          'Échappement des sorties et vérification du type MIME des fichiers envoyés',
+          'Cookie de session HttpOnly et SameSite',
+          'À venir : jetons CSRF, limitation des tentatives de connexion, tests automatisés',
+        ],
+      },
+      {
+        title: 'En binôme',
+        paragraphs: ['Projet réalisé à deux : 174 commits au total, dont une centaine de ma main.'],
       },
     ],
   },
@@ -100,7 +132,8 @@ export const DETAILS = {
     ],
   },
   'bataille-navale': {
-    lead: 'Bataille navale en 3D : interface en Vue.js, modèles 3D avec Babylon.js et interaction avec un serveur. Bientôt en ligne.',
+    lead: 'Bataille navale en 3D : interface en Vue.js, modèles 3D avec Babylon.js et interaction avec un serveur.',
+    notice: 'La page dédiée à la Bataille Navale est en cours de maintenance. Le code source reste consultable sur GitHub.',
     sections: [
       { title: 'Technique', points: ['Interface en Vue.js', 'Modèles 3D avec Babylon.js', 'Interaction avec le serveur via une API'] },
     ],

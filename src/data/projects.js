@@ -18,7 +18,7 @@ export const PROJECTS = [
   {
     slug: 'goodnight', featured: true, name: 'Goodnight', tag: 'Web',
     accent: 'linear-gradient(135deg,#0f172a,#1e3a8a 60%,#f59e0b)',
-    desc: 'Plateforme immobilière complète : MVC PHP, 3 rôles, KPI, FullCalendar, sécurité PDO et XSS. 174 commits.',
+    desc: 'Plateforme de location immobilière développée en binôme : MVC PHP, 3 rôles, KPI, FullCalendar, sécurité PDO et XSS. 174 commits au total.',
     stack: ['PHP', 'MySQL', 'JS', 'Chart.js', 'FullCalendar'], repo: `${GH}/Goodnight`,
   },
   {
@@ -28,7 +28,7 @@ export const PROJECTS = [
     stack: ['Laravel 12', 'Blade', 'Alpine.js', 'Tailwind CSS', 'PHPUnit'], repo: `${GH}/TeyvatHubFR`,
   },
   {
-    slug: 'bataille-navale', featured: true, name: 'Bataille Navale', tag: '3D', status: 'Bientôt en ligne',
+    slug: 'bataille-navale', featured: true, name: 'Bataille Navale', tag: '3D', status: 'Page en maintenance',
     accent: 'linear-gradient(135deg,#06324a,#0b6b8f 60%,#9be0f5)',
     desc: 'Bataille navale 3D : interface Vue.js, modèles 3D Babylon.js, interaction avec le serveur.',
     stack: ['Vue.js', 'Babylon.js', 'JavaScript', 'API'], repo: `${GH}/Bataille-Navale`,
