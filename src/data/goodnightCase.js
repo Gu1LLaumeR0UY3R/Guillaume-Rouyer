@@ -37,3 +37,36 @@ export const FOCUS = {
     { slot: 'validation', role: 'Administrateur', title: 'Validation des biens', alt: "Liste des biens en attente de validation", more: "L'administrateur valide ou refuse chaque annonce. Une modification critique remet le bien en attente." },
   ],
 }
+
+export const TECH = {
+  kicker: 'Réalisation technique',
+  title: 'Prévenir les bonnes personnes, au bon moment.',
+  challenge: [
+    "Quand un propriétaire supprime un bien, tous les locataires qui avaient une réservation à venir doivent être prévenus, sans alourdir le reste de l'application.",
+    "La solution retenue : centraliser cela dans le modèle de notifications. Les contrôleurs appellent une seule méthode, qui retrouve les locataires concernés avec une requête préparée et écrit une notification pour chacun. Le navigateur interroge ensuite un compteur toutes les 30 secondes pour allumer la cloche.",
+  ],
+  stack: ['PHP 7.4+', 'MVC maison', 'PDO', 'MySQL', 'JavaScript', 'FullCalendar', 'Chart.js', 'Mapbox GL JS'],
+  codeTitle: 'Extrait simplifié de NotificationModel.php',
+  code: `public function notifyUsersWithFutureReservationsForBien($id_biens, $title, $message, $link = null) {
+    $sql = "SELECT DISTINCT r.id_locataire FROM reservations r
+            WHERE r.id_biens = :id_biens AND r.date_fin >= CURDATE()";
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute(['id_biens' => $id_biens]);
+
+    foreach ($stmt->fetchAll(PDO::FETCH_COLUMN) as $uid) {
+        $this->create([
+            'user_id' => (int) $uid,
+            'type' => 'bien_change',
+            'title' => $title,
+            'message' => $message,
+            'link' => $link,
+        ]);
+    }
+}`,
+  note: 'Limites assumées : un compteur interrogé toutes les 30 secondes plutôt que du temps réel (WebSocket), et pas encore de tests automatisés.',
+}
+
+export const CTA = {
+  title: 'Envie de voir le code ?',
+  text: "Goodnight est un projet de démonstration : il n'y a pas de version en ligne pour l'instant. Le code est public sur GitHub.",
+}

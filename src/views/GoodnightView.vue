@@ -3,6 +3,8 @@ import CaseHero from '../components/case/CaseHero.vue'
 import ProductIntro from '../components/case/ProductIntro.vue'
 import JourneySteps from '../components/case/JourneySteps.vue'
 import InterfaceFocus from '../components/case/InterfaceFocus.vue'
+import TechSection from '../components/case/TechSection.vue'
+import CaseCta from '../components/case/CaseCta.vue'
 </script>
 
 <template>
@@ -11,6 +13,8 @@ import InterfaceFocus from '../components/case/InterfaceFocus.vue'
     <ProductIntro />
     <JourneySteps />
     <InterfaceFocus />
+    <TechSection />
+    <CaseCta />
   </div>
 </template>
 
