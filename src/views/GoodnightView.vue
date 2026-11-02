@@ -1,12 +1,16 @@
 <script setup>
 import CaseHero from '../components/case/CaseHero.vue'
 import ProductIntro from '../components/case/ProductIntro.vue'
+import JourneySteps from '../components/case/JourneySteps.vue'
+import InterfaceFocus from '../components/case/InterfaceFocus.vue'
 </script>
 
 <template>
   <div class="case">
     <CaseHero />
     <ProductIntro />
+    <JourneySteps />
+    <InterfaceFocus />
   </div>
 </template>
 

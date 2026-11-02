@@ -19,3 +19,21 @@ export const INTRO = {
   ],
   stack: ['PHP', 'MySQL', 'JavaScript', 'FullCalendar', 'Chart.js', 'Mapbox GL JS'],
 }
+
+export const STEPS = [
+  { n: '01', icon: 'search', title: 'Explorer', text: 'Recherche par commune, type de bien et dates, puis visualisation des biens sur une carte.' },
+  { n: '02', icon: 'calendar', title: 'Consulter', text: 'Fiche détaillée : photos, tarifs par saison, commentaires et notes des locataires, favoris.' },
+  { n: '03', icon: 'key', title: 'Réserver', text: 'Choix des dates, réservation en ligne, historique et annulation. Le propriétaire est notifié.' },
+]
+
+export const FOCUS = {
+  kicker: 'En images',
+  title: 'Les écrans qui comptent.',
+  text: 'Les composants les plus aboutis, vus depuis chaque espace.',
+  items: [
+    { slot: 'calendrier', role: 'Propriétaire', title: 'Calendrier', alt: 'Calendrier des réservations du propriétaire', more: 'Réservations et blocages de dates sur un calendrier FullCalendar, avec des tarifs par saison.' },
+    { slot: 'tableau-de-bord', role: 'Propriétaire', title: 'Tableau de bord', alt: 'Tableau de bord avec indicateurs et graphiques', more: 'KPI et graphiques de réservations et de revenus : deux courbes superposées, deux axes, période au choix.' },
+    { slot: 'notifications', role: 'Tous les espaces', title: 'Notifications', alt: 'Cloche et panneau de notifications', more: 'Une cloche et un compteur : chaque événement lié à une réservation prévient les personnes concernées.' },
+    { slot: 'validation', role: 'Administrateur', title: 'Validation des biens', alt: "Liste des biens en attente de validation", more: "L'administrateur valide ou refuse chaque annonce. Une modification critique remet le bien en attente." },
+  ],
+}
