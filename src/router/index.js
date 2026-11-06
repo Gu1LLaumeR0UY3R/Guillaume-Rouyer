@@ -8,6 +8,7 @@ const routes = [
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue'), meta: { title: 'Contact' } },
   { path: '/projets/spidernet', redirect: '/projets/spidernet/tableau' },
   { path: '/projets/spidernet/tableau', name: 'spidernet-board', component: () => import('../views/SpiderNetBoardView.vue'), meta: { title: "SpiderNet, tableau d'enquête", fullscreen: true } },
+  { path: '/projets/bataille-navale', name: 'bataille-navale', component: () => import('../views/BatailleNavaleView.vue'), meta: { title: 'Bataille Navale' } },
   { path: '/projets/goodnight', name: 'goodnight', component: () => import('../views/GoodnightView.vue'), meta: { title: 'Goodnight' } },
   { path: '/projets/:slug', name: 'project', component: () => import('../views/ProjectView.vue'), meta: { title: 'Projet' } },
   { path: '/mentions-legales', name: 'legal', component: () => import('../views/LegalView.vue'), meta: { title: 'Mentions légales' } },
