@@ -8,6 +8,7 @@ Application **Vue 3 + Vite** (JavaScript, Composition API), déployée sur **Clo
 - Projets phares sur l'accueil, liste filtrable avec défilement automatique lent quand aucun filtre n'est actif
 - **SpiderNet** : tableau d'enquête interactif en plein écran (`/projets/spidernet/tableau`)
 - **Goodnight** : page d'étude de cas éditoriale (`/projets/goodnight`) ; les images se déposent dans `src/assets/goodnight/`
+- **Bataille Navale** : page d'étude de cas (`/projets/bataille-navale`) avec extraits de code réels, comparaison animée des trois IA et démonstration de l'animation de l'eau ; les images se déposent dans `src/assets/bataille-navale/`
 - Thème clair / sombre : le site démarre toujours en clair, le choix n'est pas mémorisé (aucun stockage navigateur)
 - Polices auto-hébergées : aucune requête vers un service tiers
 - Contenus pilotés par des fichiers de données
