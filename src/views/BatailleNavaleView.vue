@@ -1,12 +1,14 @@
 <script setup>
 import BnHero from '../components/bn/BnHero.vue'
 import BnArsenal from '../components/bn/BnArsenal.vue'
+import BnEditor from '../components/bn/BnEditor.vue'
 </script>
 
 <template>
   <div class="bn">
     <BnHero />
     <BnArsenal />
+    <BnEditor />
   </div>
 </template>
 
