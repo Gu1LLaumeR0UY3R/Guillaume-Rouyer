@@ -28,9 +28,9 @@ export const PROJECTS = [
     stack: ['Laravel 12', 'Blade', 'Alpine.js', 'Tailwind CSS', 'PHPUnit'], repo: `${GH}/TeyvatHubFR`,
   },
   {
-    slug: 'bataille-navale', featured: true, name: 'Bataille Navale', tag: '3D', status: 'Page en maintenance',
+    slug: 'bataille-navale', featured: true, name: 'Bataille Navale', tag: '3D', status: 'Jouable en ligne',
     accent: 'linear-gradient(135deg,#06324a,#0b6b8f 60%,#9be0f5)',
-    desc: 'Bataille navale 3D : interface Vue.js, modèles 3D Babylon.js, interaction avec le serveur.',
+    desc: 'Jeu de stratégie navale en 3D : trois niveaux d’IA, arsenal d’outils, éditeur de cartes et eau animée par des ondes sinusoïdales.',
     stack: ['Vue.js', 'Babylon.js', 'JavaScript', 'API'], repo: `${GH}/Bataille-Navale`,
   },
   {

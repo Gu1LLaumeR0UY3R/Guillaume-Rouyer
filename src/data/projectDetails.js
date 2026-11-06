@@ -133,7 +133,6 @@ export const DETAILS = {
   },
   'bataille-navale': {
     lead: 'Bataille navale en 3D : interface en Vue.js, modèles 3D avec Babylon.js et interaction avec un serveur.',
-    notice: 'La page dédiée à la Bataille Navale est en cours de maintenance. Le code source reste consultable sur GitHub.',
     sections: [
       { title: 'Technique', points: ['Interface en Vue.js', 'Modèles 3D avec Babylon.js', 'Interaction avec le serveur via une API'] },
     ],
