@@ -4,6 +4,8 @@ import BnArsenal from '../components/bn/BnArsenal.vue'
 import BnEditor from '../components/bn/BnEditor.vue'
 import BnAI from '../components/bn/BnAI.vue'
 import BnWaves from '../components/bn/BnWaves.vue'
+import BnStatus from '../components/bn/BnStatus.vue'
+import BnCta from '../components/bn/BnCta.vue'
 </script>
 
 <template>
@@ -13,6 +15,8 @@ import BnWaves from '../components/bn/BnWaves.vue'
     <BnEditor />
     <BnAI />
     <BnWaves />
+    <BnStatus />
+    <BnCta />
   </div>
 </template>
 
