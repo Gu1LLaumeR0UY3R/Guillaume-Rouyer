@@ -169,12 +169,16 @@ export function makeTree(kind, h, seed) {
 
 /* ----------------------------- FLEURS ------------------------------ */
 
-export const FLOWER_COLORS = ['#ffffff', '#ff8fb1', '#ffd54a', '#9ec5ff', '#c9a0ff']
-export function makeFlower(color) {
-  return fromMap(
-    ['.p.', 'pyp', '.p.', '.g.', 'gg.', '.g.'],
-    { p: color, y: color === '#ffd54a' ? '#ff9f1c' : '#ffd54a', g: '#4c9a55' },
-  )
+export const FLOWER_COLORS = ['#ffffff', '#ff8fb1', '#ffd54a', '#9ec5ff', '#c9a0ff', '#ff6b6b', '#ffa94d']
+export const FLOWER_SHAPES = 3
+// 3 formes : marguerite, tulipe, fleur haute (type lavande)
+const FLOWER_MAPS = [
+  ['.p.', 'pyp', '.p.', '.g.', 'gg.', '.g.'],
+  ['p.p', 'ppp', '.p.', '.g.', 'gg.', '.g.'],
+  ['.p.', '.p.', 'pp.', '.p.', '.g.', 'gg.', '.g.', '.g.'],
+]
+export function makeFlower(color, shape = 0) {
+  return fromMap(FLOWER_MAPS[shape], { p: color, y: color === '#ffd54a' ? '#ff9f1c' : '#ffd54a', g: '#4c9a55' })
 }
 
 /* ----------------------------- ANIMAUX ----------------------------- */
@@ -227,3 +231,11 @@ export function butterflyFrames(c) {
   const p = { b: c, k: '#2a2a3a' }
   return [fromMap(['bb.bb', 'bbkbb', '.b.b.'], p), fromMap(['..k..', '.bkb.', '..k..'], p)]
 }
+
+// Ruche suspendue à une branche, et abeille (2 images : ailes en haut / en bas)
+export const hiveSprite = fromMap([
+  '...rr...', '..dyyd..', '.dyyyyd.', '.dooood.', 'dyyyyyyd', 'dooooood', 'dyyhhyyd', '.dyhhyd.', '..dyyd..', '...dd...',
+], { r: '#6b4a32', d: '#7a4a10', y: '#f2b632', o: '#d98a1c', h: '#2a1608' })
+
+const BEE = { y: '#ffd23a', k: '#2a2a2a', w: '#f4fbff' }
+export const beeFrames = [fromMap(['.ww.', 'ykyk', '.yk.'], BEE), fromMap(['....', 'ykyk', '.wwy'], BEE)]

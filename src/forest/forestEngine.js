@@ -1,7 +1,7 @@
 // Moteur de la forêt pixel : dessine tout dans un petit canvas basse résolution
 // (1 pixel du canvas = PX pixels à l'écran), agrandi sans lissage pour garder le style pixel art.
 import {
-  TREE_KINDS, TREE_COLORS, FLOWER_COLORS, makeTree, makeFlower, fromMap, flip, rng,
+  TREE_KINDS, TREE_COLORS, FLOWER_COLORS, FLOWER_SHAPES, makeTree, makeFlower, fromMap, flip, rng, hiveSprite, beeFrames,
   deerFrames, squirrelFrames, owlFrames, birdFrames, butterflyFrames,
 } from './sprites.js'
 import { skyAt, mixRgb, rgbCss, hexToRgb, hourNow } from './daylight.js'
@@ -46,7 +46,8 @@ function toCanvas(g) { // grille de couleurs -> petit canvas
   return c
 }
 
-const flowerGrids = FLOWER_COLORS.map(makeFlower)
+// toutes les combinaisons forme x couleur ; un numéro = une fleur
+const flowerGrids = Array.from({ length: FLOWER_COLORS.length * FLOWER_SHAPES }, (_, n) => makeFlower(FLOWER_COLORS[n % FLOWER_COLORS.length], Math.floor(n / FLOWER_COLORS.length)))
 const deerL = deerFrames.map(flip), squirrelL = squirrelFrames.map(flip)
 const butterflyColors = ['#f6b3d1', '#ffd36b', '#9ad1ff', '#ffffff']
 const butterflies = butterflyColors.map(butterflyFrames)
@@ -84,7 +85,7 @@ export function createForest(canvas, host, hooks = {}) {
       const seen = new Set()
       store.trees = o.trees
         .filter((r) => r && Number.isInteger(r.i) && r.i >= 0 && r.i < SPOTS.length && !seen.has(r.i) && seen.add(r.i))
-        .map((r) => ({ i: r.i }))
+        .map((r) => (r.h ? { i: r.i, h: 1 } : { i: r.i }))
     } catch { /* stockage indisponible : on joue sans sauvegarde */ }
   }
   function save() {
@@ -99,7 +100,9 @@ export function createForest(canvas, host, hooks = {}) {
     const h = Math.max(16, Math.round(H * lerp(CONFIG.TREE_H[0], CONFIG.TREE_H[1], spot.d) * k))
     const grid = makeTree(spot.k, h, spot.s)
     const e = { type: 'tree', rec, kind: spot.k, grid, img: toCanvas(grid), x: Math.round(spot.x * W), y: baseY, h, born: animate ? t : -9, leaves: !animate, phase: (spot.s % 628) / 100 }
-    e.flowers = []
+    const r = rng(spot.s + 7)
+    e.flowers = Array.from({ length: 7 }, () => ({ type: 'flower', x: e.x + Math.round((r() - 0.5) * 40), y: baseY + Math.round((r() - 0.5) * 5), img: toCanvas(flowerGrids[Math.floor(r() * flowerGrids.length)]), born: animate ? t + 0.35 : -9 }))
+    e.hive = !!rec.h && spot.k !== 'sapin' // ruche suspendue à une branche
     return e
   }
   const rebuildFlowers = () => { flowers = trees.flatMap((e) => e.flowers) }
@@ -112,7 +115,11 @@ export function createForest(canvas, host, hooks = {}) {
     const r = rng(2024)
     trees = store.trees.map((rec) => buildTree(rec, false))
     rebuildFlowers()
-    wild = Array.from({ length: 9 }, () => ({ type: 'flower', x: Math.round(r() * W), y: Math.round(bMin() + r() * (bMax() - bMin())), img: toCanvas(flowerGrids[Math.floor(r() * FLOWER_COLORS.length)]), born: -9 }))
+    wild = []
+    for (let c = 0; c < Math.round(W / 24); c++) { // des touffes de 3 à 6 fleurs
+      const cx = r() * W, cy = bMin() + r() * (bMax() - bMin()), n = 3 + Math.floor(r() * 4), g = Math.floor(r() * FLOWER_COLORS.length)
+      for (let k = 0; k < n; k++) wild.push({ type: 'flower', x: Math.round(cx + (r() - 0.5) * 22), y: Math.round(cy + (r() - 0.5) * 6), img: toCanvas(flowerGrids[(r() < 0.7 ? g : Math.floor(r() * FLOWER_COLORS.length)) + FLOWER_COLORS.length * Math.floor(r() * FLOWER_SHAPES)]), born: -9 })
+    }
     stars = Array.from({ length: Math.round(W / 5) }, () => ({ x: Math.round(r() * W), y: Math.round(r() * gTop() * 0.8), ph: r() * 6, big: r() < 0.12 }))
     clouds = Array.from({ length: 4 }, (_, i) => { const w = 22 + Math.round(r() * 16); return { img: toCanvas(makeCloud(w, r)), x: r() * W, y: 6 + i * (gTop() * 0.16) + r() * 6, v: 1.5 + r() * 2.5 } })
     tufts = Array.from({ length: Math.round(W * 0.55) }, () => { const y = gTop() + r() * (H - gTop()); return { x: Math.round(r() * W), y: Math.round(y), h: 2 + Math.floor(((y - gTop()) / (H - gTop())) * 3), ph: r() * 6, c: r() < 0.5 ? 0 : 1 } })
@@ -143,7 +150,27 @@ export function createForest(canvas, host, hooks = {}) {
     if (type === 'owl') { a.tree = null; a.blink = 2 + rand() * 4 }
     return a
   }
+  let beeSig = ''
+  function pickBeeTarget(a) {
+    if (a.hive && rand() < 0.45) { a.tx = a.hive.x + Math.round(a.hive.grid.w * 0.2) + (rand() - 0.5) * 22; a.ty = a.hive.y - a.hive.h * 0.45 + (rand() - 0.5) * 14; a.onFlower = false; return }
+    const all = [...wild, ...flowers], f = all[Math.floor(rand() * all.length)]
+    if (f) { a.tx = f.x + 1; a.ty = f.y - 5; a.onFlower = true }
+  }
+  function syncBees() { // 2 abeilles sauvages + 3 par ruche
+    const hives = trees.filter((e) => e.hive)
+    const sig = hives.map((e) => e.rec.i).join(',')
+    if (sig === beeSig) return
+    beeSig = sig
+    fauna = fauna.filter((a) => a.type !== 'bee')
+    if (reduced) return
+    const owners = [null, null, ...hives.flatMap((h) => [h, h, h])]
+    for (const hive of owners) {
+      const a = { type: 'bee', hive, x: hive ? hive.x : rand() * W, y: hive ? hive.y - hive.h * 0.45 : H * (0.7 + rand() * 0.2), ph: rand() * 6, pause: 0 }
+      pickBeeTarget(a); fauna.push(a)
+    }
+  }
   function syncFauna() {
+    syncBees()
     const w = want()
     for (const type of Object.keys(w)) {
       const mine = fauna.filter((a) => a.type === type)
@@ -178,6 +205,7 @@ export function createForest(canvas, host, hooks = {}) {
   }
   function plantSpot(i) {
     const rec = { i }
+    if (SPOTS[i].k !== 'sapin' && rand() < 0.3) rec.h = 1 // 30 % de chance : une ruche pousse sur cet arbre
     const e = buildTree(rec, !reduced)
     trees.push(e); store.trees.push(rec); store.total++
     rebuildFlowers(); save(); syncFauna()
@@ -227,6 +255,14 @@ export function createForest(canvas, host, hooks = {}) {
         if (d < 3) { a.tx = rand() * W; a.ty = H * (0.62 + rand() * 0.3) - rand() * 14 }
       } else if (a.type === 'firefly') {
         a.x += Math.sin(t * 0.6 + a.ph) * 4 * dt; a.y += Math.cos(t * 0.5 + a.ph * 1.3) * 3 * dt
+      } else if (a.type === 'bee') {
+        if (a.hive && !trees.includes(a.hive)) a.hive = null
+        if (a.pause > 0) a.pause -= dt
+        else {
+          const dx = a.tx - a.x, dy = a.ty - a.y, d = Math.hypot(dx, dy) || 1
+          a.x += (dx / d) * 24 * dt + Math.sin(t * 9 + a.ph) * 0.35; a.y += (dy / d) * 24 * dt + Math.cos(t * 8 + a.ph) * 0.35
+          if (d < 2) { if (a.onFlower) a.pause = 0.6 + rand() * 1.2; pickBeeTarget(a) }
+        }
       } else if (a.type === 'owl') {
         a.blink -= dt
         if (a.blink < -0.15) a.blink = 3 + rand() * 5
@@ -265,6 +301,7 @@ export function createForest(canvas, host, hooks = {}) {
       const dx = amp ? Math.round(Math.sin(t * 1.2 + e.phase + by * 0.05) * amp * (1 - by / e.h) ** 1.5) : 0
       ctx.drawImage(e.img, 0, by, e.grid.w, vis, e.x - e.grid.ax + dx, dy, e.grid.w, vis)
     }
+    if (e.hive && p >= 1) ctx.drawImage(toCanvas(hiveSprite), e.x + Math.round(e.grid.w * 0.2) - 4, Math.round(e.y - e.h * 0.45) - 4)
   }
   function drawFlower(f) {
     const ease = clamp((t - f.born) / 0.5, 0, 1)
@@ -350,6 +387,7 @@ export function createForest(canvas, host, hooks = {}) {
       ctx.globalAlpha = f.dayF
       for (const a of fauna) {
         if (a.type === 'bird') { const g = birdFrames[Math.floor(t * 6) % 2]; ctx.drawImage(toCanvas(g), Math.round(a.x), Math.round(a.y)) }
+        if (a.type === 'bee') ctx.drawImage(toCanvas(beeFrames[Math.floor(t * 14 + a.ph) % 2]), Math.round(a.x) - 2, Math.round(a.y) - 1)
         if (a.type === 'butterfly') { const g = butterflies[a.c][Math.floor(t * 7 + a.ph) % 2]; ctx.drawImage(toCanvas(g), Math.round(a.x), Math.round(a.y)) }
       }
       ctx.globalAlpha = 1
