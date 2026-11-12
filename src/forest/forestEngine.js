@@ -9,13 +9,25 @@ import { skyAt, mixRgb, rgbCss, hexToRgb, hourNow } from './daylight.js'
 // Réglages faciles à modifier
 export const CONFIG = {
   PX_DESKTOP: 3, PX_MOBILE: 2, // taille d'un pixel à l'écran
-  MAX_TREES: 48,
   GROUND_TOP: 0.66, // où commence le sol (fraction de la hauteur du hero)
   BASE_MIN: 0.72, BASE_MAX: 0.97, // zone où les troncs peuvent être plantés
   TREE_H: [0.2, 0.38], // hauteur des arbres : loin -> proche (fraction de la hauteur)
   GROW_TIME: 0.75, // durée de la pousse en secondes
 }
-const KEY = 'er1gon359:foret:v1'
+const KEY = 'er1gon359:foret:v2'
+
+// Emplacements fixes des arbres (x = position horizontale, d = profondeur 0 loin -> 1 proche).
+// Chaque emplacement a toujours le même arbre : aucune surprise, la composition est dessinée à l'avance.
+const SPOTS = [
+  // plan lointain
+  { x: 0.05, d: 0.06, k: 'sapin' }, { x: 0.17, d: 0.14, k: 'bouleau' }, { x: 0.29, d: 0.05, k: 'chene' }, { x: 0.42, d: 0.15, k: 'cerisier' },
+  { x: 0.55, d: 0.04, k: 'sapin' }, { x: 0.67, d: 0.13, k: 'chene' }, { x: 0.8, d: 0.06, k: 'bouleau' }, { x: 0.93, d: 0.15, k: 'cerisier' },
+  // plan moyen
+  { x: 0.1, d: 0.42, k: 'chene' }, { x: 0.24, d: 0.55, k: 'cerisier' }, { x: 0.37, d: 0.45, k: 'sapin' }, { x: 0.5, d: 0.58, k: 'bouleau' },
+  { x: 0.63, d: 0.44, k: 'cerisier' }, { x: 0.77, d: 0.56, k: 'chene' }, { x: 0.9, d: 0.46, k: 'sapin' },
+  // premier plan
+  { x: 0.06, d: 0.9, k: 'cerisier' }, { x: 0.3, d: 0.97, k: 'chene' }, { x: 0.54, d: 0.88, k: 'sapin' }, { x: 0.76, d: 0.96, k: 'cerisier' }, { x: 0.95, d: 0.9, k: 'bouleau' },
+].map((s, i) => ({ ...s, s: 1000 + i * 7919 }))
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v))
 const lerp = (a, b, t) => a + (b - a) * t
 const easeOutBack = (p) => (p >= 1 ? 1 : 1 + 2.70158 * (p - 1) ** 3 + 1.70158 * (p - 1) ** 2)
@@ -69,12 +81,10 @@ export function createForest(canvas, host, hooks = {}) {
       const o = JSON.parse(localStorage.getItem(KEY) || 'null')
       if (!o || !Array.isArray(o.trees)) return
       store.total = Number.isFinite(o.total) ? Math.max(0, Math.floor(o.total)) : 0
-      store.trees = o.trees.slice(-CONFIG.MAX_TREES)
-        .filter((r) => r && TREE_KINDS.includes(r.k) && [r.x, r.y, r.s].every(Number.isFinite))
-        .map((r) => ({
-          k: r.k, x: clamp(r.x, 0.02, 0.98), y: clamp(r.y, 0, 1), s: Math.floor(r.s) >>> 0,
-          f: (Array.isArray(r.f) ? r.f : []).slice(0, 5).map((a) => [clamp(+a[0] || 0, -16, 16), clamp(+a[1] || 0, -3, 3), clamp(+a[2] | 0, 0, FLOWER_COLORS.length - 1)]),
-        }))
+      const seen = new Set()
+      store.trees = o.trees
+        .filter((r) => r && Number.isInteger(r.i) && r.i >= 0 && r.i < SPOTS.length && !seen.has(r.i) && seen.add(r.i))
+        .map((r) => ({ i: r.i }))
     } catch { /* stockage indisponible : on joue sans sauvegarde */ }
   }
   function save() {
@@ -83,12 +93,13 @@ export function createForest(canvas, host, hooks = {}) {
 
   /* ---------- construction de la scène ---------- */
   function buildTree(rec, animate) {
-    const baseY = Math.round(bMin() + (bMax() - bMin()) * rec.y)
-    const k = 0.85 + 0.3 * ((rec.s % 97) / 97)
-    const h = Math.max(16, Math.round(H * lerp(CONFIG.TREE_H[0], CONFIG.TREE_H[1], rec.y) * k))
-    const grid = makeTree(rec.k, h, rec.s)
-    const e = { type: 'tree', rec, grid, img: toCanvas(grid), x: Math.round(rec.x * W), y: baseY, h, born: animate ? t : -9, leaves: !animate, phase: (rec.s % 628) / 100 }
-    e.flowers = rec.f.map(([dx, dy, ci]) => ({ type: 'flower', x: e.x + Math.round(dx), y: baseY + Math.round(dy), img: toCanvas(flowerGrids[ci]), born: animate ? t + 0.35 : -9 }))
+    const spot = SPOTS[rec.i]
+    const baseY = Math.round(bMin() + (bMax() - bMin()) * spot.d)
+    const k = 0.85 + 0.3 * ((spot.s % 97) / 97)
+    const h = Math.max(16, Math.round(H * lerp(CONFIG.TREE_H[0], CONFIG.TREE_H[1], spot.d) * k))
+    const grid = makeTree(spot.k, h, spot.s)
+    const e = { type: 'tree', rec, kind: spot.k, grid, img: toCanvas(grid), x: Math.round(spot.x * W), y: baseY, h, born: animate ? t : -9, leaves: !animate, phase: (spot.s % 628) / 100 }
+    e.flowers = []
     return e
   }
   const rebuildFlowers = () => { flowers = trees.flatMap((e) => e.flowers) }
@@ -153,30 +164,39 @@ export function createForest(canvas, host, hooks = {}) {
   /* ---------- planter ---------- */
   function plantAt(cssX, cssY) {
     if (t - lastPlant < 0.12) return false // anti-spam
+    const taken = new Set(store.trees.map((r) => r.i))
+    const free = SPOTS.map((_, i) => i).filter((i) => !taken.has(i))
+    if (!free.length) return false // le bois est complet
     lastPlant = t
+    // On choisit l'emplacement libre le plus proche du clic (clic sur les titres : seule la position horizontale compte)
     const bx = cssX / PX, by = cssY / PX
-    // Clic dans la zone du sol : on plante là. Sinon (clic sur les titres) : profondeur au hasard.
-    const d = by >= bMin() && by <= bMax() ? (by - bMin()) / (bMax() - bMin()) : rand()
-    const rec = {
-      k: TREE_KINDS[Math.floor(rand() * TREE_KINDS.length)], x: clamp(bx / W, 0.02, 0.98), y: d, s: Math.floor(rand() * 2 ** 31),
-      f: Array.from({ length: 3 + Math.floor(rand() * 3) }, () => [Math.round((rand() - 0.5) * 28), Math.round((rand() - 0.5) * 5), Math.floor(rand() * FLOWER_COLORS.length)]),
-    }
+    const inBand = by >= bMin() - 6
+    const baseOf = (i) => bMin() + (bMax() - bMin()) * SPOTS[i].d
+    const score = (i) => (SPOTS[i].x * W - bx) ** 2 + (inBand ? ((baseOf(i) - by) * 2) ** 2 : 0)
+    const i = free.reduce((a, b) => (score(b) < score(a) ? b : a))
+    return plantSpot(i)
+  }
+  function plantSpot(i) {
+    const rec = { i }
     const e = buildTree(rec, !reduced)
     trees.push(e); store.trees.push(rec); store.total++
-    if (trees.length > CONFIG.MAX_TREES) { const old = trees.shift(); store.trees.shift(); burst(old.x, old.y, ['#6b4a32', '#8a6a4a'], 8, { up: true }) }
     rebuildFlowers(); save(); syncFauna()
     if (!reduced) {
       burst(e.x, e.y, ['#6b4a32', '#8a6a4a', '#4c9a55', '#a5d6a0'], 16, { up: true, speed: 55, spread: 2 })
       burst(e.x, e.y, ['#d8c9a8', '#c4b38e'], 8, { speed: 22, spread: 0.5, g: 0, life: 0.5, w: 12 }) // poussière
       burst(e.x, e.y - 2, ['#ffffff', '#fff3a0'], 6, { up: true, speed: 40, g: -10, life: 0.9 }) // étincelles
     }
-    hooks.onCount?.(trees.length); hooks.onPlant?.(store.total)
+    hooks.onCount?.(trees.length, SPOTS.length); hooks.onPlant?.(store.total)
     return true
   }
-  function plantRandom() { plantAt(rand() * W * PX, (bMin() + rand() * (bMax() - bMin())) * PX) }
+  function plantRandom() {
+    const taken = new Set(store.trees.map((r) => r.i))
+    const free = SPOTS.map((_, i) => i).filter((i) => !taken.has(i))
+    if (free.length) plantSpot(free[Math.floor(rand() * free.length)])
+  }
   function clear() {
-    trees.forEach((e) => burst(e.x, e.y, ['#6b4a32', '#8a6a4a', TREE_COLORS[e.rec.k]], 4, { up: true }))
-    trees = []; store.trees = []; rebuildFlowers(); save(); syncFauna(); hooks.onCount?.(0)
+    trees.forEach((e) => burst(e.x, e.y, ['#6b4a32', '#8a6a4a', TREE_COLORS[e.kind]], 4, { up: true }))
+    trees = []; store.trees = []; rebuildFlowers(); save(); syncFauna(); hooks.onCount?.(0, SPOTS.length)
   }
 
   /* ---------- mise à jour ---------- */
@@ -216,9 +236,9 @@ export function createForest(canvas, host, hooks = {}) {
     for (const e of trees) {
       if (!e.leaves && t - e.born > CONFIG.GROW_TIME * 0.6) {
         e.leaves = true
-        burst(e.x, e.y - e.h * 0.6, [TREE_COLORS[e.rec.k], '#ffffff'], 10, { speed: 24, g: 20, life: 1.1 })
+        burst(e.x, e.y - e.h * 0.6, [TREE_COLORS[e.kind], '#ffffff'], 10, { speed: 24, g: 20, life: 1.1 })
       }
-      if (e.rec.k === 'cerisier' && !reduced && rand() < dt * 0.35) // pétales
+      if (e.kind === 'cerisier' && !reduced && rand() < dt * 0.35) // pétales
         burst(e.x + (rand() - 0.5) * e.grid.w * 0.6, e.y - e.h * 0.55, ['#f9c8d9', '#ffffff'], 1, { speed: 4, g: 5, life: 3, sway: true })
     }
     for (let i = parts.length - 1; i >= 0; i--) {
@@ -238,7 +258,7 @@ export function createForest(canvas, host, hooks = {}) {
     const sw = Math.round(e.grid.w * 0.5 * clamp(ease, 0, 1))
     ctx.fillStyle = 'rgba(14,38,26,0.22)'
     ctx.fillRect(e.x - sw, e.y, sw * 2, 1); ctx.fillRect(e.x - Math.round(sw * 0.7), e.y + 1, Math.round(sw * 1.4), 1)
-    const amp = reduced || p < 1 ? 0 : e.rec.k === 'sapin' ? 0.9 : 1.5
+    const amp = reduced || p < 1 ? 0 : e.kind === 'sapin' ? 0.9 : 1.5
     for (let by = 0; by < e.h; by += 4) { // tranches de 4 lignes : le haut de l'arbre oscille avec le vent
       const dy = top + by, vis = Math.min(4, e.h - by, e.y - dy)
       if (vis <= 0) continue
@@ -376,7 +396,7 @@ export function createForest(canvas, host, hooks = {}) {
   let ro, io
   function mount() {
     load()
-    const size = () => { const r = host.getBoundingClientRect(); rebuild(r.width, r.height); hooks.onCount?.(trees.length) }
+    const size = () => { const r = host.getBoundingClientRect(); rebuild(r.width, r.height); hooks.onCount?.(trees.length, SPOTS.length) }
     size()
     ro = new ResizeObserver(size); ro.observe(host)
     io = new IntersectionObserver(([en]) => { visible = en.isIntersecting }); io.observe(host)
