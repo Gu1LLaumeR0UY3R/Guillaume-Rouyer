@@ -44,6 +44,7 @@ export function createGame(level, ships, seed) {
   const cells = new Array(SIZE * SIZE).fill('') // '', 'miss', 'hit' ou 'sunk'
   const remaining = FLEET.slice()
   let shots = 0
+  let lastShot = -1
   const pick = (list) => list[Math.floor(rand() * list.length)]
   const indexes = (state) => cells.reduce((acc, v, i) => (v === state ? (acc.push(i), acc) : acc), [])
 
@@ -89,6 +90,7 @@ export function createGame(level, ships, seed) {
     if (remaining.length === 0) return false
     const i = choose()
     shots += 1
+    lastShot = i
     const ship = ships.find((s) => s.cells.includes(i))
     if (!ship) {
       cells[i] = 'miss'
@@ -102,5 +104,5 @@ export function createGame(level, ships, seed) {
     return true
   }
 
-  return { cells, step, get shots() { return shots }, get done() { return remaining.length === 0 } }
+  return { cells, step, get shots() { return shots }, get last() { return lastShot }, get left() { return remaining.length }, get done() { return remaining.length === 0 } }
 }

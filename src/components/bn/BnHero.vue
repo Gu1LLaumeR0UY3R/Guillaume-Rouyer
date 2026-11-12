@@ -24,6 +24,7 @@ const counter = computed(() => `${pad(index.value + 1)} / ${pad(slides.length)}`
       <div v-if="!slides.length" class="fallback">
         <span class="sun" />
         <svg class="wave w1" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60C100 20 200 100 300 60S500 20 600 60 800 100 900 60 1100 20 1200 60V120H0Z" /></svg>
+        <svg class="boat" viewBox="0 0 200 120" aria-hidden="true"><path d="M20 84h160l-22 22H44z" fill="#0B3550" /><path d="M70 84V52h60v32z" fill="#0e4468" /><path d="M96 52V26h8v26z" fill="#0B3550" /><path d="M104 28l34 10-34 8z" fill="#FFBD54" /></svg>
         <svg class="wave w2" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70C120 40 180 100 300 70S480 40 600 70 780 100 900 70 1080 40 1200 70V120H0Z" /></svg>
       </div>
       <div class="veil" />
@@ -51,6 +52,10 @@ const counter = computed(() => `${pad(index.value + 1)} / ${pad(slides.length)}`
 .bg img.on{opacity:1}
 .fallback{position:absolute;inset:0;background:linear-gradient(180deg,#f2b36a 0%,#e58c66 22%,#2c8cae 46%,#126184 70%,#0B3550 100%)}
 .sun{position:absolute;right:16%;top:20%;width:clamp(90px,14vw,190px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#fff6d8,#ffd27a 55%,rgba(255,189,84,0) 72%);filter:blur(1px)}
+.boat{position:absolute;right:20%;bottom:25%;width:clamp(120px,16vw,220px);animation:bob 6s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-1.5deg)}50%{transform:translateY(-8px) rotate(1.5deg)}}
+.sun{animation:glow 7s ease-in-out infinite alternate}
+@keyframes glow{from{transform:scale(1);opacity:.9}to{transform:scale(1.08);opacity:1}}
 .wave{position:absolute;left:-5%;width:110%;height:34%}
 .w1{bottom:0;fill:rgba(11,53,80,.85);animation:drift 14s ease-in-out infinite alternate}
 .w2{bottom:6%;fill:rgba(40,166,160,.35);animation:drift 10s ease-in-out infinite alternate-reverse}
@@ -59,13 +64,16 @@ const counter = computed(() => `${pad(index.value + 1)} / ${pad(slides.length)}`
 .content{position:relative;padding-top:72px;padding-bottom:96px}
 .content>*{max-width:36rem}
 .kicker{margin:0 0 18px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#bfe6ee}
-h1{margin:0 0 14px;font:italic 500 clamp(54px,9vw,104px)/1 var(--serif);color:var(--sun);text-shadow:0 4px 30px rgba(0,0,0,.25)}
+h1{margin:0 0 14px;font:italic 500 clamp(54px,9vw,104px)/1 var(--serif);color:transparent;background:linear-gradient(100deg,#FFBD54 0%,#FFBD54 40%,#fff3cf 50%,#FFBD54 60%,#FFBD54 100%) 100% 0/250% 100%;-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 4px 24px rgba(0,0,0,.25));animation:shimmer 2.4s ease-in-out 1.3s 1 forwards}
+@keyframes shimmer{to{background-position:0 0}}
 .tagline{margin:0 0 14px;font:500 clamp(22px,3vw,30px)/1.25 var(--serif)}
 .text{margin:0 0 18px;color:#e3f3f7}
 .meta{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0 0 26px;padding:0;list-style:none;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#bfe6ee}
 .meta li+li::before{content:'·';margin-right:16px;opacity:.6}
 .actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 24px;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;transition:transform .25s,box-shadow .25s}
+.btn{position:relative;display:inline-flex;align-items:center;min-height:48px;padding:0 24px;overflow:hidden;border-radius:999px;font-weight:600;font-size:15px;text-decoration:none;transition:transform .25s,box-shadow .25s}
+.btn::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.5),transparent);transform:skewX(-20deg);transition:left .6s}
+.btn:hover::after{left:130%}
 .btn:hover{transform:translateY(-2px)}
 .play{background:var(--sun);color:#10293a;box-shadow:0 12px 28px -12px rgba(255,189,84,.8)}
 .ghost{border:1px solid rgba(255,255,255,.6);color:#fff}
@@ -74,5 +82,5 @@ h1{margin:0 0 14px;font:italic 500 clamp(54px,9vw,104px)/1 var(--serif);color:va
 .content>*{opacity:0;transform:translateY(24px);animation:rise 1s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i,0)*.12s + .15s)}
 .content>:nth-child(1){--i:0}.content>:nth-child(2){--i:1}.content>:nth-child(3){--i:2}.content>:nth-child(4){--i:3}.content>:nth-child(5){--i:4}.content>:nth-child(6){--i:5}
 @keyframes rise{to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){.content>*{opacity:1;transform:none;animation:none}.w1,.w2{animation:none}}
+@media (prefers-reduced-motion:reduce){.content>*{opacity:1;transform:none;animation:none}.w1,.w2,.boat,.sun{animation:none}h1{animation:none;background-position:0 0}.btn::after{display:none}}
 </style>

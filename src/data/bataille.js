@@ -1,5 +1,5 @@
 // Contenu de la page d'étude de cas de Bataille Navale. Les images se déposent dans src/assets/bataille-navale/.
-export const GAME_URL = '' // adresse du jeu en ligne : renseignée, elle fait apparaître le bouton « Jouer »
+export const GAME_URL = 'https://bataille-navale.pages.dev/' // adresse du jeu en ligne : elle fait apparaître le bouton « Jouer »
 export const REPO = 'https://github.com/Gu1LLaumeR0UY3R/Bataille-Navale'
 
 export const HERO = {
@@ -11,7 +11,7 @@ export const HERO = {
 }
 
 export const GAMEPLAY = {
-  kicker: 'Gameplay',
+  kicker: '01 — Gameplay',
   title: 'Un plateau, une flotte, un arsenal.',
   paragraphs: [
     "La grille fait 10 × 10 cases. Chaque camp place cinq navires, puis tire à tour de rôle. Le joueur et l'IA jouent avec exactement les mêmes règles.",
@@ -29,7 +29,7 @@ export const ARSENAL = [
 ]
 
 export const EDITOR = {
-  kicker: 'Éditeur de cartes',
+  kicker: '02 — Éditeur de cartes',
   title: 'Build your own archipelago.',
   subtitle: "Un bac à sable 3D pour façonner son terrain de jeu, importer ses propres objets et créer des configurations tactiques.",
   verbs: [
@@ -49,7 +49,7 @@ export const EDITOR = {
 }
 
 export const AI = {
-  kicker: 'Intelligence artificielle',
+  kicker: '03 — Intelligence artificielle',
   title: 'Trois adversaires. Trois façons de penser.',
   text: "Les trois IA tirent en priorité sur un contact de sonar et utilisent l'arsenal comme le joueur. Ce qui les distingue, c'est leur façon de choisir une case.",
   levels: [
@@ -61,17 +61,17 @@ export const AI = {
 }
 
 export const WAVES = {
-  kicker: 'Behind the waves',
+  kicker: '04 — Behind the waves',
   title: "Une mer qui bouge, à partir d'une équation.",
   paragraphs: [
-    "La surface de l'eau est la somme de deux ondes sinusoïdales qui avancent dans des directions différentes. Chacune a une amplitude, une longueur d'onde, une pulsation et une direction.",
-    "Les dalles, les marqueurs et les bateaux appellent tous la même fonction : ils montent et descendent ensemble, sans décalage. La pente de la surface incline les bateaux.",
+    "La mer n'est pas une animation enregistrée : c'est une fonction du temps. En chaque point (x, z), la hauteur de l'eau est calculée à chaque image, en combinant deux ondes qui avancent dans des directions différentes.",
+    "Les dalles, les marqueurs et les bateaux appellent tous cette même fonction : ils montent et descendent ensemble, sans décalage, et la pente de la surface incline les bateaux.",
   ],
   ondes: [
     { name: 'Onde 1', amplitude: 0.045, longueurOnde: 7, pulsation: 1.3, direction: [1, 0.35] },
     { name: 'Onde 2', amplitude: 0.02, longueurOnde: 3.7, pulsation: 1.9, direction: [-0.4, 1] },
   ],
-  note: 'Démonstration : mêmes ondes et mêmes paramètres que le jeu, tracés en coupe.',
+  note: 'Démonstration : la même fonction et les mêmes paramètres que le jeu, vus en perspective. Le curseur d’amplitude exagère le relief pour mieux le voir.',
 }
 
 export const STATUS = [

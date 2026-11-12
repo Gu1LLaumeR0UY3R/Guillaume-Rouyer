@@ -10,7 +10,7 @@ const running = ref(false)
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 
 const boards = reactive({ easy: [], medium: [], hard: [] })
-const stats = reactive({ easy: { shots: 0, done: false }, medium: { shots: 0, done: false }, hard: { shots: 0, done: false } })
+const stats = reactive({ easy: { shots: 0, done: false, last: -1, left: 5 }, medium: { shots: 0, done: false, last: -1, left: 5 }, hard: { shots: 0, done: false, last: -1, left: 5 } })
 const shipCells = ref(new Set())
 let games = {}
 let timer
@@ -20,6 +20,8 @@ function sync() {
     boards[key] = [...games[key].cells]
     stats[key].shots = games[key].shots
     stats[key].done = games[key].done
+    stats[key].last = games[key].last
+    stats[key].left = games[key].left
   }
 }
 function stop() {
@@ -58,11 +60,16 @@ onBeforeUnmount(stop)
 
 const current = computed(() => AI.levels.find((l) => l.id === level.value))
 const summary = computed(() => AI.levels.map((l) => `${l.name} : ${stats[l.id].done ? `flotte coulée en ${stats[l.id].shots} tirs` : `${stats[l.id].shots} tirs`}`).join(' · '))
-const cellClass = (key, i) => boards[key][i] || (shipCells.value.has(i) ? 'ship' : '')
+const cellClass = (key, i) => [boards[key][i] || (shipCells.value.has(i) ? 'ship' : ''), i === stats[key].last && !stats[key].done ? 'last' : ''].join(' ')
+const ranks = computed(() => {
+  if (!AI.levels.every((l) => stats[l.id].done)) return {}
+  const order = [...AI.levels].sort((a, b) => stats[a.id].shots - stats[b.id].shots)
+  return Object.fromEntries(order.map((l, k) => [l.id, k === 0 ? '1er' : `${k + 1}e`]))
+})
 </script>
 
 <template>
-  <section id="ia" class="ai">
+  <section id="ia" class="ai" v-reveal>
     <div class="container">
       <p class="kicker">{{ AI.kicker }}</p>
       <h2>{{ AI.title }}</h2>
@@ -91,7 +98,8 @@ const cellClass = (key, i) => boards[key][i] || (shipCells.value.has(i) ? 'ship'
         <div class="grids">
           <figure v-for="l in AI.levels" :key="l.id">
             <div class="grid" aria-hidden="true"><i v-for="(_, i) in 100" :key="i" :class="cellClass(l.id, i)" /></div>
-            <figcaption><strong>{{ l.name }}</strong> <span>{{ stats[l.id].shots }} tirs{{ stats[l.id].done ? ' · terminé' : '' }}</span></figcaption>
+            <div class="bar" aria-hidden="true"><span :style="{ width: ((5 - stats[l.id].left) / 5) * 100 + '%' }" /></div>
+            <figcaption><strong>{{ l.name }}</strong> <span>{{ stats[l.id].shots }} tirs · {{ 5 - stats[l.id].left }}/5 navires coulés</span><em v-if="ranks[l.id]" :class="{ first: ranks[l.id] === '1er' }">{{ ranks[l.id] }}</em></figcaption>
           </figure>
         </div>
         <p class="sr" aria-live="polite">{{ summary }}</p>
@@ -130,8 +138,18 @@ pre{margin:0;padding:16px 18px;overflow-x:auto;font:12.5px/1.65 ui-monospace,SFM
 .grid i.miss{background:rgba(255,255,255,.55);transform:scale(.55);border-radius:50%}
 .grid i.hit{background:var(--sun)}
 .grid i.sunk{background:#e4572e}
-.grids figcaption{display:flex;justify-content:space-between;gap:8px;padding:10px 2px 0;border:0;color:var(--deep);font-size:14px}
+.grid i.last{animation:blink .7s ease-in-out infinite alternate;outline:2px solid #fff}
+@keyframes blink{from{transform:scale(1)}to{transform:scale(1.25)}}
+.bar{height:6px;margin-top:8px;border-radius:99px;background:rgba(11,53,80,.12);overflow:hidden}
+.bar span{display:block;height:100%;background:linear-gradient(90deg,#28A6A0,#FFBD54);transition:width .3s}
+em{padding:2px 10px;border-radius:999px;background:#e4eef0;color:var(--deep);font-size:12px;font-style:normal;font-weight:600}
+em.first{background:var(--sun)}
+@media (prefers-reduced-motion:reduce){.grid i.last{animation:none}}
+.grids figcaption{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:4px 8px;padding:8px 2px 0;border:0;color:var(--deep);font-size:14px}
 .grids figcaption span{color:var(--muted)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 .note{margin:18px 0 0;color:var(--muted);font-size:13px}
+.kicker::after{content:'';display:block;width:42px;height:2px;margin-top:10px;background:currentColor;opacity:.55;transform:scaleX(0);transform-origin:left;transition:transform .8s .25s ease}
+.in .kicker::after{transform:scaleX(1)}
+@media (prefers-reduced-motion:reduce){.kicker::after{transform:none;transition:none}}
 </style>

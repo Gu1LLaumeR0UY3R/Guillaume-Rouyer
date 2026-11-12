@@ -3,7 +3,7 @@ import { CREDITS, GAME_URL, REPO } from '../../data/bataille.js'
 </script>
 
 <template>
-  <section class="cta">
+  <section class="cta" v-reveal>
     <div class="container inner">
       <h2>Envie de jouer ?</h2>
       <div class="buttons">
@@ -24,7 +24,10 @@ import { CREDITS, GAME_URL, REPO } from '../../data/bataille.js'
 .inner{max-width:780px;text-align:center}
 h2{margin:0 0 24px;font:italic 500 clamp(34px,5vw,54px)/1.1 var(--serif);color:#fff}
 .buttons{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
-.btn{display:inline-flex;align-items:center;min-height:48px;padding:0 26px;border-radius:999px;font-weight:600;text-decoration:none;transition:transform .25s}
+.btn{position:relative;display:inline-flex;align-items:center;min-height:48px;padding:0 26px;overflow:hidden;border-radius:999px;font-weight:600;text-decoration:none;transition:transform .25s}
+.btn::after{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.45),transparent);transform:skewX(-20deg);transition:left .6s}
+.btn:hover::after{left:130%}
+@media (prefers-reduced-motion:reduce){.btn::after{display:none}}
 .btn:hover{transform:translateY(-2px)}
 .play{background:var(--sun);color:#10293a}
 .ghost{border:1px solid rgba(255,255,255,.5);color:#fff}
