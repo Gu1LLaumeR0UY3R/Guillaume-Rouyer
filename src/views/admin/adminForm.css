@@ -1,0 +1,10 @@
+.admin{max-width:520px;margin:0 auto;padding:72px 20px}
+.admin h1{font-size:clamp(30px,5vw,40px);margin-bottom:8px}
+.admin p{color:var(--muted)}
+.admin form{display:grid;gap:16px;margin-top:24px;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+.admin label{display:grid;gap:6px;font-weight:600}
+.admin input{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);font:inherit}
+.admin .err{margin:0;color:#b42318;font-weight:600}
+.admin .ok{margin:0;color:var(--green);font-weight:600}
+.admin .qr{width:200px;margin:0 auto;padding:8px;border-radius:12px;background:#fff}
+.admin code{word-break:break-all}
