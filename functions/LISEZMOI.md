@@ -15,6 +15,12 @@ Les fichiers de `functions/` deviennent automatiquement l'API du site (`/api/...
 4. Déployer (push sur `main`), puis ouvrir `/admin/installation` : jeton + mot de passe, scan du QR code, premier code.
 5. Une fois le compte créé, **supprimer le secret `SETUP_TOKEN`** : la page d'installation devient inutilisable.
 
+## Mettre à jour la base (nouvelles tables)
+
+À chaque fois qu'un fichier est ajouté dans `migrations/`, l'appliquer sur la vraie base :
+`npx wrangler d1 migrations apply portfolio-db --remote`
+(Le contenu des projets est importé automatiquement depuis `migrations/0003_seed_projects.sql`.)
+
 ## Perte du téléphone (2FA)
 
 `npx wrangler d1 execute portfolio-db --remote --command "DELETE FROM admin"`, remettre un `SETUP_TOKEN`, refaire l'installation.
@@ -34,3 +40,4 @@ Les fichiers de `functions/` deviennent automatiquement l'API du site (`/api/...
 - Requêtes SQL toujours préparées (`bind`), entrées validées (`_lib/validate.js`), erreurs internes jamais détaillées au visiteur.
 - Journaux dans la console Cloudflare et dans la table `logs` (30 jours), mots de passe/codes/jetons masqués.
 - En-têtes de sécurité et CSP dans `public/_headers`.
+- Projets : table `projects`, API publique `/api/projects`, API admin `/api/admin/projects` (création, modification, statut, ordre, suppression). Dégradés, liens et textes sont validés ; l'affichage se fait toujours en texte (jamais en HTML).
