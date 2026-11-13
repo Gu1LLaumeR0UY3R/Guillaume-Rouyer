@@ -1,6 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
-import { PROJECTS, TAGS } from '../data/projects.js'
+import { projects, tags } from '../content/projects.js'
 import ProjectCard from './ProjectCard.vue'
 
 const current = ref('Tout')
@@ -8,7 +8,7 @@ const track = ref(null)
 const paused = ref(false)
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const list = computed(() => PROJECTS.filter((p) => current.value === 'Tout' || p.tag === current.value))
+const list = computed(() => projects.value.filter((p) => current.value === 'Tout' || p.tag === current.value))
 
 // Avec un filtre actif, les résultats s'affichent depuis le début de la liste.
 watch(current, async () => {
@@ -35,7 +35,7 @@ onBeforeUnmount(() => clearInterval(timer))
       <h2>Projets</h2>
       <div class="chips" role="group" aria-label="Filtrer par catégorie">
         <button
-          v-for="t in TAGS"
+          v-for="t in tags"
           :key="t"
           class="chip"
           type="button"

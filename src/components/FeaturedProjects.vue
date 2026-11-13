@@ -1,8 +1,8 @@
 <script setup>
 import { computed } from 'vue'
-import { PROJECTS, projectLink } from '../data/projects.js'
+import { projects, projectLink, statusLabel } from '../content/projects.js'
 
-const featured = computed(() => PROJECTS.filter((p) => p.featured))
+const featured = computed(() => projects.value.filter((p) => p.featured))
 </script>
 
 <template>
@@ -13,7 +13,7 @@ const featured = computed(() => PROJECTS.filter((p) => p.featured))
       <div class="grid">
         <RouterLink v-for="(p, i) in featured" :key="p.slug" class="card" :class="{ big: i === 0 }" :to="projectLink(p)">
           <div class="banner" :style="{ background: p.accent }">
-            <span v-if="p.status" class="status">{{ p.status }}</span>
+            <span v-if="statusLabel(p)" class="status">{{ statusLabel(p) }}</span>
             <h3>{{ p.name }}</h3>
           </div>
           <div class="content">

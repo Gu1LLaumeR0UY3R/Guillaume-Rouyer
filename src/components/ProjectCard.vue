@@ -1,12 +1,12 @@
 <script setup>
-import { projectLink } from '../data/projects.js'
+import { projectLink, safeUrl, statusLabel } from '../content/projects.js'
 
 defineProps({ project: { type: Object, required: true } })
 </script>
 
 <template>
   <article class="card">
-    <span v-if="project.status" class="status">{{ project.status }}</span>
+    <span v-if="statusLabel(project)" class="status">{{ statusLabel(project) }}</span>
     <span class="tag">{{ project.tag }}</span>
     <h3>{{ project.name }}</h3>
     <p>{{ project.desc }}</p>
@@ -14,9 +14,9 @@ defineProps({ project: { type: Object, required: true } })
     <div class="links">
       <RouterLink v-if="project.featured" class="link" :to="projectLink(project)">Voir le projet →</RouterLink>
       <a
-        v-if="project.repo"
+        v-if="safeUrl(project.repo)"
         class="link"
-        :href="project.repo"
+        :href="safeUrl(project.repo)"
         target="_blank"
         rel="noopener"
         :aria-label="`Voir le code de ${project.name} sur GitHub`"

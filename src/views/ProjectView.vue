@@ -1,36 +1,41 @@
 <script setup>
-import { computed, watchEffect } from 'vue'
+import { ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { PROJECTS } from '../data/projects.js'
-import { DETAILS } from '../data/projectDetails.js'
+import { loadDetail, safeUrl, statusLabel } from '../content/projects.js'
+import MaintenancePage from '../components/MaintenancePage.vue'
 
 const route = useRoute()
-const project = computed(() => PROJECTS.find((p) => p.slug === route.params.slug && p.featured))
-const detail = computed(() => (project.value ? DETAILS[project.value.slug] : null))
+const project = ref(null)
+const loading = ref(true)
 
-watchEffect(() => {
+watch(() => route.params.slug, async (slug) => {
+  loading.value = true
+  project.value = await loadDetail(slug)
+  loading.value = false
   if (project.value) document.title = `${project.value.name} · Er1gon359`
-})
+}, { immediate: true })
 </script>
 
 <template>
-  <article v-if="project && detail" class="project">
+  <p v-if="loading" class="container missing" role="status">Chargement…</p>
+  <MaintenancePage v-else-if="project?.status === 'maintenance'" :project="project" />
+  <article v-else-if="project && project.featured && project.details" class="project">
     <header class="banner" :style="{ background: project.accent }">
       <div class="container inner">
         <RouterLink class="back" to="/projets">← Tous les projets</RouterLink>
-        <span v-if="project.status" class="status">{{ project.status }}</span>
+        <span v-if="statusLabel(project)" class="status">{{ statusLabel(project) }}</span>
         <h1>{{ project.name }}</h1>
-        <p class="lead">{{ detail.lead }}</p>
+        <p class="lead">{{ project.details.lead }}</p>
         <ul class="stack"><li v-for="s in project.stack" :key="s">{{ s }}</li></ul>
-        <a v-if="project.repo" class="main" :href="project.repo" target="_blank" rel="noopener">Voir le code sur GitHub →</a>
+        <a v-if="safeUrl(project.repo)" class="main" :href="safeUrl(project.repo)" target="_blank" rel="noopener">Voir le code sur GitHub →</a>
       </div>
     </header>
     <div class="container body">
-      <p v-if="detail.notice" class="notice">{{ detail.notice }}</p>
-      <section v-for="s in detail.sections" :key="s.title">
+      <p v-if="project.details.notice" class="notice">{{ project.details.notice }}</p>
+      <section v-for="(s, i) in project.details.sections" :key="i">
         <h2>{{ s.title }}</h2>
-        <p v-for="t in s.paragraphs" :key="t">{{ t }}</p>
-        <ul v-if="s.points"><li v-for="pt in s.points" :key="pt">{{ pt }}</li></ul>
+        <p v-for="(t, j) in s.paragraphs" :key="j">{{ t }}</p>
+        <ul v-if="s.points?.length"><li v-for="(pt, j) in s.points" :key="j">{{ pt }}</li></ul>
       </section>
     </div>
   </article>
