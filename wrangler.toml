@@ -1,0 +1,11 @@
+name = "portfolio"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-09-01"
+
+# Base D1. Créer avec : npx wrangler d1 create portfolio-db
+# puis remplacer database_id par l'identifiant affiché.
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-db"
+database_id = "REMPLACER-PAR-L-ID-DE-LA-BASE"
+migrations_dir = "migrations"
