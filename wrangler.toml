@@ -1,4 +1,4 @@
-name = "portfolio"
+name = "guillaume-rouyer"
 pages_build_output_dir = "dist"
 compatibility_date = "2025-09-01"
 
@@ -7,5 +7,5 @@ compatibility_date = "2025-09-01"
 [[d1_databases]]
 binding = "DB"
 database_name = "portfolio-db"
-database_id = "REMPLACER-PAR-L-ID-DE-LA-BASE"
+database_id = "f5822eac-50e5-4689-b4ca-8b0b1ae553a3"
 migrations_dir = "migrations"
