@@ -1,11 +1,10 @@
 <script setup>
 // Tableau de bord provisoire : il montre que la connexion et les journaux fonctionnent. L'admin complet arrive à l'étape suivante.
 import { onMounted, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
 import { api } from '../../admin/api.js'
+import AdminNav from './AdminNav.vue'
 import './adminForm.css'
 
-const router = useRouter()
 const logs = ref([])
 const level = ref('')
 const error = ref('')
@@ -14,9 +13,6 @@ async function load() {
   error.value = ''
   try { logs.value = (await api(`/api/admin/logs?limit=100${level.value ? `&level=${level.value}` : ''}`)).logs } catch (e) { error.value = e.message }
 }
-async function logout() {
-  try { await api('/api/admin/logout', { method: 'POST' }) } finally { router.push('/admin') }
-}
 onMounted(load)
 watch(level, load)
 const fmt = (t) => new Date(t).toLocaleString('fr-FR')
@@ -24,12 +20,13 @@ const fmt = (t) => new Date(t).toLocaleString('fr-FR')
 
 <template>
   <div class="admin dash">
-    <h1>Tableau de bord</h1>
+    <AdminNav />
+    <h1>Journaux</h1>
     <p>Connecté. Journaux de sécurité et d'activité (30 jours).</p>
-    <p><label>Niveau
+    <p class="bar"><label>Niveau
       <select v-model="level"><option value="">Tous</option><option>info</option><option>warn</option><option>error</option><option>security</option></select>
     </label>
-    <button class="btn btn-ghost" @click="logout">Se déconnecter</button></p>
+  </p>
     <p v-if="error" class="err" role="alert">{{ error }}</p>
     <div class="tablewrap">
       <table>

@@ -8,9 +8,9 @@ const routes = [
   { path: '/a-propos', name: 'about', component: () => import('../views/AboutView.vue'), meta: { title: 'À propos' } },
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue'), meta: { title: 'Contact' } },
   { path: '/projets/spidernet', redirect: '/projets/spidernet/tableau' },
-  { path: '/projets/spidernet/tableau', name: 'spidernet-board', component: () => import('../views/SpiderNetBoardView.vue'), meta: { title: "SpiderNet, tableau d'enquête", fullscreen: true } },
+  { path: '/projets/spidernet/tableau', name: 'spidernet-board', component: () => import('../views/ProjectGate.vue'), meta: { title: "SpiderNet, tableau d'enquête", fullscreen: true, project: 'spidernet', view: () => import('../views/SpiderNetBoardView.vue') } },
   { path: '/projets/bataille-navale', name: 'bataille-navale', component: () => import('../views/BatailleNavaleView.vue'), meta: { title: 'Bataille Navale' } },
-  { path: '/projets/goodnight', name: 'goodnight', component: () => import('../views/GoodnightView.vue'), meta: { title: 'Goodnight' } },
+  { path: '/projets/goodnight', name: 'goodnight', component: () => import('../views/ProjectGate.vue'), meta: { title: 'Goodnight', project: 'goodnight', view: () => import('../views/GoodnightView.vue') } },
   { path: '/projets/:slug', name: 'project', component: () => import('../views/ProjectView.vue'), meta: { title: 'Projet' } },
   { path: '/mentions-legales', name: 'legal', component: () => import('../views/LegalView.vue'), meta: { title: 'Mentions légales' } },
   { path: '/confidentialite', name: 'privacy', component: () => import('../views/PrivacyView.vue'), meta: { title: 'Confidentialité' } },
@@ -18,6 +18,9 @@ const routes = [
   { path: '/admin', name: 'admin-login', component: () => import('../views/admin/AdminLoginView.vue'), meta: { title: 'Administration', noindex: true } },
   { path: '/admin/installation', name: 'admin-setup', component: () => import('../views/admin/AdminSetupView.vue'), meta: { title: 'Installation', noindex: true } },
   { path: '/admin/tableau', name: 'admin-dashboard', component: () => import('../views/admin/AdminDashboardView.vue'), meta: { title: 'Tableau de bord', noindex: true, admin: true } },
+  { path: '/admin/projets', name: 'admin-projects', component: () => import('../views/admin/AdminProjectsView.vue'), meta: { title: 'Projets (admin)', noindex: true, admin: true } },
+  { path: '/admin/projets/nouveau', name: 'admin-project-new', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Nouveau projet', noindex: true, admin: true } },
+  { path: '/admin/projets/:slug', name: 'admin-project-edit', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Modifier un projet', noindex: true, admin: true } },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('../views/NotFoundView.vue'), meta: { title: 'Page introuvable' } },
 ]
 

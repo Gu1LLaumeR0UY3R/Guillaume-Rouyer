@@ -8,3 +8,29 @@
 .admin .ok{margin:0;color:var(--green);font-weight:600}
 .admin .qr{width:200px;margin:0 auto;padding:8px;border-radius:12px;background:#fff}
 .admin code{word-break:break-all}
+
+/* Pages d'admin larges (liste et édition de projets) */
+.admin.wide{max-width:1000px}
+.admin .bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:16px 0}
+.admin .bar .spacer{flex:1}
+.admin textarea,.admin select{padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);font:inherit}
+.admin textarea{min-height:90px;resize:vertical}
+.admin select{min-height:44px}
+.admin .hint{margin:0;color:var(--muted);font-size:14px;font-weight:400}
+.admin .grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.admin fieldset{display:grid;gap:12px;padding:16px;border:1px solid var(--line);border-radius:12px}
+.admin legend{padding:0 8px;font-weight:700}
+.admin .check{display:flex;align-items:center;gap:10px;font-weight:600}
+.admin .check input{min-height:auto;width:20px;height:20px}
+.admin .colors{display:flex;flex-wrap:wrap;gap:16px;align-items:end}
+.admin .colors input[type=color]{width:64px;padding:2px;min-height:44px}
+.admin .colors input[type=range]{min-height:auto;padding:0}
+.admin .banner-preview{height:72px;border-radius:12px}
+.admin .section-box{display:grid;gap:10px;padding:14px;border:1px dashed var(--line);border-radius:12px}
+.admin .btn-danger{border-color:#b42318;color:#b42318}
+.admin .small{min-height:36px;padding:0 14px;font-size:14px}
+.admin table{width:100%;border-collapse:collapse}
+.admin td,.admin th{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.admin .name{font-weight:700}
+.admin .actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.admin .preview{display:flex;justify-content:center;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
