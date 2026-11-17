@@ -91,7 +91,7 @@ async function confirmTotp() {
               <td>{{ s.ip || '—' }}</td>
               <td>{{ s.country || '—' }}</td>
               <td>{{ fmt(s.lastSeen) }}</td>
-              <td class="actions"><button v-if="!s.current" class="btn btn-ghost btn-danger small" type="button" @click="revoke(s.id)">Fermer</button></td>
+              <td><div class="actions"><button v-if="!s.current" class="btn btn-ghost btn-danger small" type="button" title="Déconnecte cette session" @click="revoke(s.id)">Fermer</button></div></td>
             </tr>
           </tbody>
         </table>
