@@ -4,7 +4,6 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '../../admin/api.js'
 import ProjectCard from '../../components/ProjectCard.vue'
-import AdminNav from './AdminNav.vue'
 import './adminForm.css'
 
 const route = useRoute()
@@ -79,7 +78,6 @@ async function remove() {
 
 <template>
   <div class="admin wide">
-    <AdminNav />
     <h1>{{ isNew ? 'Nouveau projet' : f.name || 'Modifier le projet' }}</h1>
     <form @submit.prevent="save">
       <fieldset>

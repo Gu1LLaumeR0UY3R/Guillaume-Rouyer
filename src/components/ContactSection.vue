@@ -1,5 +1,5 @@
 <script setup>
-import { LINKS } from '../data/contact.js'
+import { links } from '../content/settings.js'
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import { LINKS } from '../data/contact.js'
       <p>Un projet, une mission ou une simple question : écris-moi.</p>
       <div class="cta">
         <a
-          v-for="l in LINKS"
+          v-for="l in links"
           :key="l.label"
           class="btn"
           :class="l.primary ? 'light' : 'outline'"

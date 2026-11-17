@@ -17,10 +17,15 @@ const routes = [
   // Administration : jamais indexée, tableau de bord protégé par la session
   { path: '/admin', name: 'admin-login', component: () => import('../views/admin/AdminLoginView.vue'), meta: { title: 'Administration', noindex: true } },
   { path: '/admin/installation', name: 'admin-setup', component: () => import('../views/admin/AdminSetupView.vue'), meta: { title: 'Installation', noindex: true } },
-  { path: '/admin/tableau', name: 'admin-dashboard', component: () => import('../views/admin/AdminDashboardView.vue'), meta: { title: 'Tableau de bord', noindex: true, admin: true } },
-  { path: '/admin/projets', name: 'admin-projects', component: () => import('../views/admin/AdminProjectsView.vue'), meta: { title: 'Projets (admin)', noindex: true, admin: true } },
-  { path: '/admin/projets/nouveau', name: 'admin-project-new', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Nouveau projet', noindex: true, admin: true } },
-  { path: '/admin/projets/:slug', name: 'admin-project-edit', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Modifier un projet', noindex: true, admin: true } },
+  // Pages protégées : `adminLayout` les place dans le cadre d'admin (barre latérale à gauche, voir App.vue)
+  { path: '/admin/tableau', name: 'admin-dashboard', component: () => import('../views/admin/AdminDashboardView.vue'), meta: { title: 'Tableau de bord', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/alertes', name: 'admin-alerts', component: () => import('../views/admin/AdminAlertsView.vue'), meta: { title: 'Alertes', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/projets', name: 'admin-projects', component: () => import('../views/admin/AdminProjectsView.vue'), meta: { title: 'Projets (admin)', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/projets/nouveau', name: 'admin-project-new', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Nouveau projet', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/projets/:slug', name: 'admin-project-edit', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Modifier un projet', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/journaux', name: 'admin-logs', component: () => import('../views/admin/AdminLogsView.vue'), meta: { title: 'Journaux', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/reglages', name: 'admin-settings', component: () => import('../views/admin/AdminSettingsView.vue'), meta: { title: 'Réglages', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/compte', name: 'admin-account', component: () => import('../views/admin/AdminAccountView.vue'), meta: { title: 'Compte et sécurité', noindex: true, admin: true, adminLayout: true } },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('../views/NotFoundView.vue'), meta: { title: 'Page introuvable' } },
 ]
 

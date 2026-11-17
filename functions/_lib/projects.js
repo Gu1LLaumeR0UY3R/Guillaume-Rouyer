@@ -18,7 +18,7 @@ function strList(v, { max, itemMax, name }) {
   return v.map((x) => str(x, { min: 1, max: itemMax, name }))
 }
 
-function httpsUrl(v, name) {
+export function httpsUrl(v, name) {
   if (v == null || v === '') return null
   const s = str(v, { max: 200, name })
   let u
@@ -84,7 +84,14 @@ export function toApi(r, { details = false } = {}) {
     slug: r.slug, name: r.name, tag: r.tag, status: r.status, accent: r.accent, desc: r.description,
     stack: parse(r.stack, []), repo: r.repo, note: r.note, featured: !!r.featured, board: r.board, maintenanceMessage: r.maintenance_message ?? '',
   }
-  if (details) { p.details = parse(r.details, { lead: '', notice: '', sections: [] }); p.position = r.position; p.updatedAt = r.updated_at }
+  if (details) { p.details = parse(r.details, { lead: '', notice: '', sections: [] }); p.position = r.position; p.updatedAt = r.updated_at; p.prevStatus = r.prev_status ?? null }
   return p
 }
-export const COLUMNS = 'slug, name, tag, status, accent, description, stack, repo, note, featured, board, maintenance_message, details, position, updated_at'
+export const COLUMNS = 'slug, name, tag, status, accent, description, stack, repo, note, featured, board, maintenance_message, details, position, updated_at, prev_status'
+
+// Interrupteur de maintenance : en passant en maintenance on mémorise l'ancien statut, qui est rétabli à la désactivation.
+export function nextPrevStatus(old, newStatus) {
+  if (newStatus !== 'maintenance') return null
+  return old.status === 'maintenance' ? old.prev_status ?? null : old.status
+}
+export const restoredStatus = (old) => (STATUSES.includes(old.prev_status) && old.prev_status !== 'maintenance' ? old.prev_status : 'online')

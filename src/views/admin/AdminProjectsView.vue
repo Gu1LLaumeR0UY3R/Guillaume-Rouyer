@@ -3,7 +3,8 @@
 import { onMounted, ref } from 'vue'
 import { api } from '../../admin/api.js'
 import { projectLink } from '../../content/projects.js'
-import AdminNav from './AdminNav.vue'
+import { toast } from '../../admin/toasts.js'
+import ToggleSwitch from './ToggleSwitch.vue'
 import './adminForm.css'
 
 const projects = ref([])
@@ -16,6 +17,15 @@ async function load() {
 async function setStatus(p, status) {
   error.value = ''
   try { await api(`/api/admin/projects/${p.slug}`, { method: 'PATCH', body: { status } }); p.status = status } catch (e) { error.value = e.message; await load() }
+}
+// Interrupteur maintenance : le serveur mémorise l'ancien statut et le rétablit à la désactivation.
+async function setMaintenance(p, on) {
+  error.value = ''
+  try {
+    const r = await api(`/api/admin/projects/${p.slug}`, { method: 'PATCH', body: { maintenance: on } })
+    p.status = r.status
+    toast(on ? `« ${p.name} » en maintenance.` : `« ${p.name} » de nouveau ${r.status === 'wip' ? 'en cours' : 'en ligne'}.`, on ? 'warn' : 'ok')
+  } catch (e) { error.value = e.message; await load() }
 }
 async function move(i, d) {
   const j = i + d
@@ -30,13 +40,12 @@ onMounted(load)
 
 <template>
   <div class="admin wide">
-    <AdminNav />
     <h1>Projets</h1>
     <p>Les modifications apparaissent sur le site en moins d'une minute.</p>
     <div class="bar"><RouterLink class="btn btn-primary" to="/admin/projets/nouveau">+ Nouveau projet</RouterLink></div>
     <p v-if="error" class="err" role="alert">{{ error }}</p>
     <table>
-      <thead><tr><th>Ordre</th><th>Projet</th><th>Statut</th><th /></tr></thead>
+      <thead><tr><th>Ordre</th><th>Projet</th><th>Statut</th><th>Maintenance</th><th /></tr></thead>
       <tbody>
         <tr v-for="(p, i) in projects" :key="p.slug">
           <td>
@@ -49,6 +58,7 @@ onMounted(load)
               <option v-for="[v, l] in STATUS" :key="v" :value="v">{{ l }}</option>
             </select>
           </td>
+          <td><ToggleSwitch :model-value="p.status === 'maintenance'" :disabled="p.status === 'hidden'" :label="`Maintenance de ${p.name}`" compact @update:model-value="setMaintenance(p, $event)" /></td>
           <td class="actions">
             <RouterLink v-if="p.status !== 'hidden'" class="btn btn-ghost small" :to="projectLink(p)" target="_blank">Voir</RouterLink>
             <RouterLink class="btn btn-primary small" :to="`/admin/projets/${p.slug}`">Modifier</RouterLink>

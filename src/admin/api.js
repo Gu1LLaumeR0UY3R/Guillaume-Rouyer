@@ -15,6 +15,16 @@ export async function api(path, { method = 'GET', body } = {}) {
   return data
 }
 
+// Télécharge un fichier renvoyé par l'API (ex. export CSV des journaux).
+export async function download(path, filename) {
+  const res = await fetch(path, { credentials: 'same-origin' })
+  if (!res.ok) throw new Error('Téléchargement impossible')
+  const url = URL.createObjectURL(await res.blob())
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename })
+  document.body.append(a); a.click(); a.remove()
+  URL.revokeObjectURL(url)
+}
+
 // Renvoie true si une session admin est ouverte (et récupère le jeton CSRF).
 export async function checkSession() {
   try { setCsrf((await api('/api/admin/me')).csrf); return true } catch { return false }

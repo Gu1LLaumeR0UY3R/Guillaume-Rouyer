@@ -1,5 +1,6 @@
 // Journaux : chaque événement est écrit dans la console Cloudflare ET dans la table `logs` (consultable dans l'admin).
 import { getIp, getCountry } from './http.js'
+import { alertForLog } from './alerts.js'
 
 export const LEVELS = ['info', 'warn', 'error', 'security']
 const SECRET_KEY = /pass|code|token|secret|cookie|authorization|csrf/i
@@ -21,8 +22,10 @@ export async function log(ctx, level, event, meta = {}) {
     path: clean(new URL(request.url).pathname), ua: clean(request.headers.get('User-Agent')), meta: JSON.stringify(redact(meta)).slice(0, 2000),
   }
   console.log(JSON.stringify(row))
-  const p = env.DB.prepare('INSERT INTO logs (at, level, event, ip, country, path, ua, meta) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
-    .bind(row.at, row.level, row.event, row.ip, row.country, row.path, row.ua, row.meta).run()
-    .catch((e) => console.error('log_db_error', e.message))
-  if (ctx.waitUntil) ctx.waitUntil(p); else await p
+  const work = (async () => {
+    await env.DB.prepare('INSERT INTO logs (at, level, event, ip, country, path, ua, meta) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+      .bind(row.at, row.level, row.event, row.ip, row.country, row.path, row.ua, row.meta).run()
+    await alertForLog(env, row) // certains événements créent aussi une alerte (voir alerts.js)
+  })().catch((e) => console.error('log_db_error', e.message))
+  if (ctx.waitUntil) ctx.waitUntil(work); else await work
 }

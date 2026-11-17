@@ -1,24 +1,36 @@
 <script setup>
 import { ref, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { loadDetail, safeUrl, statusLabel } from '../content/projects.js'
+import { useRoute, useRouter } from 'vue-router'
+import { adminPreviewText, loadAdminProject, loadDetail, safeUrl, statusLabel } from '../content/projects.js'
+import AdminPreviewFlag from '../components/AdminPreviewFlag.vue'
 import MaintenancePage from '../components/MaintenancePage.vue'
 
 const route = useRoute()
+const router = useRouter()
 const project = ref(null)
+const preview = ref('')
 const loading = ref(true)
 
+// Public : un projet masqué ou introuvable renvoie vers l'accueil, un projet en maintenance affiche la page de maintenance.
+// Administrateur connecté : il voit toujours le projet, avec un rappel de son statut.
 watch(() => route.params.slug, async (slug) => {
   loading.value = true
-  project.value = await loadDetail(slug)
+  preview.value = ''
+  let p = await loadDetail(slug)
+  if (!p || p.status === 'maintenance') {
+    const a = await loadAdminProject(slug)
+    if (a) { p = a; preview.value = adminPreviewText(a) }
+  }
+  project.value = p
   loading.value = false
-  if (project.value) document.title = `${project.value.name} · Er1gon359`
+  if (!p) { router.replace('/'); return }
+  document.title = `${p.name} · Er1gon359`
 }, { immediate: true })
 </script>
 
 <template>
   <p v-if="loading" class="container missing" role="status">Chargement…</p>
-  <MaintenancePage v-else-if="project?.status === 'maintenance'" :project="project" />
+  <MaintenancePage v-else-if="project?.status === 'maintenance' && !preview" :project="project" />
   <article v-else-if="project && project.featured && project.details" class="project">
     <header class="banner" :style="{ background: project.accent }">
       <div class="container inner">
@@ -43,6 +55,7 @@ watch(() => route.params.slug, async (slug) => {
     <h1>Projet introuvable</h1>
     <RouterLink class="btn btn-primary" to="/projets">Voir les projets</RouterLink>
   </section>
+  <AdminPreviewFlag v-if="preview" :text="preview" />
 </template>
 
 <style scoped>

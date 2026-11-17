@@ -1,5 +1,5 @@
 <script setup>
-import { LINKS } from '../data/contact.js'
+import { links, settings } from '../content/settings.js'
 </script>
 
 <template>
@@ -8,13 +8,13 @@ import { LINKS } from '../data/contact.js'
       <aside class="contact-box" aria-label="Me contacter">
         <p class="title">Me contacter</p>
         <ul>
-          <li v-for="l in LINKS" :key="l.label">
+          <li v-for="l in links" :key="l.label">
             <a :href="l.href" :target="l.external ? '_blank' : null" :rel="l.external ? 'noopener' : null">{{ l.label }}</a>
           </li>
         </ul>
       </aside>
       <div class="bottom">
-        <p>© 2026 Guillaume Rouyer · Fait avec Vue.js</p>
+        <p>{{ settings.footerText }}</p>
         <nav aria-label="Informations légales">
           <RouterLink to="/mentions-legales">Mentions légales</RouterLink>
           <RouterLink to="/confidentialite">Confidentialité</RouterLink>

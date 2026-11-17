@@ -17,5 +17,6 @@ export async function purgeOld(env) {
     env.DB.prepare('DELETE FROM logs WHERE at < ?').bind(now - 30 * 86400000),
     env.DB.prepare('DELETE FROM login_attempts WHERE at < ?').bind(now - 86400000),
     env.DB.prepare('DELETE FROM sessions WHERE expires_at < ?').bind(now),
+    env.DB.prepare('DELETE FROM alerts WHERE is_read = 1 AND at < ?').bind(now - 90 * 86400000), // alertes lues : 90 jours
   ])
 }
