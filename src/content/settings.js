@@ -9,6 +9,7 @@ export const DEFAULTS = {
   footerText: '© 2026 Guillaume Rouyer · Fait avec Vue.js',
   maintenanceOn: false,
   maintenanceMessage: '',
+  announcement: null, // { text, type, link, linkLabel } quand une annonce est active
 }
 
 export const settings = ref({ ...DEFAULTS })

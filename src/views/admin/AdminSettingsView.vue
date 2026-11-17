@@ -7,18 +7,19 @@ import ToggleSwitch from './ToggleSwitch.vue'
 import './adminForm.css'
 
 const f = reactive({ contactEmail: '', githubUrl: '', linkedinUrl: '', footerText: '', maintenanceOn: false, maintenanceMessage: '' })
+const pick = (s) => Object.fromEntries(Object.keys(f).map((k) => [k, s[k]])) // cette page ne gère pas l'annonce
 const error = ref('')
 const busy = ref(false)
 
 onMounted(async () => {
-  try { Object.assign(f, (await api('/api/admin/settings')).settings) } catch (e) { error.value = e.message }
+  try { Object.assign(f, pick((await api('/api/admin/settings')).settings)) } catch (e) { error.value = e.message }
 })
 
 async function save() {
   if (f.maintenanceOn && !window.confirm('La maintenance de tout le site sera ACTIVE : les visiteurs ne verront que la page de maintenance. Continuer ?')) return
   error.value = ''; busy.value = true
   try {
-    Object.assign(f, (await api('/api/admin/settings', { method: 'PUT', body: { ...f } })).settings)
+    Object.assign(f, pick((await api('/api/admin/settings', { method: 'PUT', body: { ...f } })).settings))
     toast('Réglages enregistrés. Ils apparaissent sur le site en quelques secondes.', 'ok')
   } catch (e) { error.value = e.message } finally { busy.value = false }
 }

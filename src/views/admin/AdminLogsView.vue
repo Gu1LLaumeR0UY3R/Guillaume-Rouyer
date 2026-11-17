@@ -12,6 +12,7 @@ const EVENTS = {
   project_created: 'Projet créé', project_updated: 'Projet modifié', project_patched: 'Projet modifié (rapide)', project_deleted: 'Projet supprimé', projects_reordered: 'Ordre des projets modifié',
   settings_updated: 'Réglages modifiés', site_maintenance_on: 'Maintenance du site activée', site_maintenance_off: 'Maintenance du site désactivée',
   password_changed: 'Mot de passe modifié', totp_change_started: 'Changement de 2FA commencé', totp_changed: '2FA régénéré', totp_change_bad_code: 'Code 2FA refusé (changement)',
+  media_uploaded: 'Image ajoutée', media_updated: 'Image modifiée', media_trashed: 'Image mise à la corbeille', media_restored: 'Image restaurée', media_deleted: 'Image supprimée définitivement',
   session_revoked: 'Session fermée', sessions_revoked_all: 'Autres sessions fermées', logs_purged: 'Journaux purgés',
   setup_started: 'Installation commencée', setup_done: 'Installation terminée', setup_bad_token: 'Jeton d\'installation refusé', setup_bad_code: 'Code d\'installation refusé',
 }

@@ -2,6 +2,25 @@
 let csrf = ''
 export const setCsrf = (v) => { csrf = v }
 
+// Envoie un fichier brut avec suivi de progression (fetch ne sait pas le faire). `headers` : nom, texte alternatif, dimensions.
+export function upload(path, blob, headers, onProgress) {
+  return new Promise((resolve, reject) => {
+    const x = new XMLHttpRequest()
+    x.open('POST', path)
+    x.withCredentials = true
+    x.setRequestHeader('X-CSRF-Token', csrf)
+    for (const [k, v] of Object.entries(headers)) x.setRequestHeader(k, encodeURIComponent(v))
+    x.upload.onprogress = (e) => e.lengthComputable && onProgress?.(e.loaded / e.total)
+    x.onerror = () => reject(new Error('Erreur réseau'))
+    x.onload = () => {
+      let d = null
+      try { d = JSON.parse(x.responseText) } catch { /* pas de JSON */ }
+      x.status >= 200 && x.status < 300 ? resolve(d) : reject(Object.assign(new Error(d?.error || 'Envoi refusé'), { status: x.status }))
+    }
+    x.send(blob)
+  })
+}
+
 export async function api(path, { method = 'GET', body } = {}) {
   const res = await fetch(path, {
     method,

@@ -2,7 +2,7 @@
 // Les valeurs par défaut sont celles d'avant l'admin : si la table est vide, le site s'affiche comme avant.
 import { HttpError } from './http.js'
 import { httpsUrl } from './projects.js'
-import { str } from './validate.js'
+import { oneOf, str } from './validate.js'
 
 export const DEFAULTS = {
   contactEmail: 'gui.rouyer@gmail.com',
@@ -11,7 +11,17 @@ export const DEFAULTS = {
   footerText: '© 2026 Guillaume Rouyer · Fait avec Vue.js',
   maintenanceOn: false,
   maintenanceMessage: '',
+  // Bannière d'annonce (page d'accueil, avant les projets)
+  announceOn: false,
+  announceText: '',
+  announceType: 'info', // info | nouveau | important
+  announceLink: '',
+  announceLinkLabel: '',
+  announceStart: null, // date de début en ms (null = tout de suite)
+  announceEnd: null, // date de fin en ms (null = sans fin)
 }
+export const ANNOUNCE_TYPES = ['info', 'nouveau', 'important']
+export const ANNOUNCE_KEYS = Object.keys(DEFAULTS).filter((k) => k.startsWith('announce'))
 const KEYS = Object.keys(DEFAULTS)
 const EMAIL = /^[A-Za-z0-9._%+-]{1,64}@[A-Za-z0-9.-]{1,190}\.[A-Za-z]{2,24}$/
 
@@ -24,6 +34,14 @@ export async function getSettings(env) {
     try { out[k] = JSON.parse(r.value) } catch { /* valeur illisible : on garde la valeur par défaut */ }
   }
   return out
+}
+
+// Ce que le public voit : l'annonce seulement si elle est active maintenant (activée et dans ses dates). Jamais de brouillon.
+export function publicSettings(s, now = Date.now()) {
+  const pub = Object.fromEntries(Object.entries(s).filter(([k]) => !ANNOUNCE_KEYS.includes(k)))
+  const live = s.announceOn && s.announceText && (!s.announceStart || now >= s.announceStart) && (!s.announceEnd || now < s.announceEnd)
+  pub.announcement = live ? { text: s.announceText, type: s.announceType, link: s.announceLink, linkLabel: s.announceLinkLabel } : null
+  return pub
 }
 
 // Valide les réglages reçus (seuls ceux qui sont présents sont contrôlés et enregistrés).
@@ -43,7 +61,29 @@ export function parseSettings(b) {
     out.maintenanceOn = b.maintenanceOn
   }
   if (b.maintenanceMessage !== undefined) out.maintenanceMessage = str(b.maintenanceMessage, { max: 300, name: 'message de maintenance' })
+  if (b.announceOn !== undefined) {
+    if (typeof b.announceOn !== 'boolean') throw new HttpError(400, 'Valeur d\'annonce invalide')
+    out.announceOn = b.announceOn
+  }
+  if (b.announceText !== undefined) out.announceText = str(b.announceText, { max: 200, name: 'texte de l\'annonce' }).trim()
+  if (b.announceType !== undefined) out.announceType = oneOf(b.announceType, ANNOUNCE_TYPES, { def: 'info', name: 'type d\'annonce' })
+  if (b.announceLink !== undefined) out.announceLink = announceLink(b.announceLink)
+  if (b.announceLinkLabel !== undefined) out.announceLinkLabel = str(b.announceLinkLabel, { max: 40, name: 'texte du lien' }).trim()
+  for (const k of ['announceStart', 'announceEnd']) {
+    if (b[k] === undefined) continue
+    if (b[k] !== null && (!Number.isInteger(b[k]) || b[k] < 0 || b[k] > 4102444800000)) throw new HttpError(400, 'Date invalide')
+    out[k] = b[k]
+  }
+  if (out.announceStart && out.announceEnd && out.announceEnd <= out.announceStart) throw new HttpError(400, 'La fin doit être après le début')
   return out
+}
+
+// Lien d'annonce : une adresse https, ou une page du site (commence par un seul « / »).
+function announceLink(v) {
+  const s = str(v, { max: 300, name: 'lien de l\'annonce' }).trim()
+  if (!s) return ''
+  if (/^\/(?![/\\])[A-Za-z0-9\-._~!$&'()*+,;=:@%/?#]*$/.test(s)) return s
+  return httpsUrl(s, 'lien de l\'annonce') ?? ''
 }
 
 export async function saveSettings(env, values) {
