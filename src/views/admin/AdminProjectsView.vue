@@ -59,9 +59,11 @@ onMounted(load)
             </select>
           </td>
           <td><ToggleSwitch :model-value="p.status === 'maintenance'" :disabled="p.status === 'hidden'" :label="`Maintenance de ${p.name}`" compact @update:model-value="setMaintenance(p, $event)" /></td>
-          <td class="actions">
-            <RouterLink v-if="p.status !== 'hidden'" class="btn btn-ghost small" :to="projectLink(p)" target="_blank">Voir</RouterLink>
-            <RouterLink class="btn btn-primary small" :to="`/admin/projets/${p.slug}`">Modifier</RouterLink>
+          <td>
+           <div class="actions">
+            <RouterLink v-if="p.status !== 'hidden'" class="btn btn-ghost small" :to="projectLink(p)" target="_blank" title="Ouvre la page publique du projet dans un nouvel onglet">Voir</RouterLink>
+            <RouterLink class="btn btn-primary small" :to="`/admin/projets/${p.slug}`" title="Modifier le contenu, le statut et la couleur">Modifier</RouterLink>
+           </div>
           </td>
         </tr>
       </tbody>
