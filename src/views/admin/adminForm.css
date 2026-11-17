@@ -10,7 +10,10 @@
 .admin code{word-break:break-all}
 
 /* Pages d'admin larges (liste et édition de projets) */
-.admin.wide{max-width:1000px}
+.admin.wide{max-width:1240px;animation:pagein .4s ease both}
+.admin.narrow{max-width:760px}
+@keyframes pagein{from{opacity:0;transform:translateY(10px)}}
+@media (prefers-reduced-motion:reduce){.admin.wide{animation:none}}
 .admin .bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:16px 0}
 .admin .bar .spacer{flex:1}
 .admin textarea,.admin select{padding:10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);font:inherit}
@@ -30,7 +33,11 @@
 .admin .btn-danger{border-color:#b42318;color:#b42318}
 .admin .small{min-height:36px;padding:0 14px;font-size:14px}
 .admin table{width:100%;border-collapse:collapse}
-.admin td,.admin th{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.admin td,.admin th{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle;line-height:1.4}
+.admin tbody tr{transition:background .15s}
+.admin tbody tr:hover{background:var(--card)}
+.admin input,.admin select{box-sizing:border-box;line-height:1.2}
+.admin input:focus,.admin select:focus,.admin textarea:focus{outline:2px solid var(--neon);outline-offset:-1px}
 .admin .name{font-weight:700}
 .admin .actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .admin .preview{display:flex;justify-content:center;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}

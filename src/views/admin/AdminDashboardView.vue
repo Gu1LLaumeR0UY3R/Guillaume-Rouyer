@@ -3,6 +3,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
+import CountUp from './CountUp.vue'
 import StatChart from './StatChart.vue'
 import ToggleSwitch from './ToggleSwitch.vue'
 import './adminForm.css'
@@ -46,50 +47,50 @@ async function setMaintenance(on) {
       <p v-if="d.maintenanceOn" class="warnbox" role="status"><strong>Maintenance globale active.</strong> Le public ne voit que la page de maintenance.</p>
 
       <section class="tiles" aria-label="Résumé">
-        <RouterLink class="tile" to="/admin/projets">
-          <span class="n">{{ d.projects.total }}</span><span class="l">projets</span><span class="s">{{ d.projects.statuses.online }} en ligne</span>
+        <RouterLink class="tile" style="--d:0" to="/admin/projets" title="Nombre total de projets, tous statuts confondus. Clique pour les gérer.">
+          <span class="n"><CountUp :value="d.projects.total" /></span><span class="l">projets</span><span class="s">{{ d.projects.statuses.online }} en ligne</span>
         </RouterLink>
-        <RouterLink class="tile" :class="{ hot: d.alerts.unread }" to="/admin/alertes">
-          <span class="n">{{ d.alerts.unread }}</span><span class="l">alerte{{ d.alerts.unread > 1 ? 's' : '' }} non lue{{ d.alerts.unread > 1 ? 's' : '' }}</span><span class="s">{{ d.alerts.unread ? 'À consulter' : 'Rien à signaler' }}</span>
+        <RouterLink class="tile" style="--d:1" :class="{ hot: d.alerts.unread }" to="/admin/alertes" title="Alertes de sécurité ou d'erreur que tu n'as pas encore ouvertes. Clique pour les lire.">
+          <span class="n"><CountUp :value="d.alerts.unread" /></span><span class="l">alerte{{ d.alerts.unread > 1 ? 's' : '' }} non lue{{ d.alerts.unread > 1 ? 's' : '' }}</span><span class="s">{{ d.alerts.unread ? 'À consulter' : 'Rien à signaler' }}</span>
         </RouterLink>
-        <RouterLink class="tile" to="/admin/journaux">
-          <span class="n">{{ d.last24h.loginFailed }}</span><span class="l">échec{{ d.last24h.loginFailed > 1 ? 's' : '' }} de connexion (24 h)</span><span class="s">{{ d.last24h.loginOk }} réussie{{ d.last24h.loginOk > 1 ? 's' : '' }}</span>
+        <RouterLink class="tile" style="--d:2" to="/admin/journaux" title="Tentatives de connexion ratées ces 24 dernières heures (mauvais mot de passe ou code 2FA).">
+          <span class="n"><CountUp :value="d.last24h.loginFailed" /></span><span class="l">échec{{ d.last24h.loginFailed > 1 ? 's' : '' }} de connexion (24 h)</span><span class="s">{{ d.last24h.loginOk }} réussie{{ d.last24h.loginOk > 1 ? 's' : '' }}</span>
         </RouterLink>
-        <RouterLink class="tile" :class="{ hot: d.last24h.errors }" to="/admin/journaux">
-          <span class="n">{{ d.last24h.errors }}</span><span class="l">erreur{{ d.last24h.errors > 1 ? 's' : '' }} serveur (24 h)</span><span class="s">{{ d.last24h.originRefused }} requête(s) refusée(s)</span>
+        <RouterLink class="tile" style="--d:3" :class="{ hot: d.last24h.errors }" to="/admin/journaux" title="Erreurs internes du serveur ces 24 dernières heures. Ouvre les journaux pour voir le détail.">
+          <span class="n"><CountUp :value="d.last24h.errors" /></span><span class="l">erreur{{ d.last24h.errors > 1 ? 's' : '' }} serveur (24 h)</span><span class="s">{{ d.last24h.originRefused }} requête(s) refusée(s)</span>
         </RouterLink>
       </section>
 
       <section aria-labelledby="sc">
         <h2 id="sc">Raccourcis</h2>
         <div class="bar">
-          <RouterLink class="btn btn-primary small" to="/admin/projets/nouveau">+ Nouveau projet</RouterLink>
-          <RouterLink class="btn btn-ghost small" to="/admin/alertes">Alertes</RouterLink>
-          <RouterLink class="btn btn-ghost small" to="/admin/journaux">Journaux</RouterLink>
-          <RouterLink class="btn btn-ghost small" to="/admin/reglages">Réglages</RouterLink>
-          <RouterLink class="btn btn-ghost small" to="/" target="_blank">Voir le site</RouterLink>
+          <RouterLink class="btn btn-primary small" to="/admin/projets/nouveau" title="Créer un projet">+ Nouveau projet</RouterLink>
+          <RouterLink class="btn btn-ghost small" to="/admin/alertes" title="Voir les alertes">Alertes</RouterLink>
+          <RouterLink class="btn btn-ghost small" to="/admin/journaux" title="Historique des événements du site">Journaux</RouterLink>
+          <RouterLink class="btn btn-ghost small" to="/admin/reglages" title="Contact, pied de page, maintenance">Réglages</RouterLink>
+          <RouterLink class="btn btn-ghost small" to="/" target="_blank" title="Ouvre le site public dans un nouvel onglet">Voir le site</RouterLink>
           <span class="spacer" />
           <ToggleSwitch :model-value="d.maintenanceOn" :disabled="busy" label="Maintenance de tout le site" @update:model-value="setMaintenance" />
         </div>
       </section>
 
       <div class="cols">
-        <StatChart title="Projets par statut" :data="statusData" initial="pie" />
-        <StatChart title="Événements sensibles sur 7 jours" :data="activityData" :allow="['bar']" />
+        <StatChart title="Projets par statut" :data="statusData" initial="pie" unit="projet(s)" style="--d:4" />
+        <StatChart title="Événements sensibles sur 7 jours" :data="activityData" :allow="['bar']" unit="événement(s)" single style="--d:5" />
       </div>
 
       <div class="cols">
-        <section class="card" aria-labelledby="sh">
+        <section class="card" style="--d:6" aria-labelledby="sh">
           <h2 id="sh">Santé du site</h2>
           <ul class="health">
-            <li v-for="h in d.health" :key="h.id">
+            <li v-for="h in d.health" :key="h.id" :title="h.ok ? 'Tout est bon' : (h.hint || 'À vérifier')">
               <span class="mark" :class="h.ok ? 'ok' : 'ko'" aria-hidden="true">{{ h.ok ? '✓' : '!' }}</span>
               <span><span class="sr">{{ h.ok ? 'Bon : ' : 'À vérifier : ' }}</span>{{ h.label }}<span v-if="!h.ok && h.hint" class="hint"><br />{{ h.hint }}</span></span>
             </li>
           </ul>
         </section>
 
-        <section class="card" aria-labelledby="sa">
+        <section class="card" style="--d:7" aria-labelledby="sa">
           <h2 id="sa">Dernières alertes</h2>
           <p v-if="!d.alerts.latest.length" class="hint">Aucune alerte pour le moment.</p>
           <ul v-else class="alist">
@@ -102,7 +103,7 @@ async function setMaintenance(on) {
         </section>
       </div>
 
-      <section class="card" aria-labelledby="sl">
+      <section class="card" style="--d:8" aria-labelledby="sl">
         <h2 id="sl">Dernières connexions</h2>
         <div class="tablewrap">
           <table>
@@ -119,28 +120,40 @@ async function setMaintenance(on) {
 </template>
 
 <style scoped>
-.dash h2{margin:0 0 12px;font-size:22px}
-.dash section{padding:0;margin-top:28px}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:20px}
-.tile{display:grid;gap:2px;padding:16px 18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);color:var(--fg);text-decoration:none}
-.tile:hover{border-color:var(--green)}
-.tile.hot{border-color:#b42318}
-.n{font:600 34px var(--serif);line-height:1.1}
-.l{font-weight:600}
-.s{color:var(--muted);font-size:14px}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px;margin-top:28px}
+.dash{max-width:1360px}
+.dash h2{margin:0 0 14px;font-size:22px}
+.dash section{margin-top:28px}
+.dash section.card{padding:22px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px}
+.tile,.card,.chart,.cols>*{animation:rise .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d, 0) * 70ms)}
+.tile{display:grid;align-content:center;justify-items:center;gap:4px;min-height:140px;padding:20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);color:var(--fg);text-align:center;text-decoration:none;transition:transform .2s,border-color .2s,box-shadow .2s}
+.tile:hover{border-color:var(--green);transform:translateY(-4px);box-shadow:0 16px 30px -18px var(--glow)}
+.tile.hot{border-color:#b42318;animation:rise .55s cubic-bezier(.2,.8,.2,1) both,pulse 2.4s 1s ease-in-out infinite}
+.n{font:600 40px/1 var(--serif);font-variant-numeric:tabular-nums}
+.l{font-weight:600;line-height:1.3}
+.s{color:var(--muted);font-size:14px;line-height:1.3}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(360px,1fr));gap:18px;margin-top:28px;align-items:stretch}
 .cols>section{margin-top:0}
-.card{padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+.card{padding:22px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);transition:border-color .25s,box-shadow .25s}
+.card:hover{border-color:var(--green);box-shadow:0 14px 30px -22px var(--glow)}
 .warnbox{margin:16px 0 0;padding:12px 16px;border:1px solid #f59e0b;border-radius:12px;background:var(--card);color:var(--fg)}
-.health,.alist{display:grid;gap:12px;margin:0;padding:0;list-style:none}
-.health li{display:flex;gap:12px;align-items:flex-start}
-.mark{display:grid;flex:none;place-items:center;width:24px;height:24px;border-radius:50%;font-weight:700}
+.health,.alist{display:grid;gap:6px;margin:0;padding:0;list-style:none}
+.health li,.alist li{padding:8px 10px;margin:0 -10px;border-radius:10px;transition:background .2s}
+.health li:hover,.alist li:hover{background:var(--bg)}
+.health li{display:flex;gap:12px;align-items:center}
+.mark{display:inline-flex;flex:none;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;font:700 14px/1 var(--font)}
 .mark.ok{background:var(--green);color:var(--on-green)}
 .mark.ko{background:#f59e0b;color:#1b1200}
 .alist li.unread strong{color:var(--fg)}
-.more{display:inline-block;margin-top:14px;color:var(--green);font-weight:600}
+.more{display:inline-block;margin-top:14px;color:var(--green);font-weight:600;transition:transform .2s}
+.more:hover{transform:translateX(4px)}
 .tablewrap{overflow-x:auto}
 table{font-size:14px}
+tbody tr{transition:background .2s}
+tbody tr:hover{background:var(--bg)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .small{min-height:38px;padding:0 14px;font-size:14px}
+@keyframes rise{from{opacity:0;transform:translateY(16px)}}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(180,35,24,.18)}}
+@media (prefers-reduced-motion:reduce){.tile,.card,.chart,.cols>*,.tile.hot{animation:none}.tile,.card,.more{transition:none}}
 </style>

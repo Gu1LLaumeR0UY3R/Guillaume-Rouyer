@@ -107,12 +107,12 @@ const fmt = (t) => new Date(t).toLocaleString('fr-FR')
         <tbody>
           <tr v-for="l in logs" :key="l.id">
             <td>{{ fmt(l.at) }}</td>
-            <td><span class="lv" :class="l.level">{{ l.level }}</span></td>
+            <td title="Gravité de l'événement"><span class="lv" :class="l.level">{{ l.level }}</span></td>
             <td>{{ EVENTS[l.event] || l.event }}<br /><code class="raw">{{ l.event }}</code></td>
             <td>{{ l.ip }}</td>
             <td>{{ l.country || '—' }}</td>
             <td class="ua" :title="l.ua">{{ l.ua }}</td>
-            <td class="detail"><code>{{ l.meta }}</code></td>
+            <td class="detail" :title="l.meta"><code>{{ l.meta }}</code></td>
           </tr>
         </tbody>
       </table>
@@ -123,18 +123,21 @@ const fmt = (t) => new Date(t).toLocaleString('fr-FR')
 
 <style scoped>
 .tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 12px}
-.tab{min-height:40px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--fg);font:600 15px var(--font);cursor:pointer}
+.tab{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 18px;transition:background .2s,color .2s,transform .15s;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--fg);font:600 15px var(--font);cursor:pointer}
+.tab:hover{transform:translateY(-1px);border-color:var(--green)}
 .tab[aria-pressed='true']{border-color:var(--green);background:var(--green);color:var(--on-green)}
+.filters label{min-width:0}
+.filters input,.filters select{width:100%}
 .filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
 .inline{display:flex;align-items:center;gap:10px;font-weight:600}
 .empty{padding:24px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius)}
 table{font-size:14px}
-th,td{white-space:nowrap;vertical-align:top}
+th,td{white-space:nowrap;vertical-align:middle}
 .raw{color:var(--muted);font-size:12px}
 .ua{max-width:200px;overflow:hidden;text-overflow:ellipsis}
-.detail{white-space:normal;min-width:200px;max-width:380px;overflow-wrap:anywhere}
-.lv{padding:2px 10px;border:1px solid var(--line);border-radius:999px;font-size:12px;font-weight:600}
+.detail{min-width:200px;max-width:380px;overflow:hidden;text-overflow:ellipsis}
+.lv{display:inline-flex;align-items:center;padding:3px 10px;line-height:1;border:1px solid var(--line);border-radius:999px;font-size:12px;font-weight:600}
 .lv.security,.lv.error{border-color:#b42318;color:#b42318}
 .lv.warn{border-color:#b45309;color:#b45309}
 .small{min-height:36px;padding:0 14px;font-size:14px}
