@@ -12,6 +12,7 @@ const items = [
   { to: '/admin/tableau', label: 'Tableau de bord', tip: 'Vue d\'ensemble : chiffres clés, santé, alertes' },
   { to: '/admin/alertes', label: 'Alertes', tip: 'Événements de sécurité ou d\'erreur à traiter', badge: 'alerts' },
   { to: '/admin/projets', label: 'Projets', tip: 'Créer, modifier, masquer ou mettre en maintenance' },
+  { to: '/admin/statistiques', label: 'Statistiques', tip: 'Visites, pays, appareils, temps passé, arbres plantés' },
   { to: '/admin/medias', label: 'Médias', tip: 'Images du site : envoi par glisser-déposer, corbeille' },
   { to: '/admin/annonce', label: 'Annonce', tip: 'Bannière affichée sur la page d\'accueil' },
   { to: '/admin/journaux', label: 'Journaux', tip: 'Historique détaillé, recherche et export CSV' },

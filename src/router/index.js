@@ -23,6 +23,7 @@ const routes = [
   { path: '/admin/projets', name: 'admin-projects', component: () => import('../views/admin/AdminProjectsView.vue'), meta: { title: 'Projets (admin)', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/projets/nouveau', name: 'admin-project-new', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Nouveau projet', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/projets/:slug', name: 'admin-project-edit', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Modifier un projet', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/statistiques', name: 'admin-stats', component: () => import('../views/admin/AdminStatsView.vue'), meta: { title: 'Statistiques', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/medias', name: 'admin-media', component: () => import('../views/admin/AdminMediaView.vue'), meta: { title: 'Médias', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/annonce', name: 'admin-announcement', component: () => import('../views/admin/AdminAnnouncementView.vue'), meta: { title: 'Annonce', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/journaux', name: 'admin-logs', component: () => import('../views/admin/AdminLogsView.vue'), meta: { title: 'Journaux', noindex: true, admin: true, adminLayout: true } },

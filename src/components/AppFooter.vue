@@ -1,5 +1,6 @@
 <script setup>
 import { links, settings } from '../content/settings.js'
+import { track } from '../stats.js'
 </script>
 
 <template>
@@ -9,7 +10,7 @@ import { links, settings } from '../content/settings.js'
         <p class="title">Me contacter</p>
         <ul>
           <li v-for="l in links" :key="l.label">
-            <a :href="l.href" :target="l.external ? '_blank' : null" :rel="l.external ? 'noopener' : null">{{ l.label }}</a>
+            <a :href="l.href" :target="l.external ? '_blank' : null" :rel="l.external ? 'noopener' : null" @click="track.click(l.kind)">{{ l.label }}</a>
           </li>
         </ul>
       </aside>

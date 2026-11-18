@@ -1,17 +1,46 @@
 <script setup>
+import { ref } from 'vue'
 import LegalLayout from '../components/LegalLayout.vue'
+import { isOptedOut, optOutStored, setOptOut } from '../stats.js'
+
+const off = ref(optOutStored())
+const auto = isOptedOut() && !off.value // « Do Not Track » ou « Global Privacy Control » déjà actifs dans ton navigateur
+function toggleOff() { off.value = !off.value; setOptOut(off.value) }
 </script>
 
 <template>
-  <LegalLayout title="Politique de confidentialité" updated="12 novembre 2026">
+  <LegalLayout title="Politique de confidentialité" updated="18 novembre 2026">
     <h2>En résumé</h2>
     <p>
-      Ce site ne collecte aucune donnée personnelle par lui-même : pas de compte visiteur, pas de formulaire, pas de cookie
-      pour les visiteurs, pas de mesure d'audience, pas de publicité.
+      Ce site ne collecte aucune donnée personnelle par lui-même : pas de compte visiteur, pas de cookie pour les visiteurs,
+      pas de publicité. Il compte seulement, de façon anonyme et agrégée, combien de personnes viennent (voir « Mesure d'audience »),
+      et tu peux le refuser en un clic.
     </p>
 
     <h2>Ce que le site enregistre dans ton navigateur</h2>
-    <p>Rien. Le choix du mode clair ou sombre n'est pas mémorisé : le site démarre toujours en mode clair.</p>
+    <p>
+      Rien, sauf si tu choisis de ne pas être compté (voir ci-dessous) : ce choix est alors gardé dans ton navigateur pour être respecté.
+      Le choix du mode clair ou sombre n'est pas mémorisé : le site démarre toujours en mode clair.
+    </p>
+
+    <h2>Mesure d'audience</h2>
+    <p>
+      Pour savoir si le site est consulté, il compte des visites de façon anonyme, sans cookie et sans identifiant. Il enregistre
+      uniquement des compteurs par jour : les pages vues, le temps passé actif sur une page, le pays et le continent
+      (déduits au moment de la visite, sans conserver ton adresse IP), le type d'appareil (ordinateur, mobile ou tablette), le site d'où tu viens,
+      le thème clair ou sombre choisi, les clics sur les liens de contact et le nombre d'arbres plantés dans le décor.
+      Il n'y a aucune ligne par visiteur : personne ne peut être reconnu d'une visite à l'autre, et ces compteurs ne sont croisés avec aucune autre donnée.
+      Ils servent uniquement à l'éditeur, sont conservés 13 mois, puis supprimés. Les robots sont exclus.
+    </p>
+    <p>
+      Tu peux refuser : le site respecte « Do Not Track » et « Global Privacy Control », et tu peux aussi cliquer ci-dessous.
+      <span v-if="auto"> Ton navigateur envoie déjà ce refus : tu n'es pas compté.</span>
+    </p>
+    <p>
+      <button class="btn btn-ghost" type="button" :aria-pressed="off" @click="toggleOff">
+        {{ off ? 'Je ne suis pas compté (cliquer pour accepter)' : 'Ne pas me compter' }}
+      </button>
+    </p>
 
     <h2>Journaux de sécurité</h2>
     <p>

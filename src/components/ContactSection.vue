@@ -1,5 +1,6 @@
 <script setup>
 import { links } from '../content/settings.js'
+import { track } from '../stats.js'
 </script>
 
 <template>
@@ -15,6 +16,7 @@ import { links } from '../content/settings.js'
           :class="l.primary ? 'light' : 'outline'"
           :href="l.href"
           :rel="l.external ? 'noopener' : null"
+          @click="track.click(l.kind)"
         >{{ l.label }}</a>
       </div>
     </div>

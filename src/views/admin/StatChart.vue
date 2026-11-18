@@ -12,7 +12,7 @@ const props = defineProps({
   unit: { type: String, default: '' }, // ex. « projets » : affiché après la valeur
   single: Boolean, // une seule couleur pour toutes les barres (évolution dans le temps)
 })
-const NAMES = { bar: 'Barres', pie: 'Camembert' }
+const NAMES = { bar: 'Barres', pie: 'Camembert', line: 'Courbe' }
 const COLORS = ['#16a34a', '#f59e0b', '#3b82f6', '#a855f7', '#ef4444', '#14b8a6', '#eab308', '#64748b']
 
 const mode = ref(props.allow.includes(props.initial) ? props.initial : props.allow[0])
@@ -37,6 +37,19 @@ const slices = computed(() => {
     return { ...x, d, dx: Math.cos(mid) * 7, dy: Math.sin(mid) * 7 }
   })
 })
+// Courbe : points répartis sur la largeur, valeur la plus haute arrondie vers le haut pour laisser de l'air.
+const W = 600, H = 220, PAD = { l: 34, r: 14, t: 14, b: 26 }
+const top = computed(() => { const m = max.value; const p = 10 ** Math.floor(Math.log10(Math.max(m, 1))); return Math.max(1, Math.ceil(m / p * 2) / 2 * p) })
+const pts = computed(() => rows.value.map((r, i) => ({
+  ...r,
+  x: PAD.l + (rows.value.length > 1 ? (i / (rows.value.length - 1)) * (W - PAD.l - PAD.r) : (W - PAD.l - PAD.r) / 2),
+  y: PAD.t + (1 - r.value / top.value) * (H - PAD.t - PAD.b),
+})))
+const linePath = computed(() => pts.value.map((p, i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' '))
+const areaPath = computed(() => (pts.value.length ? `${linePath.value} L ${pts.value.at(-1).x.toFixed(1)} ${H - PAD.b} L ${pts.value[0].x.toFixed(1)} ${H - PAD.b} Z` : ''))
+const ticks = computed(() => [0, 0.5, 1].map((k) => ({ v: Math.round(top.value * k * 10) / 10, y: PAD.t + (1 - k) * (H - PAD.t - PAD.b) })))
+const xLabels = computed(() => { const n = pts.value.length, step = Math.max(1, Math.ceil(n / 6)); return pts.value.filter((_, i) => i % step === 0 || i === n - 1) })
+const tipLeft = computed(() => (cur.value ? `${(pts.value[active.value].x / W) * 100}%` : '0'))
 const on = (i) => { active.value = i }
 const off = () => { active.value = -1 }
 </script>
@@ -51,6 +64,19 @@ const off = () => { active.value = -1 }
     </figcaption>
 
     <p v-if="!total" class="empty">Aucune donnée pour le moment.</p>
+
+    <div v-else-if="mode === 'line'" class="line" :class="{ dimming: active >= 0 }" @mouseleave="off">
+      <svg :viewBox="`0 0 ${W} ${H}`" role="img" :aria-label="title">
+        <g class="grid"><template v-for="t in ticks" :key="t.y"><line :x1="PAD.l" :x2="W - PAD.r" :y1="t.y" :y2="t.y" /><text :x="PAD.l - 6" :y="t.y + 4" text-anchor="end">{{ t.v }}</text></template></g>
+        <path class="area" :d="areaPath" />
+        <path class="ln" :d="linePath" />
+        <line v-if="cur" class="guide" :x1="pts[active].x" :x2="pts[active].x" :y1="PAD.t" :y2="H - PAD.b" />
+        <circle v-for="p in pts" :key="p.i" class="pt" :class="{ on: active === p.i }" :cx="p.x" :cy="p.y" :r="active === p.i ? 5.5 : 3" />
+        <text v-for="p in xLabels" :key="'x' + p.i" class="xl" :x="p.x" :y="H - 6" text-anchor="middle">{{ p.label }}</text>
+        <rect v-for="(p, i) in pts" :key="'h' + p.i" class="hit" :x="p.x - (W - PAD.l - PAD.r) / Math.max(pts.length - 1, 1) / 2" :y="0" :width="(W - PAD.l - PAD.r) / Math.max(pts.length - 1, 1)" :height="H" tabindex="0" @mouseenter="on(p.i)" @focus="on(p.i)" @blur="off" />
+      </svg>
+      <span v-if="cur" class="tip line-tip" role="tooltip" :style="{ left: `clamp(70px, ${tipLeft}, calc(100% - 70px))` }"><strong>{{ cur.label }}</strong>{{ detail(cur) }}</span>
+    </div>
 
     <ul v-else-if="mode === 'bar'" class="bars" :class="{ dimming: active >= 0 }" @mouseleave="off">
       <li v-for="r in rows" :key="r.label" :class="{ on: active === r.i }" tabindex="0" @mouseenter="on(r.i)" @focus="on(r.i)" @blur="off">
@@ -70,7 +96,7 @@ const off = () => { active.value = -1 }
         </g>
         <g class="center" text-anchor="middle" fill="currentColor">
           <template v-if="cur">
-            <text x="100" y="86" class="c-label">{{ cur.label.length > 14 ? `${cur.label.slice(0, 13)}…` : cur.label }}</text>
+            <text x="100" y="86" class="c-label">{{ cur.label.length > 18 ? `${cur.label.slice(0, 17)}…` : cur.label }}</text>
             <text x="100" y="108" class="c-big">{{ pct(cur.value) }} %</text>
             <text x="100" y="128" class="c-small">{{ detail(cur).split(' · ')[0] }}</text>
           </template>
@@ -131,7 +157,22 @@ li.on .tip{opacity:1;transform:translate(-50%,0)}
 .dot{flex:none;width:12px;height:12px;border-radius:3px}
 .pc{color:var(--muted)}
 
+/* Courbe */
+.line{position:relative}
+.line svg{display:block;width:100%;height:auto;overflow:visible}
+.grid line{stroke:var(--line);stroke-dasharray:3 4}
+.grid text,.xl{fill:var(--muted);font:500 11px var(--font)}
+.area{fill:color-mix(in srgb,var(--green) 14%,transparent);animation:fadein .8s ease both}
+.ln{fill:none;stroke:var(--green);stroke-width:2.5;stroke-linejoin:round;stroke-linecap:round;stroke-dasharray:1400;stroke-dashoffset:0;animation:draw 1.1s cubic-bezier(.2,.8,.2,1) both}
+.pt{fill:var(--card);stroke:var(--green);stroke-width:2;transition:r .15s}
+.pt.on{fill:var(--green)}
+.guide{stroke:var(--green);stroke-opacity:.35;stroke-dasharray:3 3}
+.hit{fill:transparent;outline:0}
+.line-tip{top:0;bottom:auto;opacity:1;transform:translate(-50%,-4px)}
+.line-tip::after{display:none}
+@keyframes draw{from{stroke-dashoffset:1400}}
+@keyframes fadein{from{opacity:0}}
 @keyframes grow{from{transform:scaleX(0)}}
 @keyframes pop{from{opacity:0;transform:scale(.6) rotate(-25deg)}}
-@media (prefers-reduced-motion:reduce){.fill,.slice path{animation:none}.slice,.tip,.chart,li{transition:none}}
+@media (prefers-reduced-motion:reduce){.fill,.slice path,.ln,.area{animation:none}.slice,.tip,.chart,li{transition:none}}
 </style>

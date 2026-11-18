@@ -10,6 +10,8 @@ import '@fontsource-variable/dm-sans'
 import './styles/base.css'
 import './styles/motion.css'
 import { reveal } from './directives/reveal.js'
+import { initStats } from './stats.js'
 
 loadProjects()
 createApp(App).directive('reveal', reveal).use(router).mount('#app')
+initStats(router)

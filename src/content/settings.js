@@ -22,9 +22,9 @@ const https = (u) => (typeof u === 'string' && u.startsWith('https://') ? u : ''
 export const links = computed(() => {
   const s = settings.value
   return [
-    EMAIL.test(s.contactEmail) && { label: s.contactEmail, href: `mailto:${s.contactEmail}`, primary: true },
-    https(s.githubUrl) && { label: 'GitHub', href: https(s.githubUrl), external: true },
-    https(s.linkedinUrl) && { label: 'LinkedIn', href: https(s.linkedinUrl), external: true },
+    EMAIL.test(s.contactEmail) && { label: s.contactEmail, kind: 'email', href: `mailto:${s.contactEmail}`, primary: true },
+    https(s.githubUrl) && { label: 'GitHub', kind: 'github', href: https(s.githubUrl), external: true },
+    https(s.linkedinUrl) && { label: 'LinkedIn', kind: 'linkedin', href: https(s.linkedinUrl), external: true },
   ].filter(Boolean)
 })
 

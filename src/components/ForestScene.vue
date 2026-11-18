@@ -3,6 +3,7 @@
 // Un clic dans le hero plante un arbre ; la logique de dessin est dans forest/forestEngine.js.
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { createForest } from '../forest/forestEngine.js'
+import { track } from '../stats.js'
 
 const emit = defineEmits(['plant']) // reçoit le total d'arbres plantés (utile plus tard pour les statistiques)
 
@@ -18,7 +19,7 @@ onMounted(() => {
   forest = createForest(cv.value, host, {
     onCount: (n, m) => { count.value = n; max.value = m },
     onNight: (n) => { night.value = n; host.dataset.sky = n ? 'night' : 'day' }, // le hero adapte la couleur du texte
-    onPlant: (total) => emit('plant', total),
+    onPlant: (total) => { track.tree(); emit('plant', total) },
   })
   forest.mount()
 })
