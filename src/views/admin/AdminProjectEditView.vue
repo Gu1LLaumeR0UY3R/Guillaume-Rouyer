@@ -35,10 +35,12 @@ const f = reactive({
 const stackInput = ref('')
 // Champ « Autre… » : montre la catégorie si elle n'est pas dans la liste, et la remplace quand on tape.
 const customTag = computed({ get: () => (tags.value.includes(f.tag) ? '' : f.tag), set: (v) => { f.tag = v.trim() ? v : (tags.value[0] ?? 'Web') } })
-let originalAccent = '', accentTouched = false
+const originalAccent = ref('')
+const accentTouched = ref(false) // réactif : sinon l'aperçu ne se met pas à jour quand on touche aux couleurs ou à l'angle
 
 const accent = computed(() => `linear-gradient(${f.angle}deg,${f.c1},${f.c2} 55%,${f.c3})`)
-const effectiveAccent = computed(() => (!isNew && !accentTouched && originalAccent ? originalAccent : accent.value))
+// Tant que les couleurs ne sont pas touchées, on garde le dégradé d'origine tel quel (il peut avoir des réglages que le formulaire ne sait pas éditer).
+const effectiveAccent = computed(() => (!isNew && !accentTouched.value && originalAccent.value ? originalAccent.value : accent.value))
 const split = (s, re) => s.split(re).map((x) => x.trim()).filter(Boolean)
 
 function fill(p) {
@@ -48,7 +50,7 @@ function fill(p) {
     bannerMode: p.bannerImage ? 'image' : 'gradient', bannerImage: p.bannerImage ?? '', bannerDim: p.bannerDim ?? 35,
     sections: (p.details?.sections ?? []).map((s) => ({ title: s.title, paragraphsText: s.paragraphs.join('\n\n'), pointsText: s.points.join('\n'), open: false })),
   })
-  originalAccent = p.accent
+  originalAccent.value = p.accent
   const m = /linear-gradient\((\d+)deg\s*,\s*(#[0-9a-f]{6})[^,]*,\s*(#[0-9a-f]{6})[^,]*,\s*(#[0-9a-f]{6})/i.exec(p.accent)
   if (m) Object.assign(f, { angle: +m[1], c1: m[2], c2: m[3], c3: m[4] })
 }
