@@ -41,3 +41,10 @@
 .admin .name{font-weight:700}
 .admin .actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
 .admin .preview{display:flex;justify-content:center;padding:16px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}
+
+/* Champs qui ne dépassent jamais de leur conteneur */
+.admin label,.admin .grid2>*,.admin fieldset{min-width:0}
+.admin input:not([type=checkbox]):not([type=radio]):not([type=color]):not([type=range]),.admin select,.admin textarea{width:100%;max-width:100%;min-width:0;box-sizing:border-box;text-overflow:ellipsis}
+.admin textarea{overflow-wrap:anywhere}
+.admin .grid2{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
+.admin td,.admin th{overflow-wrap:anywhere}

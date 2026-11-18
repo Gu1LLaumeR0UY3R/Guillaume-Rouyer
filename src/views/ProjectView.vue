@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { adminPreviewText, loadAdminProject, loadDetail, safeUrl, statusLabel } from '../content/projects.js'
+import { adminPreviewText, bannerBackground, loadAdminProject, loadDetail, safeUrl, statusLabel } from '../content/projects.js'
 import AdminPreviewFlag from '../components/AdminPreviewFlag.vue'
 import MaintenancePage from '../components/MaintenancePage.vue'
 
@@ -32,7 +32,7 @@ watch(() => route.params.slug, async (slug) => {
   <p v-if="loading" class="container missing" role="status">Chargement…</p>
   <MaintenancePage v-else-if="project?.status === 'maintenance' && !preview" :project="project" />
   <article v-else-if="project && project.featured && project.details" class="project">
-    <header class="banner" :style="{ background: project.accent }">
+    <header class="banner" :style="{ background: bannerBackground(project) }">
       <div class="container inner">
         <RouterLink class="back" to="/projets">← Tous les projets</RouterLink>
         <span v-if="statusLabel(project)" class="status">{{ statusLabel(project) }}</span>

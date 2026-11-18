@@ -8,6 +8,14 @@ import { api, checkSession } from '../admin/api.js'
 export const STATUS_LABEL = { wip: 'En cours', maintenance: 'Page en maintenance' }
 export const statusLabel = (p) => STATUS_LABEL[p.status] ?? ''
 export const projectLink = (p) => p.board || `/projets/${p.slug}`
+// Fond d'une bannière : image du gestionnaire de médias (assombrie) posée sur le dégradé, qui reste visible si l'image manque.
+// Le chemin est revérifié ici (/media/<24 caractères>) avant d'aller dans un style.
+export function bannerBackground(p) {
+  const img = typeof p.bannerImage === 'string' && /^\/media\/[a-f0-9]{24}$/.test(p.bannerImage) ? p.bannerImage : null
+  if (!img) return p.accent
+  const d = Math.min(80, Math.max(0, Number(p.bannerDim ?? 35))) / 100
+  return `linear-gradient(rgba(0,0,0,${d}),rgba(0,0,0,${d})), url(${img}) center/cover no-repeat${p.accent ? `, ${p.accent}` : ''}`
+}
 // N'autorise que des liens https (défense en plus de la validation du serveur)
 export const safeUrl = (u) => (typeof u === 'string' && u.startsWith('https://') ? u : null)
 

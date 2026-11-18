@@ -38,9 +38,9 @@ export function validId(id) {
 export async function usageOf(env, ids) {
   const out = Object.fromEntries(ids.map((i) => [i, []]))
   if (!ids.length) return out
-  const { results: projects } = await env.DB.prepare('SELECT slug, name, description, note, details FROM projects').all()
+  const { results: projects } = await env.DB.prepare('SELECT slug, name, description, note, details, banner_image FROM projects').all()
   for (const p of projects) {
-    const text = `${p.description}\n${p.note}\n${p.details}`
+    const text = `${p.description}\n${p.note}\n${p.details}\n${p.banner_image ?? ''}`
     for (const id of ids) if (text.includes(`/media/${id}`)) out[id].push({ kind: 'projet', label: p.name, href: `/admin/projets/${p.slug}` })
   }
   const { results: settings } = await env.DB.prepare("SELECT key, value FROM settings WHERE key LIKE 'site.%'").all()

@@ -6,6 +6,7 @@ export const STATUSES = ['online', 'wip', 'maintenance', 'hidden']
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 // Dégradé CSS autorisé : angle ou direction + 2 à 4 couleurs hexadécimales. Tout le reste est refusé (pas d'injection CSS).
 const GRADIENT = /^linear-gradient\(\s*(\d{1,3}deg|to (top|bottom|left|right)( (left|right|top|bottom))?)\s*,\s*#[0-9a-f]{3,8}(\s+\d{1,3}%)?(\s*,\s*#[0-9a-f]{3,8}(\s+\d{1,3}%)?){1,3}\s*\)$/i
+const MEDIA_PATH = /^\/media\/[a-f0-9]{24}$/
 const BOARD = /^\/projets(\/[a-z0-9-]+)+$/
 
 export function validSlug(s) {
@@ -61,6 +62,16 @@ export function parseProject(b, { partial = false } = {}) {
     if (a && !GRADIENT.test(a)) throw new HttpError(400, 'Dégradé invalide')
     out.accent = a
   }
+  if (has('bannerImage')) {
+    const v = b.bannerImage ? str(b.bannerImage, { max: 40, name: 'image de bannière' }) : null
+    if (v && !MEDIA_PATH.test(v)) throw new HttpError(400, 'Image de bannière invalide (choisis-la dans les médias)')
+    out.banner_image = v
+  }
+  if (has('bannerDim')) {
+    const n = b.bannerDim ?? 35
+    if (!Number.isInteger(n) || n < 0 || n > 80) throw new HttpError(400, 'Assombrissement invalide (0 à 80)')
+    out.banner_dim = n
+  }
   if (has('description')) out.description = str(b.description ?? '', { max: 600, name: 'description' })
   if (has('stack')) out.stack = strList(b.stack ?? [], { max: 12, itemMax: 30, name: 'technologie' })
   if (has('repo')) out.repo = httpsUrl(b.repo, 'lien du code')
@@ -83,11 +94,12 @@ export function toApi(r, { details = false } = {}) {
   const p = {
     slug: r.slug, name: r.name, tag: r.tag, status: r.status, accent: r.accent, desc: r.description,
     stack: parse(r.stack, []), repo: r.repo, note: r.note, featured: !!r.featured, board: r.board, maintenanceMessage: r.maintenance_message ?? '',
+    bannerImage: r.banner_image ?? null, bannerDim: r.banner_dim ?? 35,
   }
   if (details) { p.details = parse(r.details, { lead: '', notice: '', sections: [] }); p.position = r.position; p.updatedAt = r.updated_at; p.prevStatus = r.prev_status ?? null }
   return p
 }
-export const COLUMNS = 'slug, name, tag, status, accent, description, stack, repo, note, featured, board, maintenance_message, details, position, updated_at, prev_status'
+export const COLUMNS = 'slug, name, tag, status, accent, description, stack, repo, note, featured, board, maintenance_message, details, position, updated_at, prev_status, banner_image, banner_dim'
 
 // Interrupteur de maintenance : en passant en maintenance on mémorise l'ancien statut, qui est rétabli à la désactivation.
 export function nextPrevStatus(old, newStatus) {

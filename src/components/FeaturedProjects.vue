@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { projects, projectLink, statusLabel } from '../content/projects.js'
+import { bannerBackground, projects, projectLink, statusLabel } from '../content/projects.js'
 
 const featured = computed(() => projects.value.filter((p) => p.featured))
 </script>
@@ -12,7 +12,7 @@ const featured = computed(() => projects.value.filter((p) => p.featured))
       <p class="intro">Les projets dont je suis le plus fier, avec leur histoire et leurs choix techniques.</p>
       <div class="grid">
         <RouterLink v-for="(p, i) in featured" :key="p.slug" class="card" :class="{ big: i === 0 }" :to="projectLink(p)">
-          <div class="banner" :style="{ background: p.accent }">
+          <div class="banner" :style="{ background: bannerBackground(p) }">
             <span v-if="statusLabel(p)" class="status">{{ statusLabel(p) }}</span>
             <h3>{{ p.name }}</h3>
           </div>
