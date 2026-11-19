@@ -5,6 +5,7 @@ import { requireAdmin } from '../../../_lib/auth.js'
 import { MAX_BYTES, MAX_TOTAL, TRASH_DAYS, newId, sniff, toBase64, usageOf } from '../../../_lib/media.js'
 import { int, str } from '../../../_lib/validate.js'
 import { log } from '../../../_lib/logger.js'
+import { raiseAlert } from '../../../_lib/alerts.js'
 
 export const onRequest = (ctx) => route(ctx, { GET, POST })
 
@@ -46,6 +47,7 @@ async function POST(ctx) {
   const id = newId()
   await ctx.env.DB.prepare('INSERT INTO media (id, name, alt, mime, width, height, size, data, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
     .bind(id, name, alt, mime, width, height, bytes.length, toBase64(bytes), Date.now()).run()
+  if (s + bytes.length > MAX_TOTAL * 0.8) await raiseAlert(ctx.env, { level: 'warn', kind: 'quota', title: 'Espace médias presque plein', detail: `${Math.round((s + bytes.length) / 1e6)} Mo sur ${MAX_TOTAL / 1e6} Mo réservés. Vide la corbeille ou supprime des images.`, key: 'quota_media' })
   await log(ctx, 'info', 'media_uploaded', { id, size: bytes.length })
   return json({ ok: true, id, url: `/media/${id}` }, 201)
 }

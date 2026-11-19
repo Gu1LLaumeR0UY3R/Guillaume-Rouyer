@@ -48,3 +48,8 @@
 .admin textarea{overflow-wrap:anywhere}
 .admin .grid2{grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr))}
 .admin td,.admin th{overflow-wrap:anywhere}
+
+/* Boutons de suppression lisibles en mode sombre */
+[data-theme=dark] .admin .btn-danger{border-color:#ff7b6e;color:#ff9a90;background:transparent}
+[data-theme=dark] .admin .globe{--globe-land:#2c3330;--globe-sea:#0f1a24;--globe-sea2:#1b2b3a}
+[data-theme=dark] .admin .err{color:#ff9a90}

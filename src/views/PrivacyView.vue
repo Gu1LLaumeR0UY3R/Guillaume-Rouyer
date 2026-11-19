@@ -50,6 +50,11 @@ function toggleOff() { off.value = !off.value; setOptOut(off.value) }
       l'intérêt légitime de l'éditeur et sont supprimés au bout de 30 jours.
     </p>
     <p>
+      Pour se protéger d'une attaque, l'éditeur peut bloquer l'accès au site à un pays, à un continent ou à une adresse IP.
+      Une adresse IP n'est conservée dans ce but que le temps du blocage, 30 jours au maximum, puis effacée. Seuls le pays
+      (déduit par l'hébergeur) et le nombre d'accès bloqués sont comptés, sans aucune adresse.
+    </p>
+    <p>
       Un cookie technique de session n'est créé que lors de la connexion à l'espace d'administration. Il est
       strictement nécessaire à son fonctionnement et ne concerne pas les visiteurs.
     </p>
