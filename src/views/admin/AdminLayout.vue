@@ -12,6 +12,7 @@ const items = [
   { to: '/admin/tableau', label: 'Tableau de bord', tip: 'Vue d\'ensemble : chiffres clés, santé, alertes' },
   { to: '/admin/alertes', label: 'Alertes', tip: 'Événements de sécurité ou d\'erreur à traiter', badge: 'alerts' },
   { to: '/admin/projets', label: 'Projets', tip: 'Créer, modifier, masquer ou mettre en maintenance' },
+  { to: '/admin/contenu/spidernet', label: 'Contenu', tip: 'Modifier les textes du site : tableau SpiderNet (autres pages bientôt)' },
   { to: '/admin/statistiques', label: 'Statistiques', tip: 'Visites, pays, appareils, temps passé, arbres plantés' },
   { to: '/admin/securite', label: 'Sécurité', tip: 'Bannir un pays, un continent ou une adresse IP · mode protégé' },
   { to: '/admin/sante', label: 'Santé du site', tip: 'Quotas Cloudflare, espace utilisé, erreurs récentes' },
