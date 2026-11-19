@@ -107,7 +107,7 @@ const num = (o, f, e, min, max) => { const v = parseFloat(e.target.value); if (N
 
 <template>
   <main class="admin wide">
-    <RouterLink to="/admin/projets" class="hint">← Projets</RouterLink>
+    <RouterLink to="/admin/contenu" class="hint">← Contenu du site</RouterLink>
     <h1>Tableau SpiderNet</h1>
     <p class="hint">Les cartes du tableau d'enquête du projet SpiderNet. Chaque changement est visible sur le site quelques secondes après l'enregistrement.
       <strong>{{ custom ? 'Contenu modifié.' : 'Contenu d\'origine (jamais modifié).' }}</strong></p>

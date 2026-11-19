@@ -1,19 +1,22 @@
 <script setup>
 import ForestScene from './ForestScene.vue'
+import { home, loadSite } from '../content/site.js'
+import { pick, t } from '../i18n/index.js'
+
+loadSite()
+// Texte modifié dans l'admin, sinon texte d'origine
+const txt = (key) => pick(home.value, key) || t(`hero.${key}`)
 </script>
 
 <template>
   <section id="accueil" class="hero">
     <ForestScene />
     <div class="container">
-      <p class="badge">Bachelor Concepteur Développeur d'Applications · Full Stack &amp; Cybersécurité</p>
-      <h1>Développeur Web &amp; PHP, <span>full stack</span>.</h1>
-      <p class="lead">
-        Guillaume Rouyer, développeur junior curieux et autodidacte. Des API REST aux apps mobiles,
-        jusqu'à une IA locale auto-hébergée sur mon propre serveur Proxmox.
-      </p>
+      <p class="badge">{{ txt('badge') }}</p>
+      <h1>{{ txt('titleA') }} <span>{{ txt('titleB') }}</span>.</h1>
+      <p class="lead">{{ txt('lead') }}</p>
       <div class="cta">
-        <RouterLink class="btn btn-primary" to="/projets">Voir mes projets</RouterLink>
+        <RouterLink class="btn btn-primary" to="/projets">{{ txt('cta') }}</RouterLink>
         <a class="btn btn-ghost" href="https://github.com/Gu1LLaumeR0UY3R" rel="noopener">GitHub</a>
       </div>
     </div>

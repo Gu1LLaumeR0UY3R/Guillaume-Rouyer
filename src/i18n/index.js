@@ -5,7 +5,7 @@ export const lang = ref(typeof navigator !== 'undefined' && /^fr/i.test(navigato
 
 watchEffect(() => { document.documentElement.lang = lang.value })
 
-const MESSAGES = {
+export const MESSAGES = {
   fr: {
     skip: 'Aller au contenu',
     'nav.projects': 'Projets', 'nav.about': 'À propos', 'nav.contact': 'Contact',

@@ -4,7 +4,7 @@ import { computed, ref } from 'vue'
 import { FACTS, SKILLS } from '../data/skills.js'
 import { EXPERIENCES, FORMATION } from '../data/timeline.js'
 
-const BIO = [
+export const BIO = [
   "Je suis développeur junior, passionné par les nouvelles technologies. Autodidacte et curieux, j'aime comprendre comment les choses fonctionnent, des API REST aux applications mobiles, jusqu'à l'auto-hébergement d'une IA locale sur mon propre serveur Proxmox.",
   "Je me forme au Bachelor Concepteur Développeur d'Applications (Full Stack & Cybersécurité), après un BTS SIO option SLAM. J'aime autant construire l'interface que l'infrastructure qui la fait tourner : PHP et Laravel, Python et FastAPI, Vue.js, React Native, Docker.",
 ]
@@ -30,7 +30,7 @@ let pending = null
 export function loadSite() {
   pending ??= fetch('/api/content', { headers: { Accept: 'application/json' } })
     .then((r) => { if (!r.ok) throw new Error('indisponible'); return r.json() })
-    .then((d) => { if (d?.about?.length || d?.timeline?.length) site.value = { ...fallback(), ...d } })
+    .then((d) => { if (d && Object.keys(d).length) site.value = { ...fallback(), ...d } })
     .catch(() => { /* on garde les données locales */ })
     .finally(() => { siteLoaded.value = true })
   return pending
@@ -41,3 +41,6 @@ export const facts = computed(() => site.value.about.filter((a) => a.kind === 'f
 export const skillGroups = computed(() => site.value.skill_groups.map((g) => ({ ...g, items: site.value.skills.filter((s) => s.group_id === g.id) })))
 export const formations = computed(() => site.value.timeline.filter((x) => x.kind === 'formation'))
 export const experiences = computed(() => site.value.timeline.filter((x) => x.kind === 'experience'))
+
+// Textes de l'en-tête de l'accueil modifiés dans l'admin (vide = textes d'origine du dictionnaire i18n)
+export const home = computed(() => site.value.home ?? {})
