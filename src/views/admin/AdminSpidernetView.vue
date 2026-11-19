@@ -35,7 +35,7 @@ async function save() {
   try {
     await api('/api/admin/content/spidernet', { method: 'PUT', body: { items: clean() } })
     saved.value = snapshot(); custom.value = true
-    toast('Tableau enregistré : visible sur le site d'ici quelques secondes', 'info')
+    toast("Tableau enregistré : visible sur le site d'ici quelques secondes", 'info')
   } catch (e) { toast(e.message, 'danger') } finally { busy.value = false }
 }
 async function reset() {
