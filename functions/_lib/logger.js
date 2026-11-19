@@ -1,6 +1,7 @@
 // Journaux : chaque événement est écrit dans la console Cloudflare ET dans la table `logs` (consultable dans l'admin).
 import { getIp, getCountry } from './http.js'
 import { alertForLog } from './alerts.js'
+import { autoBan } from './bans.js'
 
 export const LEVELS = ['info', 'warn', 'error', 'security']
 const SECRET_KEY = /pass|code|token|secret|cookie|authorization|csrf/i
@@ -26,6 +27,8 @@ export async function log(ctx, level, event, meta = {}) {
     await env.DB.prepare('INSERT INTO logs (at, level, event, ip, country, path, ua, meta) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
       .bind(row.at, row.level, row.event, row.ip, row.country, row.path, row.ua, row.meta).run()
     await alertForLog(env, row) // certains événements créent aussi une alerte (voir alerts.js)
+    // Connexion verrouillée = quelqu'un insiste : l'adresse est bloquée 30 minutes sur tout le site (sauf celle de l'administrateur)
+    if (row.event === 'login_locked') await autoBan(env, row.ip, 30 * 60_000, 'Connexion verrouillée après trop d\'échecs')
   })().catch((e) => console.error('log_db_error', e.message))
   if (ctx.waitUntil) ctx.waitUntil(work); else await work
 }

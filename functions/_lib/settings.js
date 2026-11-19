@@ -11,6 +11,7 @@ export const DEFAULTS = {
   footerText: '© 2026 Guillaume Rouyer · Fait avec Vue.js',
   maintenanceOn: false,
   maintenanceMessage: '',
+  protectedMode: false, // « mode protégé » : limites plus strictes en cas d'attaque (jamais envoyé au public)
   // Bannière d'annonce (page d'accueil, avant les projets)
   announceOn: false,
   announceText: '',
@@ -38,7 +39,7 @@ export async function getSettings(env) {
 
 // Ce que le public voit : l'annonce seulement si elle est active maintenant (activée et dans ses dates). Jamais de brouillon.
 export function publicSettings(s, now = Date.now()) {
-  const pub = Object.fromEntries(Object.entries(s).filter(([k]) => !ANNOUNCE_KEYS.includes(k)))
+  const pub = Object.fromEntries(Object.entries(s).filter(([k]) => !ANNOUNCE_KEYS.includes(k) && k !== 'protectedMode'))
   const live = s.announceOn && s.announceText && (!s.announceStart || now >= s.announceStart) && (!s.announceEnd || now < s.announceEnd)
   pub.announcement = live ? { text: s.announceText, type: s.announceType, link: s.announceLink, linkLabel: s.announceLinkLabel } : null
   return pub
@@ -59,6 +60,10 @@ export function parseSettings(b) {
   if (b.maintenanceOn !== undefined) {
     if (typeof b.maintenanceOn !== 'boolean') throw new HttpError(400, 'Valeur de maintenance invalide')
     out.maintenanceOn = b.maintenanceOn
+  }
+  if (b.protectedMode !== undefined) {
+    if (typeof b.protectedMode !== 'boolean') throw new HttpError(400, 'Valeur du mode protégé invalide')
+    out.protectedMode = b.protectedMode
   }
   if (b.maintenanceMessage !== undefined) out.maintenanceMessage = str(b.maintenanceMessage, { max: 300, name: 'message de maintenance' })
   if (b.announceOn !== undefined) {

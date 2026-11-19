@@ -1,6 +1,7 @@
 // Public : réception des mesures d'audience (hors /api : ne passe pas par les journaux de sécurité).
 // Répond toujours 204 : un refus ne doit rien révéler ni gêner le visiteur.
 import { getCountry, getIp, readJson } from './_lib/http.js'
+import { raiseAlert } from './_lib/alerts.js'
 import { DAY_CAP, bump, cleanPath, dayOf, deviceOf, isBot, refHost } from './_lib/stats.js'
 
 const done = () => new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } })
@@ -10,6 +11,7 @@ function tooFast(ip) {
   if (!h || now - h.t > 60_000) { hits.set(ip, { t: now, n: 1 }); if (hits.size > 5000) hits.clear(); return false }
   return ++h.n > 90
 }
+let warned = '' // une seule alerte de quota par jour et par serveur (la base les regroupe aussi)
 const CLICKS = ['email', 'github', 'linkedin']
 
 export async function onRequestPost(ctx) {
@@ -24,7 +26,12 @@ export async function onRequestPost(ctx) {
     const b = await readJson(request, 600)
     const day = dayOf()
     const cap = await env.DB.prepare("SELECT n FROM stat_daily WHERE day = ? AND kind = 'events' AND key = 'all'").bind(day).first()
-    if ((cap?.n ?? 0) >= DAY_CAP) return done()
+    const used = cap?.n ?? 0
+    if (used >= DAY_CAP) {
+      if (warned !== day + 'full') { warned = day + 'full'; await raiseAlert(env, { level: 'warn', kind: 'quota', title: 'Mesure d\'audience arrêtée jusqu\'à demain', detail: `${DAY_CAP} événements atteints aujourd'hui. Si ce n'est pas un vrai pic de visites, active le mode protégé.`, key: `quota_full:${day}` }) }
+      return done()
+    }
+    if (used >= DAY_CAP * 0.8 && warned !== day + 'soon') { warned = day + 'soon'; await raiseAlert(env, { level: 'warn', kind: 'quota', title: 'Mesure d\'audience à 80 % du plafond du jour', detail: `${used} / ${DAY_CAP} événements. Un pic inhabituel peut venir d'un robot : regarde les statistiques.`, key: `quota_soon:${day}` }) }
     const rows = [['events', 'all', 1]]
 
     if (b.t === 'view') {
