@@ -1,6 +1,7 @@
 <script setup>
 import { links } from '../content/settings.js'
 import { track } from '../stats.js'
+import ContactForm from './ContactForm.vue'
 import { contact, loadSite } from '../content/site.js'
 import { pick } from '../i18n/index.js'
 
@@ -26,12 +27,13 @@ const text = () => pick(contact.value, 'text') || 'Un projet, une mission ou une
           @click="track.click(l.kind)"
         >{{ l.label }}</a>
       </div>
+      <ContactForm />
     </div>
   </section>
 </template>
 
 <style scoped>
-.contact{display:flex;align-items:center;min-height:60vh;background:var(--deep);color:#f3fbf5;text-align:center}
+.contact{display:flex;align-items:center;min-height:60vh;padding:64px 0;background:var(--deep);color:#f3fbf5;text-align:center}
 .container{width:100%}
 p{margin:0 0 28px;color:#b8d8c2}
 .cta{display:flex;flex-wrap:wrap;gap:16px;justify-content:center}

@@ -20,6 +20,7 @@ const routes = [
   // Pages protégées : `adminLayout` les place dans le cadre d'admin (barre latérale à gauche, voir App.vue)
   { path: '/admin/tableau', name: 'admin-dashboard', component: () => import('../views/admin/AdminDashboardView.vue'), meta: { title: 'Tableau de bord', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/alertes', name: 'admin-alerts', component: () => import('../views/admin/AdminAlertsView.vue'), meta: { title: 'Alertes', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/messages', name: 'admin-messages', component: () => import('../views/admin/AdminMessagesView.vue'), meta: { title: 'Messages', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/projets', name: 'admin-projects', component: () => import('../views/admin/AdminProjectsView.vue'), meta: { title: 'Projets (admin)', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/projets/nouveau', name: 'admin-project-new', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Nouveau projet', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/projets/:slug', name: 'admin-project-edit', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Modifier un projet', noindex: true, admin: true, adminLayout: true } },

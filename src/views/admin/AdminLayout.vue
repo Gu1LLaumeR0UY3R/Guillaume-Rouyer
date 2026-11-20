@@ -7,20 +7,24 @@ import { badges, startBadges, stopBadges } from '../../admin/badges.js'
 import { dismiss, toasts } from '../../admin/toasts.js'
 import './adminForm.css'
 
+// Icônes du menu (tracés simples, 24×24)
+const ICONS = {"dashboard": "<rect x=\"3\" y=\"3\" width=\"7\" height=\"9\" rx=\"1\"/><rect x=\"14\" y=\"3\" width=\"7\" height=\"5\" rx=\"1\"/><rect x=\"14\" y=\"12\" width=\"7\" height=\"9\" rx=\"1\"/><rect x=\"3\" y=\"16\" width=\"7\" height=\"5\" rx=\"1\"/>", "alerts": "<path d=\"M6 8a6 6 0 0112 0c0 7 3 9 3 9H3s3-2 3-9\"/><path d=\"M10.3 21a1.94 1.94 0 003.4 0\"/>", "messages": "<rect x=\"3\" y=\"5\" width=\"18\" height=\"14\" rx=\"2\"/><path d=\"M3 7l9 6 9-6\"/>", "projects": "<path d=\"M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z\"/>", "content": "<path d=\"M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z\"/><path d=\"M14 3v5h5M9 13h6M9 17h6\"/>", "stats": "<path d=\"M4 20V10M10 20V4M16 20v-8M22 20H2\"/>", "security": "<path d=\"M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z\"/><path d=\"M9 12l2 2 4-4\"/>", "health": "<path d=\"M3 12h4l2-5 4 10 2-5h6\"/>", "media": "<rect x=\"3\" y=\"4\" width=\"18\" height=\"16\" rx=\"2\"/><circle cx=\"9\" cy=\"10\" r=\"2\"/><path d=\"M21 16l-5-5-9 9\"/>", "announce": "<path d=\"M3 11v3a1 1 0 001 1h2l5 4V6L6 10H4a1 1 0 00-1 1z\"/><path d=\"M15 9a4 4 0 010 6M18 6a8 8 0 010 12\"/>", "logs": "<path d=\"M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01\"/>", "settings": "<path d=\"M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0\"/><circle cx=\"16\" cy=\"6\" r=\"2\"/><circle cx=\"10\" cy=\"12\" r=\"2\"/><circle cx=\"18\" cy=\"18\" r=\"2\"/>", "account": "<circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21a8 8 0 0116 0\"/>"}
+
 const router = useRouter()
 const items = [
-  { to: '/admin/tableau', label: 'Tableau de bord', tip: 'Vue d\'ensemble : chiffres clés, santé, alertes' },
-  { to: '/admin/alertes', label: 'Alertes', tip: 'Événements de sécurité ou d\'erreur à traiter', badge: 'alerts' },
-  { to: '/admin/projets', label: 'Projets', tip: 'Créer, modifier, masquer ou mettre en maintenance' },
-  { to: '/admin/contenu', label: 'Contenu', tip: 'Textes de l\'accueil, À propos, compétences, parcours, tableau SpiderNet' },
-  { to: '/admin/statistiques', label: 'Statistiques', tip: 'Visites, pays, appareils, temps passé, arbres plantés' },
-  { to: '/admin/securite', label: 'Sécurité', tip: 'Bannir un pays, un continent ou une adresse IP · mode protégé' },
-  { to: '/admin/sante', label: 'Santé du site', tip: 'Quotas Cloudflare, espace utilisé, erreurs récentes' },
-  { to: '/admin/medias', label: 'Médias', tip: 'Images du site : envoi par glisser-déposer, corbeille' },
-  { to: '/admin/annonce', label: 'Annonce', tip: 'Bannière affichée sur la page d\'accueil' },
-  { to: '/admin/journaux', label: 'Journaux', tip: 'Historique détaillé, recherche et export CSV' },
-  { to: '/admin/reglages', label: 'Réglages', tip: 'Contact, pied de page, maintenance globale' },
-  { to: '/admin/compte', label: 'Compte et sécurité', tip: 'Mot de passe, 2FA, sessions ouvertes' },
+  { to: '/admin/tableau', icon: 'dashboard', label: 'Tableau de bord', tip: 'Vue d\'ensemble : chiffres clés, santé, alertes' },
+  { to: '/admin/alertes', icon: 'alerts', label: 'Alertes', tip: 'Événements de sécurité ou d\'erreur à traiter', badge: 'alerts' },
+  { to: '/admin/messages', icon: 'messages', label: 'Messages', tip: 'Messages reçus par le formulaire de contact', badge: 'messages' },
+  { to: '/admin/projets', icon: 'projects', label: 'Projets', tip: 'Créer, modifier, masquer ou mettre en maintenance' },
+  { to: '/admin/contenu', icon: 'content', label: 'Contenu', tip: 'Textes de l\'accueil, À propos, compétences, parcours, tableau SpiderNet' },
+  { to: '/admin/statistiques', icon: 'stats', label: 'Statistiques', tip: 'Visites, pays, appareils, temps passé, arbres plantés' },
+  { to: '/admin/securite', icon: 'security', label: 'Sécurité', tip: 'Bannir un pays, un continent ou une adresse IP · mode protégé' },
+  { to: '/admin/sante', icon: 'health', label: 'Santé du site', tip: 'Quotas Cloudflare, espace utilisé, erreurs récentes' },
+  { to: '/admin/medias', icon: 'media', label: 'Médias', tip: 'Images du site : envoi par glisser-déposer, corbeille' },
+  { to: '/admin/annonce', icon: 'announce', label: 'Annonce', tip: 'Bannière affichée sur la page d\'accueil' },
+  { to: '/admin/journaux', icon: 'logs', label: 'Journaux', tip: 'Historique détaillé, recherche et export CSV' },
+  { to: '/admin/reglages', icon: 'settings', label: 'Réglages', tip: 'Contact, pied de page, maintenance globale' },
+  { to: '/admin/compte', icon: 'account', label: 'Compte et sécurité', tip: 'Mot de passe, 2FA, sessions ouvertes' },
 ]
 
 onMounted(startBadges)
@@ -39,8 +43,8 @@ async function logout() {
         <ul>
           <li v-for="(i, n) in items" :key="i.to" :style="{ '--i': n }">
             <RouterLink :to="i.to" :title="i.tip">
-              {{ i.label }}
-              <span v-if="i.badge && badges[i.badge]" class="badge" :aria-label="`${badges[i.badge]} non lue(s)`">{{ badges[i.badge] }}</span>
+              <span class="lab"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" v-html="ICONS[i.icon]" /><span>{{ i.label }}</span></span>
+              <span v-if="i.badge && badges[i.badge]" class="badge" :aria-label="`${badges[i.badge]} non lu(s)`">{{ badges[i.badge] }}</span>
             </RouterLink>
           </li>
         </ul>
@@ -72,6 +76,9 @@ nav a:hover{background:var(--bg);transform:translateX(4px)}
 nav li{animation:slidein .4s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 50ms)}
 nav a.router-link-active{background:var(--green);color:var(--on-green);box-shadow:0 8px 18px -10px var(--glow)}
 @keyframes slidein{from{opacity:0;transform:translateX(-14px)}}
+.lab{display:inline-flex;align-items:center;gap:12px}
+.ico{flex:none;width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:transform .25s}
+nav a:hover .ico{transform:scale(1.15) rotate(-6deg)}
 .badge{display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 7px;border-radius:999px;background:#b42318;color:#fff;font:700 12px/1 var(--font);animation:bounce 2s ease-in-out infinite}
 @keyframes bounce{0%,80%,100%{transform:scale(1)}90%{transform:scale(1.18)}}
 .foot{display:grid;gap:8px;margin-top:auto}
@@ -82,7 +89,7 @@ nav a.router-link-active{background:var(--green);color:var(--on-green);box-shado
 .toast.danger{border-left-color:#b42318}
 .toast button{flex:none;width:28px;height:28px;border:0;border-radius:8px;background:transparent;color:var(--fg);font-size:20px;line-height:1;cursor:pointer}
 @keyframes toastin{from{opacity:0;transform:translateX(30px)}}
-@media (prefers-reduced-motion:reduce){nav li,.badge,.toast{animation:none}nav a{transition:none}}
+@media (prefers-reduced-motion:reduce){nav li,.badge,.toast{animation:none}nav a,.ico{transition:none}nav a:hover .ico{transform:none}}
 @media (max-width:860px){
   .admin-shell{grid-template-columns:1fr}
   .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;border-right:0;border-bottom:1px solid var(--line)}
