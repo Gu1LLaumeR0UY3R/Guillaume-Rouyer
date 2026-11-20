@@ -26,11 +26,11 @@ export const LEGAL_DEFAULT = {
 }
 
 export const PRIVACY_DEFAULT = {
-  updated: '19 novembre 2026',
+  updated: '20 novembre 2026',
   sections: [
   {
     "title": "En résumé",
-    "body": "Ce site ne collecte aucune donnée personnelle par lui-même : pas de compte visiteur, pas de cookie pour les visiteurs, pas de publicité. Il compte seulement, de façon anonyme et agrégée, combien de personnes viennent (voir « Mesure d'audience »), et tu peux le refuser en un clic."
+    "body": "Ce site ne collecte de donnée personnelle que si tu m'écris avec le formulaire de contact (voir « Contact par e-mail et formulaire »). Sinon : pas de compte visiteur, pas de cookie pour les visiteurs, pas de publicité. Il compte seulement, de façon anonyme et agrégée, combien de personnes viennent (voir « Mesure d'audience »), et tu peux le refuser en un clic."
   },
   {
     "title": "Ce que le site enregistre dans ton navigateur",
@@ -53,9 +53,9 @@ export const PRIVACY_DEFAULT = {
     "body": "Le site est hébergé par Cloudflare, qui traite des données techniques (adresse IP, date et pages demandées) pour délivrer et sécuriser le site. Ce traitement relève de Cloudflare, selon [sa propre politique de confidentialité](https://www.cloudflare.com/privacypolicy/)."
   },
   {
-    "title": "Contact par e-mail",
-    "body": "Si tu m'écris, j'utilise ton adresse et ton message uniquement pour te répondre. Ils sont conservés le temps nécessaire à l'échange et ne sont transmis à aucun tiers."
-  },
+    "title": "Contact par e-mail et formulaire",
+      "body": "Si tu m'écris par e-mail, j'utilise ton adresse et ton message uniquement pour te répondre.\n\nSi tu utilises le formulaire de contact, ton nom, ton adresse e-mail, ton éventuel sujet et ton message sont enregistrés sur le serveur du site, uniquement pour te répondre. Ils ne sont lus que par l'éditeur, dans son espace d'administration, et ne sont copiés nulle part ailleurs ni transmis à aucun tiers. Ils sont supprimés automatiquement au bout de 12 mois. Ton adresse IP n'est pas enregistrée avec le message.\n\nPour éviter les envois automatiques, le formulaire demande à ton navigateur de résoudre un petit calcul, sans cookie et sans service extérieur. Une vérification simple est faite sur ton adresse e-mail (forme, domaine existant, adresse jetable) ; elle interroge un service public de noms de domaine (Cloudflare) avec la partie après le « @ » seulement."
+    },
   {
     "title": "Liens externes",
     "body": "Les liens vers GitHub, LinkedIn ou d'autres sites relèvent des politiques de confidentialité de ces services."
