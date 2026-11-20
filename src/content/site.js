@@ -44,3 +44,6 @@ export const experiences = computed(() => site.value.timeline.filter((x) => x.ki
 
 // Textes de l'en-tête de l'accueil modifiés dans l'admin (vide = textes d'origine du dictionnaire i18n)
 export const home = computed(() => site.value.home ?? {})
+
+// Titre et texte de la section Contact modifiés dans l'admin
+export const contact = computed(() => site.value.contact ?? {})

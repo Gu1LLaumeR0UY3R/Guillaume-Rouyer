@@ -1,5 +1,9 @@
 <script setup>
-import { CTA, REPO } from '../../data/goodnightCase.js'
+import { computed, inject } from 'vue'
+import { REPO } from '../../data/goodnightCase.js'
+
+const G = inject('goodnight')
+const CTA = computed(() => G.value.cta)
 </script>
 
 <template>

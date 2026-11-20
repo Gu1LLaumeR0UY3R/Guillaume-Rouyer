@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { computed, provide, ref } from 'vue'
 import { useScrollVar } from '../composables/useScrollVar.js'
 import CaseHero from '../components/case/CaseHero.vue'
 import ProductIntro from '../components/case/ProductIntro.vue'
@@ -8,18 +8,27 @@ import InterfaceFocus from '../components/case/InterfaceFocus.vue'
 import TechSection from '../components/case/TechSection.vue'
 import CaseCta from '../components/case/CaseCta.vue'
 
+import { useBlock } from '../content/blocks.js'
+import { goodnightDefaults } from '../content/goodnightDefaults.js'
+
 const root = ref(null)
 useScrollVar(root)
+
+// Textes et images modifiés dans l'admin ; sinon contenu d'origine
+const { data, ready } = useBlock('goodnight')
+provide('goodnight', computed(() => data.value ?? goodnightDefaults()))
 </script>
 
 <template>
   <div ref="root" class="case">
+    <template v-if="ready">
     <CaseHero />
     <ProductIntro />
     <JourneySteps />
     <InterfaceFocus />
     <TechSection />
     <CaseCta />
+    </template>
   </div>
 </template>
 

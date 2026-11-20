@@ -1,5 +1,8 @@
 <script setup>
-import { STEPS } from '../../data/goodnightCase.js'
+import { computed, inject } from 'vue'
+
+const G = inject('goodnight')
+const STEPS = computed(() => G.value.steps)
 </script>
 
 <template>
@@ -10,13 +13,13 @@ import { STEPS } from '../../data/goodnightCase.js'
         <h2>De la recherche à la réservation.</h2>
       </div>
       <ol class="steps">
-        <li v-for="s in STEPS" :key="s.n">
+        <li v-for="(s, i) in STEPS" :key="i">
           <span class="ico" aria-hidden="true">
             <svg v-if="s.icon === 'search'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="11" cy="11" r="6.5" /><path d="M16 16l4.5 4.5" /></svg>
             <svg v-else-if="s.icon === 'calendar'" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="4" y="5.5" width="16" height="14" rx="2.5" /><path d="M4 10h16M8.5 3.5v4M15.5 3.5v4" /></svg>
             <svg v-else width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
           </span>
-          <h3>{{ s.n }}. {{ s.title }}</h3>
+          <h3>{{ String(i + 1).padStart(2, '0') }}. {{ s.title }}</h3>
           <p>{{ s.text }}</p>
         </li>
       </ol>

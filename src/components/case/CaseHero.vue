@@ -1,21 +1,25 @@
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
-import { HERO } from '../../data/goodnightCase.js'
+import { computed, inject, onBeforeUnmount, onMounted, ref } from 'vue'
+
+const G = inject('goodnight')
+const HERO = computed(() => G.value.hero)
 
 // Diaporama du bandeau : hero-1, hero-2… déposés dans src/assets/goodnight/.
 const files = import.meta.glob('../../assets/goodnight/hero-*.{jpg,jpeg,png,webp}', { eager: true, query: '?url', import: 'default' })
-const slides = Object.entries(files).sort(([a], [b]) => a.localeCompare(b)).map(([, url]) => url)
+const fileSlides = Object.entries(files).sort(([a], [b]) => a.localeCompare(b)).map(([, url]) => url)
+// Images choisies dans l'admin, sinon celles déposées dans src/assets/goodnight/
+const slides = computed(() => (HERO.value.images?.length ? HERO.value.images : fileSlides))
 
 const index = ref(0)
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches
 let timer
 onMounted(() => {
-  if (slides.length > 1 && !reduceMotion) timer = setInterval(() => { index.value = (index.value + 1) % slides.length }, 6000)
+  if (slides.value.length > 1 && !reduceMotion) timer = setInterval(() => { index.value = (index.value + 1) % slides.value.length }, 6000)
 })
 onBeforeUnmount(() => clearInterval(timer))
 
 const pad = (n) => String(n).padStart(2, '0')
-const counter = computed(() => `${pad(index.value + 1)} / ${pad(slides.length)}`)
+const counter = computed(() => `${pad(index.value + 1)} / ${pad(slides.value.length)}`)
 </script>
 
 <template>

@@ -1,13 +1,20 @@
 <script setup>
 import { links } from '../content/settings.js'
 import { track } from '../stats.js'
+import { contact, loadSite } from '../content/site.js'
+import { pick } from '../i18n/index.js'
+
+loadSite()
+// Textes modifiés dans l'admin, sinon texte d'origine
+const title = () => pick(contact.value, 'title') || 'Travaillons ensemble'
+const text = () => pick(contact.value, 'text') || 'Un projet, une mission ou une simple question : écris-moi.'
 </script>
 
 <template>
   <section id="contact" class="contact" v-reveal>
     <div class="container">
-      <h2>Travaillons ensemble</h2>
-      <p>Un projet, une mission ou une simple question : écris-moi.</p>
+      <h2>{{ title() }}</h2>
+      <p>{{ text() }}</p>
       <div class="cta">
         <a
           v-for="l in links"

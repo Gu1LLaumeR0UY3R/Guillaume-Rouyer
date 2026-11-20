@@ -6,13 +6,13 @@ import { toast } from '../../admin/toasts.js'
 import { defaults } from '../../content/siteDefaults.js'
 import './adminForm.css'
 
-const TABS = [['home', 'Accueil'], ['about', 'À propos'], ['skills', 'Compétences'], ['timeline', 'Parcours']]
+const TABS = [['home', 'Accueil'], ['about', 'À propos'], ['skills', 'Compétences'], ['timeline', 'Parcours'], ['contact', 'Contact'], ['legal', 'Mentions légales'], ['privacy', 'Confidentialité']]
 const tab = ref(new URLSearchParams(location.search).get('onglet') || 'home')
 if (!TABS.some(([k]) => k === tab.value)) tab.value = 'home'
 
-const data = reactive({ home: null, about: null, skills: null, timeline: null })
-const saved = reactive({ home: '', about: '', skills: '', timeline: '' })
-const custom = reactive({ home: false, about: false, skills: false, timeline: false })
+const data = reactive({ home: null, about: null, skills: null, timeline: null, contact: null, legal: null, privacy: null })
+const saved = reactive({ home: '', about: '', skills: '', timeline: '', contact: '', legal: '', privacy: '' })
+const custom = reactive({ home: false, about: false, skills: false, timeline: false, contact: false, legal: false, privacy: false })
 const busy = ref(false), error = ref(''), loading = ref(true)
 
 const lines = (a) => (a ?? []).map((x) => x.trim()).filter(Boolean)
@@ -72,6 +72,8 @@ const newEntry = () => ({ when_fr: '', when_en: '', title_fr: '', title_en: '', 
 const setLevel = (it, e) => { it.level = Math.max(0, Math.min(100, Math.round(+e.target.value) || 0)) }
 const pts = (e, l) => (e[`points_${l}`] ?? []).join('\n')
 const setPts = (e, l, ev) => { e[`points_${l}`] = ev.target.value.split('\n') }
+const today = () => new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+const addSection = (d) => d.sections.push({ title: 'Nouvelle section', body: '' })
 const TL = [['formation', 'Formation', 'cette formation'], ['experience', 'Expériences', 'cette expérience']]
 </script>
 
@@ -85,7 +87,8 @@ const TL = [['formation', 'Formation', 'cette formation'], ['experience', 'Expé
       <button v-for="[k, n] in TABS" :key="k" type="button" :class="{ on: tab === k }" :aria-current="tab === k ? 'page' : undefined" @click="go(k)">
         {{ n }}<i v-if="dirty(k)" class="dot" title="Modifications non enregistrées" />
       </button>
-      <RouterLink to="/admin/contenu/spidernet">Tableau SpiderNet →</RouterLink>
+      <RouterLink to="/admin/contenu/goodnight">Goodnight →</RouterLink>
+      <RouterLink to="/admin/contenu/spidernet" class="next">Tableau SpiderNet →</RouterLink>
     </nav>
 
     <template v-if="!loading && !error">
@@ -168,6 +171,44 @@ const TL = [['formation', 'Formation', 'cette formation'], ['experience', 'Expé
           <button class="btn btn-ghost small add" type="button" :disabled="data.skills.groups.length >= 12" @click="data.skills.groups.push({ title_fr: 'Nouveau groupe', title_en: '', items: [] })">+ Groupe</button>
         </template>
 
+        <!-- CONTACT -->
+        <section v-if="key === 'contact'" class="card">
+          <h2>Section « Contact » (bas de l'accueil)</h2>
+          <p class="hint">L'adresse e-mail et les liens GitHub / LinkedIn se changent dans Réglages.</p>
+          <div class="pair head"><span>Français</span><span>English</span></div>
+          <div class="pair"><label>Titre<input v-model="data.contact.title_fr" maxlength="80"></label><label>Titre<input v-model="data.contact.title_en" maxlength="80"></label></div>
+          <div class="pair"><label>Texte<textarea v-model="data.contact.text_fr" rows="3" maxlength="300" /></label><label>Texte<textarea v-model="data.contact.text_en" rows="3" maxlength="300" /></label></div>
+        </section>
+
+        <!-- PAGES LÉGALES -->
+        <template v-if="key === 'legal' || key === 'privacy'">
+          <p class="hint warn">Texte à valeur juridique : relis-le avant d'enregistrer. Pense à changer la date de mise à jour quand tu modifies le fond.</p>
+          <section class="card">
+            <div class="updated-row">
+              <label>Dernière mise à jour (texte affiché)<input v-model="data[key].updated" maxlength="40"></label>
+              <button class="btn btn-ghost small" type="button" @click="data[key].updated = today()">Mettre la date d'aujourd'hui</button>
+            </div>
+            <details class="help"><summary>Comment mettre en forme</summary>
+              <ul>
+                <li>Une <strong>ligne vide</strong> sépare deux paragraphes. Un simple retour à la ligne reste dans le même paragraphe.</li>
+                <li>Des lignes qui commencent par <code>- </code> forment une liste à puces.</li>
+                <li>Un lien : <code>[texte du lien](https://exemple.fr)</code>, <code>[écris-moi](mailto:adresse@exemple.fr)</code> ou <code>[page](/mentions-legales)</code>. Les autres types de liens sont refusés.</li>
+                <li v-if="key === 'privacy'"><code>[[mesure]]</code> seul sur une ligne affiche le bouton « Ne pas me compter ». Garde-le dans la section sur la mesure d'audience.</li>
+              </ul>
+            </details>
+          </section>
+          <section v-for="(sec, i) in data[key].sections" :key="i" class="card">
+            <label>Titre de la section<input v-model="sec.title" maxlength="100"></label>
+            <label>Texte<textarea v-model="sec.body" rows="9" maxlength="6000" /><span class="hint">{{ sec.body.length }} / 6000</span></label>
+            <div class="actions left">
+              <button class="btn btn-ghost small" type="button" aria-label="Monter" @click="move(data[key].sections, i, -1)">↑</button>
+              <button class="btn btn-ghost small" type="button" aria-label="Descendre" @click="move(data[key].sections, i, 1)">↓</button>
+              <button class="btn btn-ghost small btn-danger" type="button" @click="del(data[key].sections, i, `la section « ${sec.title} »`)">Supprimer</button>
+            </div>
+          </section>
+          <button class="btn btn-ghost small add" type="button" :disabled="data[key].sections.length >= 30" @click="addSection(data[key])">+ Section</button>
+        </template>
+
         <!-- PARCOURS -->
         <template v-if="key === 'timeline'">
           <section v-for="[kind, title, what] in TL" :key="kind" class="card">
@@ -202,10 +243,15 @@ const TL = [['formation', 'Formation', 'cette formation'], ['experience', 'Expé
 .tabs button,.tabs a{position:relative;display:inline-flex;align-items:center;gap:8px;min-height:42px;padding:0 16px;border:1px solid var(--line);border-bottom:0;border-radius:12px 12px 0 0;background:var(--card);color:var(--fg);font:600 15px var(--font);text-decoration:none;cursor:pointer;transition:background .2s}
 .tabs button:hover,.tabs a:hover{background:var(--bg)}
 .tabs button.on{background:var(--green);border-color:var(--green);color:var(--on-green)}
-.tabs a{margin-left:auto;color:var(--muted)}
+.tabs a{color:var(--muted)}
+.tabs a:first-of-type{margin-left:auto}
 .dot{width:9px;height:9px;border-radius:50%;background:#f59e0b}
 .sticky{position:sticky;top:0;z-index:20;padding:10px 0;background:var(--bg)}
 .dirty{color:#b45309;font-weight:700}
+.warn{padding:10px 14px;border:1px solid #f59e0b;border-radius:12px;margin-top:16px}
+.updated-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:end}
+.help summary{cursor:pointer;font-weight:600}.help ul{margin:8px 0 0;padding-left:20px;color:var(--muted)}
+@media (max-width:600px){.updated-row{grid-template-columns:1fr}}
 [data-theme=dark] .dirty{color:#fbbf24}
 .pair{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:14px}
 .pair.head span{font-weight:700;color:var(--green)}

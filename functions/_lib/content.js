@@ -1,6 +1,8 @@
 // Contenus éditables : liste blanche des blocs et validation de chacun.
 import { HttpError } from './http.js'
 
+const MEDIA = /^\/media\/[a-f0-9]{24}$/
+
 export const GROUPS = ['concept', 'socle', 'valo', 'tech']
 const MAX_ITEMS = 80
 const HEX = /^#[0-9a-f]{6}$/i
@@ -102,7 +104,56 @@ function timeline(b) {
   }
 }
 
-export const BLOCKS = { spidernet, home, about, skills, timeline }
+// --- Contact, pages légales et Goodnight ---
+function contact(b) { return { ...bi(b, 'title', 80, 'Titre', true), ...bi(b, 'text', 300, 'Texte', true) } }
+
+// Liens autorisés dans les textes : https, mailto, ou une page du site. Jamais de javascript: ni de lien exotique.
+const LINK = /\[([^\]]*)\]\(([^)]*)\)/g
+const SAFE_URL = /^(https:\/\/[^\s]+|mailto:[^\s@]+@[^\s@]+|\/(?![/\\])[^\s]*)$/
+function checkLinks(body, n) {
+  for (const m of body.matchAll(LINK)) if (!SAFE_URL.test(m[2].trim())) throw new HttpError(400, `${n} : lien refusé (« ${m[2].slice(0, 40)} »). Seuls https://, mailto: et les pages du site sont permis.`)
+}
+function legal(b) {
+  const sections = list(b?.sections, 30, 'Sections').map((o, i) => {
+    const n = `Section ${i + 1}`
+    const body = text(o?.body, 6000, `${n} (texte)`, true)
+    checkLinks(body, n)
+    return { title: text(o?.title, 100, `${n} (titre)`, true), body }
+  })
+  if (!sections.length) throw new HttpError(400, 'Garde au moins une section')
+  return { updated: text(b?.updated, 40, 'Date de mise à jour', true), sections }
+}
+
+const media = (v, n) => {
+  if (v === undefined || v === null || v === '') return ''
+  if (typeof v !== 'string' || !MEDIA.test(v)) throw new HttpError(400, `${n} : image invalide`)
+  return v
+}
+const strs = (v, max, len, n) => list(v ?? [], max, n).map((x, i) => text(x, len, `${n} ${i + 1}`, true))
+const ICONS = ['search', 'calendar', 'key']
+
+function goodnight(b) {
+  const h = b?.hero, i = b?.intro, f = b?.focus, t = b?.tech, c = b?.cta
+  return {
+    hero: { kicker: text(h?.kicker, 60, 'Bandeau (étiquette)'), title: text(h?.title, 60, 'Bandeau (titre)', true), tagline: text(h?.tagline, 160, 'Bandeau (accroche)'), text: text(h?.text, 400, 'Bandeau (texte)'), meta: strs(h?.meta, 5, 30, 'Bandeau (info)'), images: list(h?.images ?? [], 8, 'Images du bandeau').map((m, k) => media(m, `Image du bandeau ${k + 1}`)).filter(Boolean) },
+    intro: { kicker: text(i?.kicker, 60, 'Aperçu (étiquette)'), title: text(i?.title, 120, 'Aperçu (titre)', true), paragraphs: strs(i?.paragraphs, 5, 800, 'Aperçu (paragraphe)'), stack: strs(i?.stack, 12, 30, 'Aperçu (technologie)'), desktopImage: media(i?.desktopImage, 'Capture ordinateur'), mobileImage: media(i?.mobileImage, 'Capture mobile') },
+    steps: list(b?.steps ?? [], 6, 'Étapes').map((o, k) => {
+      if (!ICONS.includes(o?.icon)) throw new HttpError(400, `Étape ${k + 1} : icône inconnue`)
+      return { icon: o.icon, title: text(o.title, 40, `Étape ${k + 1} (titre)`, true), text: text(o.text, 240, `Étape ${k + 1} (texte)`) }
+    }),
+    focus: {
+      kicker: text(f?.kicker, 60, 'Écrans (étiquette)'), title: text(f?.title, 120, 'Écrans (titre)', true), text: text(f?.text, 300, 'Écrans (texte)'),
+      items: list(f?.items ?? [], 8, 'Écrans').map((o, k) => ({
+        role: text(o?.role, 40, `Écran ${k + 1} (rôle)`), title: text(o?.title, 60, `Écran ${k + 1} (titre)`, true), more: text(o?.more, 300, `Écran ${k + 1} (détail)`),
+        alt: text(o?.alt, 160, `Écran ${k + 1} (description de l'image)`), image: media(o?.image, `Écran ${k + 1}`), slot: text(o?.slot, 30, `Écran ${k + 1} (repère)`),
+      })),
+    },
+    tech: { kicker: text(t?.kicker, 60, 'Technique (étiquette)'), title: text(t?.title, 120, 'Technique (titre)', true), challenge: strs(t?.challenge, 4, 900, 'Technique (paragraphe)'), stack: strs(t?.stack, 12, 30, 'Technique (technologie)'), codeTitle: text(t?.codeTitle, 100, 'Code (titre)'), code: text(t?.code, 3000, 'Code'), note: text(t?.note, 300, 'Technique (note)') },
+    cta: { title: text(c?.title, 100, 'Fin de page (titre)', true), text: text(c?.text, 400, 'Fin de page (texte)') },
+  }
+}
+
+export const BLOCKS = { spidernet, home, about, skills, timeline, contact, legal, privacy: legal, goodnight }
 export const isBlock = (k) => Object.hasOwn(BLOCKS, k)
 export const parseBlock = (key, body) => BLOCKS[key](body)
 
@@ -115,11 +166,12 @@ export async function getBlock(env, key) {
 // Ce que lit le site public (`/api/content`) : les blocs enregistrés, dans la forme attendue par src/content/site.js.
 // Un bloc jamais modifié est absent : le site garde alors son contenu d'origine.
 export async function publicContent(env) {
-  const { results } = await env.DB.prepare("SELECT key, data FROM content WHERE key IN ('home', 'about', 'skills', 'timeline')").all()
+  const { results } = await env.DB.prepare("SELECT key, data FROM content WHERE key IN ('home', 'about', 'skills', 'timeline', 'contact')").all()
   const b = {}
   for (const r of results) { try { b[r.key] = JSON.parse(r.data) } catch { /* bloc illisible : ignoré */ } }
   const out = {}
   if (b.home) out.home = b.home
+  if (b.contact) out.contact = b.contact
   if (b.about) out.about = [...b.about.bios.map((x) => ({ kind: 'bio', ...x })), ...b.about.facts.map((x) => ({ kind: 'fact', ...x }))]
   if (b.skills) {
     out.skill_groups = b.skills.groups.map((g, i) => ({ id: i + 1, title_fr: g.title_fr, title_en: g.title_en }))

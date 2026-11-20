@@ -1,5 +1,8 @@
 <script setup>
-import { FOCUS } from '../../data/goodnightCase.js'
+import { computed, inject } from 'vue'
+
+const G = inject('goodnight')
+const FOCUS = computed(() => G.value.focus)
 import ImageSlot from './ImageSlot.vue'
 </script>
 
@@ -12,8 +15,8 @@ import ImageSlot from './ImageSlot.vue'
         <p class="lead">{{ FOCUS.text }}</p>
       </div>
       <div class="grid">
-        <article v-for="it in FOCUS.items" :key="it.slot" class="card" tabindex="0">
-          <ImageSlot :name="it.slot" :alt="it.alt" ratio="4 / 3" />
+        <article v-for="(it, i) in FOCUS.items" :key="i" class="card" tabindex="0">
+          <ImageSlot :name="it.slot" :src="it.image" :alt="it.alt" ratio="4 / 3" />
           <div class="body">
             <span class="role">{{ it.role }}</span>
             <h3>{{ it.title }}</h3>

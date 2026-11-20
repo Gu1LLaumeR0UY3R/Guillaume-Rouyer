@@ -1,6 +1,9 @@
 <script setup>
-import { INTRO } from '../../data/goodnightCase.js'
+import { computed, inject } from 'vue'
 import ImageSlot from './ImageSlot.vue'
+
+const G = inject('goodnight')
+const INTRO = computed(() => G.value.intro)
 </script>
 
 <template>
@@ -14,11 +17,11 @@ import ImageSlot from './ImageSlot.vue'
       </div>
       <div class="devices">
         <div class="laptop">
-          <div class="screen"><ImageSlot name="desktop" alt="Capture de la version web de Goodnight" ratio="16 / 10" /></div>
+          <div class="screen"><ImageSlot name="desktop" :src="INTRO.desktopImage" alt="Capture de la version web de Goodnight" ratio="16 / 10" /></div>
           <div class="base" />
         </div>
         <div class="phone">
-          <div class="screen"><ImageSlot name="mobile" alt="Capture de l'application mobile de Goodnight" ratio="9 / 19" /></div>
+          <div class="screen"><ImageSlot name="mobile" :src="INTRO.mobileImage" alt="Capture de l'application mobile de Goodnight" ratio="9 / 19" /></div>
         </div>
       </div>
     </div>
