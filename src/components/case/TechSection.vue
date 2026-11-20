@@ -1,5 +1,8 @@
 <script setup>
-import { TECH } from '../../data/goodnightCase.js'
+import { computed, inject } from 'vue'
+
+const G = inject('goodnight')
+const TECH = computed(() => G.value.tech)
 </script>
 
 <template>

@@ -9,13 +9,14 @@ const props = defineProps({
   name: { type: String, required: true },
   alt: { type: String, default: '' },
   ratio: { type: String, default: '16 / 9' },
+  src: { type: String, default: '' }, // image choisie dans l'admin (prioritaire sur le fichier du dossier)
 })
-const src = computed(() => urls[props.name])
+const shown = computed(() => props.src || urls[props.name])
 </script>
 
 <template>
   <figure class="slot" :style="{ aspectRatio: ratio }">
-    <img v-if="src" :src="src" :alt="alt" loading="lazy" decoding="async">
+    <img v-if="shown" :src="shown" :alt="alt" loading="lazy" decoding="async">
     <div v-else class="ph" aria-hidden="true"><span class="l1" /><span class="l2" /><span class="l3" /></div>
   </figure>
 </template>

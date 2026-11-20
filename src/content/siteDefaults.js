@@ -3,6 +3,7 @@ import { FACTS, SKILLS } from '../data/skills.js'
 import { EXPERIENCES, FORMATION } from '../data/timeline.js'
 import { MESSAGES } from '../i18n/index.js'
 import { BIO } from './site.js'
+import { LEGAL_DEFAULT, PRIVACY_DEFAULT } from './legalDefaults.js'
 
 const entries = (list) => list.map((i) => ({
   when_fr: i.when, when_en: i.when, title_fr: i.title, title_en: i.title, place_fr: i.where ?? '', place_en: i.where ?? '',
@@ -19,5 +20,8 @@ export function defaults() {
     },
     skills: { groups: SKILLS.map((g) => ({ title_fr: g.title, title_en: g.title, items: g.items.map((name) => ({ name, level: 0 })) })) },
     timeline: { formation: entries(FORMATION), experience: entries(EXPERIENCES) },
+    contact: { title_fr: 'Travaillons ensemble', title_en: "Let's work together", text_fr: 'Un projet, une mission ou une simple question : écris-moi.', text_en: 'A project, an assignment or just a question: write to me.' },
+    legal: JSON.parse(JSON.stringify(LEGAL_DEFAULT)),
+    privacy: JSON.parse(JSON.stringify(PRIVACY_DEFAULT)),
   }
 }
