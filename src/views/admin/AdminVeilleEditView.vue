@@ -6,6 +6,7 @@ import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
 import { slugify } from '../../admin/slug.js'
+import ArticleEditor from '../../components/veille/ArticleEditor.vue'
 import './adminForm.css'
 
 const route = useRoute()
@@ -139,10 +140,11 @@ async function setStatus(next) {
         </figure>
       </fieldset>
 
-      <label>Contenu (Markdown)
-        <textarea v-model="f.body" class="body" maxlength="60000" rows="22" spellcheck="true" placeholder="# Mon titre&#10;&#10;Écris ton article ici…" />
-        <span class="hint">{{ words }} mot(s) · environ {{ minutes }} min de lecture</span>
-      </label>
+      <div class="field-body">
+        <span class="lab">Contenu de l'article</span>
+        <ArticleEditor v-model="f.body" :maxlength="60000" />
+        <span class="hint">{{ words }} mot(s) · environ {{ minutes }} min de lecture · {{ f.body.length.toLocaleString('fr-FR') }} / 60 000 caractères</span>
+      </div>
 
       <p v-if="error" class="err" role="alert">{{ error }}</p>
       <div class="bar">
@@ -166,7 +168,8 @@ async function setStatus(next) {
 .state{display:inline-block;padding:3px 10px;border-radius:999px;font:700 13px/1.4 var(--font);background:var(--bg);border:1px solid var(--line)}
 .state.published{background:var(--green);border-color:var(--green);color:var(--on-green)}
 .locked{opacity:.65;cursor:not-allowed}
-.body{min-height:420px;font:15px/1.6 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;tab-size:2}
+.field-body{display:grid;gap:8px}
+.field-body .lab{font-weight:600}
 .cover{margin:0;max-width:420px}
 .cover img{display:block;width:100%;height:auto;border-radius:12px}
 .cover figcaption{margin-top:6px;color:var(--muted);font-size:14px}
