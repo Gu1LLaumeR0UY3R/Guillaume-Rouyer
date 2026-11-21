@@ -80,7 +80,8 @@ const TL = [['formation', 'Formation', 'cette formation'], ['experience', 'Expé
 
 <template>
   <main class="admin wide">
-    <h1>Contenu du site</h1>
+    <RouterLink to="/admin/contenu" class="hint">← Tous les contenus</RouterLink>
+    <h1>Modifier un texte du site</h1>
     <p class="hint">Les textes de l'accueil et de la page À propos. Chaque texte a une version française et une version anglaise : si l'anglais est vide, le français s'affiche.</p>
     <p v-if="error" class="err" role="alert">{{ error }}</p>
 
@@ -88,8 +89,6 @@ const TL = [['formation', 'Formation', 'cette formation'], ['experience', 'Expé
       <button v-for="[k, n] in TABS" :key="k" type="button" :class="{ on: tab === k }" :aria-current="tab === k ? 'page' : undefined" @click="go(k)">
         {{ n }}<i v-if="dirty(k)" class="dot" title="Modifications non enregistrées" />
       </button>
-      <RouterLink to="/admin/contenu/goodnight">Goodnight →</RouterLink>
-      <RouterLink to="/admin/contenu/spidernet" class="next">Tableau SpiderNet →</RouterLink>
     </nav>
 
     <template v-if="!loading && !error">

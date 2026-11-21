@@ -46,6 +46,8 @@ async function send() {
 </script>
 
 <template>
+  <!-- Téléporté dans <body> : la page admin a une animation (transform) qui fausserait position:fixed -->
+  <Teleport to="body">
   <div class="overlay" @click.self="emit('close')">
     <div class="dlg" role="dialog" aria-modal="true" aria-label="Choisir une image">
       <header>
@@ -87,6 +89,7 @@ async function send() {
       </ul>
     </div>
   </div>
+  </Teleport>
 </template>
 
 <style scoped>

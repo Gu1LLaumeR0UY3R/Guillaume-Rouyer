@@ -59,7 +59,7 @@ const del = (arr, i, what) => { if (confirm(`Supprimer ${what} ?`)) arr.splice(i
 
 <template>
   <main class="admin wide">
-    <RouterLink to="/admin/contenu" class="hint">← Contenu du site</RouterLink>
+    <RouterLink to="/admin/contenu" class="hint">← Tous les contenus</RouterLink>
     <h1>Étude de cas Goodnight</h1>
     <p class="hint">Textes et images de la page Goodnight, section par section (dans l'ordre de la page).
       <strong>{{ custom ? 'Contenu modifié.' : "Contenu d'origine (jamais modifié)." }}</strong>

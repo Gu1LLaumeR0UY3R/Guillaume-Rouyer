@@ -10,7 +10,7 @@ const file = ref(null), parsed = ref(null), preview = ref(null), importError = r
 
 const LABELS = { spidernet: 'Tableau SpiderNet', home: 'Accueil', about: 'À propos', skills: 'Compétences', timeline: 'Parcours', contact: 'Contact', legal: 'Mentions légales', privacy: 'Confidentialité', goodnight: 'Goodnight' }
 const name = (d) => (d.kind === 'project' ? `Projet « ${d.ref} »` : LABELS[d.ref] ?? d.ref)
-const link = (d) => (d.kind === 'project' ? `/admin/projets/${d.ref}` : d.ref === 'goodnight' ? '/admin/contenu/goodnight' : d.ref === 'spidernet' ? '/admin/contenu/spidernet' : `/admin/contenu?onglet=${d.ref}`)
+const link = (d) => (d.kind === 'project' ? `/admin/projets/${d.ref}` : d.ref === 'goodnight' ? '/admin/contenu/goodnight' : d.ref === 'spidernet' ? '/admin/contenu/spidernet' : `/admin/contenu/pages?onglet=${d.ref}`)
 const fmt = (ms) => new Date(ms).toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' })
 
 async function loadDrafts() { try { drafts.value = (await api('/api/admin/drafts')).drafts } catch (e) { error.value = e.message } }
