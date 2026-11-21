@@ -4,6 +4,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
 import { DEFAULT_ITEMS } from '../../content/spidernetDefault.js'
+import VersionTools from './VersionTools.vue'
 import './adminForm.css'
 
 const GROUPS = { concept: 'Concept', socle: 'Socle', valo: 'Valorisation', tech: 'Technique et sécurité' }
@@ -122,6 +123,7 @@ const num = (o, f, e, min, max) => { const v = parseFloat(e.target.value); if (N
         <button class="btn btn-ghost small" type="button" @click="add(true)">+ Titre de colonne</button>
         <button v-if="custom" class="btn btn-ghost small btn-danger" type="button" :disabled="busy" @click="reset">Revenir à l'origine</button>
       </div>
+      <VersionTools kind="content" ref-key="spidernet" :get-data="() => ({ items: clean() })" @restored="load" @resume="(d) => (items = wrap(d.items))" />
 
       <section class="card">
         <h2>Plan du tableau</h2>

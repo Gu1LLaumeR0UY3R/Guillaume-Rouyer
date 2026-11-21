@@ -8,11 +8,14 @@ import ToggleSwitch from './ToggleSwitch.vue'
 import './adminForm.css'
 
 const projects = ref([])
+const sched = ref({})
+const when = (ms) => new Date(ms).toLocaleString('fr-FR', { dateStyle: 'short', timeStyle: 'short' })
 const error = ref('')
 const STATUS = [['online', 'En ligne'], ['wip', 'En cours'], ['maintenance', 'En maintenance'], ['hidden', 'Masqué']]
 
 async function load() {
   try { projects.value = (await api('/api/admin/projects')).projects } catch (e) { error.value = e.message }
+  try { sched.value = Object.fromEntries((await api('/api/admin/drafts')).drafts.filter((d) => d.kind === 'project').map((d) => [d.ref, d])) } catch { sched.value = {} }
 }
 async function setStatus(p, status) {
   error.value = ''
@@ -52,7 +55,7 @@ onMounted(load)
             <button class="btn btn-ghost small" type="button" :disabled="i === 0" :aria-label="`Monter ${p.name}`" @click="move(i, -1)">↑</button>
             <button class="btn btn-ghost small" type="button" :disabled="i === projects.length - 1" :aria-label="`Descendre ${p.name}`" @click="move(i, 1)">↓</button>
           </td>
-          <td><span class="name">{{ p.name }}</span><br /><span class="hint">{{ p.tag }} · /{{ p.slug }}{{ p.featured ? ' · projet phare' : '' }}</span></td>
+          <td><span class="name">{{ p.name }}</span><br /><span class="hint">{{ p.tag }} · /{{ p.slug }}{{ p.featured ? ' · projet phare' : '' }}<template v-if="sched[p.slug]"> · {{ sched[p.slug].publishAt ? `programmé le ${when(sched[p.slug].publishAt)}` : 'brouillon en attente' }}</template></span></td>
           <td>
             <select :value="p.status" :aria-label="`Statut de ${p.name}`" @change="setStatus(p, $event.target.value)">
               <option v-for="[v, l] in STATUS" :key="v" :value="v">{{ l }}</option>

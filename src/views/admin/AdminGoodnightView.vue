@@ -6,6 +6,7 @@ import { toast } from '../../admin/toasts.js'
 import { goodnightDefaults } from '../../content/goodnightDefaults.js'
 import ImageField from './ImageField.vue'
 import StringList from './StringList.vue'
+import VersionTools from './VersionTools.vue'
 import './adminForm.css'
 
 const ICONS = { search: 'Loupe', calendar: 'Calendrier', key: 'Clé' }
@@ -27,11 +28,15 @@ const warn = (e) => { if (dirty.value) { e.preventDefault(); e.returnValue = '' 
 onMounted(() => { load(); window.addEventListener('beforeunload', warn) })
 onBeforeUnmount(() => window.removeEventListener('beforeunload', warn))
 
-async function save() {
-  busy.value = true
+function payload() {
   const body = clean()
   // Lignes vides ignorées
   for (const [o, k] of [[body.hero, 'meta'], [body.intro, 'paragraphs'], [body.intro, 'stack'], [body.tech, 'challenge'], [body.tech, 'stack']]) o[k] = o[k].map((x) => x.trim()).filter(Boolean)
+  return body
+}
+async function save() {
+  busy.value = true
+  const body = payload()
   try {
     await api('/api/admin/content/goodnight', { method: 'PUT', body })
     g.value = body; saved.value = snap(); custom.value = true
@@ -68,6 +73,7 @@ const del = (arr, i, what) => { if (confirm(`Supprimer ${what} ?`)) arr.splice(i
         <span class="spacer" />
         <button v-if="custom" class="btn btn-ghost small btn-danger" type="button" :disabled="busy" @click="reset">Revenir à l'origine</button>
       </div>
+      <VersionTools kind="content" ref-key="goodnight" :get-data="payload" @restored="load" @resume="(d) => (g = d)" />
 
       <section class="card">
         <h2>1. Bandeau d'en-tête</h2>

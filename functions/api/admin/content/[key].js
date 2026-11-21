@@ -2,6 +2,7 @@
 import { HttpError, json, readJson, route } from '../../../_lib/http.js'
 import { requireAdmin } from '../../../_lib/auth.js'
 import { getBlock, isBlock, parseBlock } from '../../../_lib/content.js'
+import { applyContent, snapshot } from '../../../_lib/versions.js'
 import { log } from '../../../_lib/logger.js'
 
 export const onRequest = (ctx) => route(ctx, { GET, PUT, DELETE })
@@ -19,9 +20,7 @@ async function PUT(ctx) {
   const { key } = ctx.params
   check(key)
   const data = parseBlock(key, await readJson(ctx.request, 120_000))
-  const now = Date.now()
-  await ctx.env.DB.prepare('INSERT INTO content (key, data, updated_at) VALUES (?, ?, ?) ON CONFLICT(key) DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at')
-    .bind(key, JSON.stringify(data), now).run()
+  const now = await applyContent(ctx.env, key, data)
   await log(ctx, 'info', 'content_updated', { key, items: data.items?.length })
   return json({ ok: true, updatedAt: now })
 }
@@ -30,6 +29,8 @@ async function DELETE(ctx) {
   await requireAdmin(ctx)
   const { key } = ctx.params
   check(key)
+  const old = await getBlock(ctx.env, key)
+  if (old) await snapshot(ctx.env, 'content', key, old, 'Avant retour aux textes d\'origine')
   await ctx.env.DB.prepare('DELETE FROM content WHERE key = ?').bind(key).run()
   await log(ctx, 'warn', 'content_reset', { key })
   return json({ ok: true })

@@ -2,6 +2,7 @@
 import { HttpError, json, readJson, route } from '../../../_lib/http.js'
 import { requireAdmin } from '../../../_lib/auth.js'
 import { COLUMNS, nextPrevStatus, parseProject, restoredStatus, toApi, validSlug } from '../../../_lib/projects.js'
+import { applyProject } from '../../../_lib/versions.js'
 import { log } from '../../../_lib/logger.js'
 
 export const onRequest = (ctx) => route(ctx, { GET, PUT, PATCH, DELETE })
@@ -22,11 +23,7 @@ const getOld = async (ctx, slug) => {
 async function PUT(ctx) {
   await requireAdmin(ctx)
   const slug = validSlug(ctx.params.slug)
-  const p = parseProject(await readJson(ctx.request, 60_000))
-  const old = await getOld(ctx, slug)
-  const res = await ctx.env.DB.prepare(`UPDATE projects SET name = ?, tag = ?, status = ?, prev_status = ?, accent = ?, description = ?, stack = ?, repo = ?, note = ?, featured = ?, board = ?, maintenance_message = ?, details = ?, banner_image = ?, banner_dim = ?, updated_at = ? WHERE slug = ?`)
-    .bind(p.name, p.tag, p.status, nextPrevStatus(old, p.status), p.accent, p.description, JSON.stringify(p.stack), p.repo, p.note, p.featured, p.board, p.maintenance_message, JSON.stringify(p.details), p.banner_image, p.banner_dim, Date.now(), slug).run()
-  if (!res.meta.changes) throw new HttpError(404, 'Projet introuvable')
+  await applyProject(ctx.env, slug, await readJson(ctx.request, 60_000))
   await log(ctx, 'info', 'project_updated', { slug })
   return json({ ok: true })
 }

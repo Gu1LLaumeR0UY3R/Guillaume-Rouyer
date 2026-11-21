@@ -107,3 +107,12 @@ export function nextPrevStatus(old, newStatus) {
   return old.status === 'maintenance' ? old.prev_status ?? null : old.status
 }
 export const restoredStatus = (old) => (STATUSES.includes(old.prev_status) && old.prev_status !== 'maintenance' ? old.prev_status : 'online')
+
+// Ligne SQL -> corps accepté par parseProject (sert aux versions et aux sauvegardes).
+export function toBody(r) {
+  const p = toApi(r, { details: true })
+  return {
+    name: p.name, tag: p.tag, status: p.status, accent: p.accent, bannerImage: p.bannerImage, bannerDim: p.bannerDim, description: p.desc,
+    stack: p.stack, repo: p.repo, note: p.note, featured: p.featured, board: p.board, maintenanceMessage: p.maintenanceMessage || null, details: p.details,
+  }
+}
