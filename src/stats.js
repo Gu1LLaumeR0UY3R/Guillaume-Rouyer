@@ -1,6 +1,8 @@
 // Mesure d'audience sans cookie : le navigateur envoie quelques compteurs anonymes (page vue, temps actif, clic sur un lien de contact,
 // choix du thème, arbre planté). Rien n'est stocké dans le navigateur, sauf le choix « ne pas me compter ».
 // Désactivée si le visiteur l'a demandé, s'il a activé « Do Not Track » / « Global Privacy Control », ou si le navigateur est piloté par un robot.
+import { consent } from './consent.js'
+
 const KEY = 'stats-off'
 const URL_ = '/mesure'
 
@@ -17,7 +19,7 @@ function send(data) {
   if (isOptedOut()) return
   try {
     const body = new Blob([JSON.stringify(data)], { type: 'application/json' })
-    if (!navigator.sendBeacon?.(URL_, body)) fetch(URL_, { method: 'POST', body, keepalive: true, credentials: 'omit' }).catch(() => {})
+    if (!navigator.sendBeacon?.(URL_, body)) fetch(URL_, { method: 'POST', body, keepalive: true, credentials: 'same-origin' }).catch(() => {})
   } catch { /* une mesure perdue n'est pas grave */ }
 }
 
@@ -48,7 +50,7 @@ export function initStats(router) {
     flush()
     path = to.path
     lastTick = Date.now()
-    send({ t: 'view', path: to.path, ref: first ? document.referrer : '', first })
+    send({ t: 'view', path: to.path, ref: first ? document.referrer : '', first, c: consent.value === 'yes' ? 1 : 0 })
     first = false
   }
   router.afterEach((to, from) => { if (to.fullPath !== from?.fullPath) record(to) })

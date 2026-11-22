@@ -3,6 +3,7 @@ import { computed, defineAsyncComponent, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
+import CookieBanner from './components/CookieBanner.vue'
 import AdminPreviewFlag from './components/AdminPreviewFlag.vue'
 import SiteMaintenance from './components/SiteMaintenance.vue'
 import { checkSession } from './admin/api.js'
@@ -35,5 +36,6 @@ const blocked = computed(() => settings.value.maintenanceOn && !isAdmin.value &&
     <AppHeader v-if="!route.meta.fullscreen" />
     <main id="contenu"><RouterView /></main>
     <AppFooter v-if="!route.meta.fullscreen" />
+    <CookieBanner />
   </template>
 </template>

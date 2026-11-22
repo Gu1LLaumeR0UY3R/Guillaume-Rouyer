@@ -25,15 +25,18 @@ async function GET(ctx) {
   const perDay = (kind) => list.map((d) => results.filter((r) => r.kind === kind && r.day === d).reduce((a, r) => a + r.n, 0))
   const total = (kind, inCur) => results.filter((r) => r.kind === kind && cur.has(r.day) === inCur).reduce((a, r) => a + r.n, 0)
 
+  const uniq = (key, inCur) => results.filter((r) => r.kind === 'uniq' && r.key === key && cur.has(r.day) === inCur).reduce((a, r) => a + r.n, 0)
   const timeSum = new Map(by('time_sum').map((x) => [x.key, x.n])), timeCnt = new Map(by('time_cnt').map((x) => [x.key, x.n]))
   const sumAll = [...timeSum.values()].reduce((a, n) => a + n, 0), cntAll = [...timeCnt.values()].reduce((a, n) => a + n, 0)
   return json({
     days: list,
     views: perDay('view'), trees: perDay('tree'),
+    visitors: list.map((d) => results.filter((r) => r.kind === 'uniq' && r.key === 'all' && r.day === d).reduce((a, r) => a + r.n, 0)),
     totals: {
       views: total('view', true), viewsBefore: total('view', false),
       trees: total('tree', true), treesBefore: total('tree', false),
       clicks: total('click', true), clicksBefore: total('click', false),
+      visitors: uniq('all', true), visitorsBefore: uniq('all', false), visitorsNew: uniq('new', true), visitorsReturning: uniq('ret', true),
       avgSeconds: cntAll ? Math.round(sumAll / cntAll) : 0,
       countries: by('country').filter((c) => c.key !== 'XX').length,
     },

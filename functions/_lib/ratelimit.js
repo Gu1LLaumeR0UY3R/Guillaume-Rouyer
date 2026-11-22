@@ -21,6 +21,7 @@ export async function purgeOld(env) {
     env.DB.prepare('DELETE FROM stat_daily WHERE day < ?').bind(new Date(now - 400 * 86400000).toISOString().slice(0, 10)), // statistiques : 13 mois
     env.DB.prepare('DELETE FROM bans WHERE expires_at IS NOT NULL AND expires_at < ?').bind(now), // bannissements expirés (une IP ne reste jamais après la fin de sa règle)
     env.DB.prepare('DELETE FROM messages WHERE created_at < ?').bind(now - 365 * 86400000), // messages de contact : 12 mois
+    env.DB.prepare('DELETE FROM vis_day WHERE day < ?').bind(new Date(now - 3 * 86400000).toISOString().slice(0, 10)), // empreintes de visiteurs : 3 jours
     env.DB.prepare('DELETE FROM pow_used WHERE expires_at < ?').bind(now),
     env.DB.prepare('DELETE FROM media WHERE deleted_at IS NOT NULL AND deleted_at < ?').bind(now - 30 * 86400000), // corbeille des médias : 30 jours
   ])

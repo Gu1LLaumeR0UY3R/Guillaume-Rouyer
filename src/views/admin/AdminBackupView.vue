@@ -1,29 +1,12 @@
 <script setup>
-// Sauvegarde : export / import JSON du contenu, et liste des brouillons et publications programmées.
-import { onMounted, ref } from 'vue'
+// Sauvegarde : export / import JSON du contenu.
+import { ref } from 'vue'
 import { api, download } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
 import './adminForm.css'
 
-const drafts = ref([]), error = ref(''), busy = ref(false)
+const error = ref(''), busy = ref(false)
 const file = ref(null), parsed = ref(null), preview = ref(null), importError = ref('')
-
-const LABELS = { spidernet: 'Tableau SpiderNet', home: 'Accueil', about: 'À propos', skills: 'Compétences', timeline: 'Parcours', contact: 'Contact', legal: 'Mentions légales', privacy: 'Confidentialité', goodnight: 'Goodnight' }
-const name = (d) => (d.kind === 'project' ? `Projet « ${d.ref} »` : LABELS[d.ref] ?? d.ref)
-const link = (d) => (d.kind === 'project' ? `/admin/projets/${d.ref}` : d.ref === 'goodnight' ? '/admin/contenu/goodnight' : d.ref === 'spidernet' ? '/admin/contenu/spidernet' : `/admin/contenu/pages?onglet=${d.ref}`)
-const fmt = (ms) => new Date(ms).toLocaleString('fr-FR', { dateStyle: 'long', timeStyle: 'short' })
-
-async function loadDrafts() { try { drafts.value = (await api('/api/admin/drafts')).drafts } catch (e) { error.value = e.message } }
-onMounted(loadDrafts)
-
-async function publish(d) {
-  if (!confirm(`Publier maintenant : ${name(d)} ?`)) return
-  try { await api('/api/admin/drafts/publish', { method: 'POST', body: { kind: d.kind, ref: d.ref } }); toast('Publié', 'ok'); await loadDrafts() } catch (e) { toast(e.message, 'danger') }
-}
-async function drop(d) {
-  if (!confirm(`Supprimer le brouillon : ${name(d)} ?`)) return
-  try { await api(`/api/admin/drafts?kind=${d.kind}&ref=${encodeURIComponent(d.ref)}`, { method: 'DELETE' }); await loadDrafts() } catch (e) { toast(e.message, 'danger') }
-}
 
 async function exportAll() {
   busy.value = true
@@ -52,26 +35,8 @@ async function doImport() {
 
 <template>
   <div class="admin wide narrow">
-    <h1>Sauvegarde et publications</h1>
+    <h1>Sauvegarde</h1>
     <p v-if="error" class="err" role="alert">{{ error }}</p>
-
-    <section class="card">
-      <h2>Publications programmées et brouillons</h2>
-      <p v-if="!drafts.length" class="hint">Aucun brouillon. Dans chaque éditeur, le bloc « Versions et publication » permet de mettre une version de côté ou de la programmer.</p>
-      <ul v-else class="list">
-        <li v-for="d in drafts" :key="d.kind + d.ref">
-          <div>
-            <RouterLink :to="link(d)">{{ name(d) }}</RouterLink>
-            <small>{{ d.publishAt ? `Programmé le ${fmt(d.publishAt)}` : `Brouillon du ${fmt(d.updatedAt)}` }}</small>
-            <small v-if="d.error" class="err">Échec : {{ d.error }}</small>
-          </div>
-          <div class="row">
-            <button class="btn btn-ghost small" type="button" @click="publish(d)">Publier maintenant</button>
-            <button class="btn btn-ghost small btn-danger" type="button" @click="drop(d)">{{ d.publishAt ? 'Annuler' : 'Supprimer' }}</button>
-          </div>
-        </li>
-      </ul>
-    </section>
 
     <section class="card">
       <h2>Exporter</h2>
@@ -98,11 +63,6 @@ async function doImport() {
 </template>
 
 <style scoped>
-.list{list-style:none;margin:0;padding:0;display:grid;gap:8px}
-.list li{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:8px 12px;border:1px solid var(--line);border-radius:8px}
-.list li>div:first-child{display:grid;gap:2px}
-small{color:var(--muted)}
-.row{display:flex;gap:8px;flex-wrap:wrap}
 .err{color:#b42318}
 [data-theme=dark] .err{color:#ff9a90}
 .prev{margin-top:12px}

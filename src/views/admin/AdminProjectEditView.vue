@@ -4,10 +4,11 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { api } from '../../admin/api.js'
+import { takeDraft } from '../../admin/draftResume.js'
 import { bannerBackground } from '../../content/projects.js'
 import ProjectCard from '../../components/ProjectCard.vue'
 import MediaPicker from './MediaPicker.vue'
-import VersionTools from './VersionTools.vue'
+import DraftBar from './DraftBar.vue'
 import './adminForm.css'
 
 const route = useRoute()
@@ -60,10 +61,6 @@ function resumeDraft(d) {
   fill({ ...d, slug: f.slug, desc: d.description, featured: !!d.featured })
   dirty.value = true
 }
-async function reloadProject() {
-  const p = (await api('/api/admin/projects')).projects.find((x) => x.slug === f.slug)
-  if (p) { fill(p); setTimeout(() => { dirty.value = false }, 0) }
-}
 onMounted(async () => {
   try {
     const all = (await api('/api/admin/projects')).projects
@@ -72,6 +69,8 @@ onMounted(async () => {
       const p = all.find((x) => x.slug === route.params.slug)
       if (!p) { error.value = 'Projet introuvable'; return }
       fill(p)
+      const dr = await takeDraft('project', p.slug)
+      if (dr) resumeDraft(dr)
     }
   } catch (e) { error.value = e.message } finally { loaded.value = true; setTimeout(() => { dirty.value = false }, 0) }
 })
@@ -129,7 +128,7 @@ async function remove() {
   <div class="admin wide pe">
     <RouterLink class="back" to="/admin/projets">← Tous les projets</RouterLink>
     <h1>{{ isNew ? 'Nouveau projet' : f.name || 'Modifier le projet' }}</h1>
-    <VersionTools v-if="!isNew && loaded && f.slug" kind="project" :ref-key="f.slug" :get-data="payload" @restored="reloadProject" @resume="resumeDraft" />
+    <DraftBar v-if="!isNew && loaded && f.slug" kind="project" :ref-key="f.slug" :get-data="payload" />
 
     <nav class="jump" aria-label="Aller à une section">
       <button v-for="[id, label] in SECTIONS" :key="id" type="button" @click="go(id)">{{ label }}</button>

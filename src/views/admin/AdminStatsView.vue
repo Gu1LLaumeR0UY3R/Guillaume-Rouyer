@@ -45,7 +45,7 @@ const cap = computed(() => (d.value ? Math.min(100, Math.round((d.value.capToday
     <div class="head">
       <div>
         <h1>Statistiques</h1>
-        <p>Visites anonymes, sans cookie ni adresse IP. Les robots et toi, connecté, ne sont pas comptés.</p>
+        <p>Visites anonymes, sans adresse IP. Un cookie d'audience n'est posé qu'avec l'accord du visiteur. Les robots et toi, connecté, ne sont pas comptés.</p>
       </div>
       <div class="seg" role="group" aria-label="Période">
         <button v-for="n in [7, 30, 90]" :key="n" type="button" :aria-pressed="days === n" :title="`Les ${n} derniers jours, aujourd'hui compris`" @click="days = n">{{ n }} jours</button>
@@ -56,12 +56,27 @@ const cap = computed(() => (d.value ? Math.min(100, Math.round((d.value.capToday
     <p v-else-if="loading && !d" role="status">Chargement…</p>
 
     <template v-if="d">
-      <p v-if="!hasData" class="empty">Pas encore de données sur cette période. Les visites sont comptées dès que cette version est en ligne : reviens après quelques visites.</p>
+      <p v-if="!hasData" class="empty">Pas encore de données sur cette période.</p>
+      <details class="diag" :open="!hasData">
+        <summary>Pourquoi je vois 0 ? Ce qui n'est pas compté</summary>
+        <ul>
+          <li><strong>Toi, connecté à l'admin.</strong> Tant que ta session admin est ouverte dans ce navigateur, tes visites du site ne comptent pas. Pour tester : ouvre le site dans une fenêtre de navigation privée (ou déconnecte-toi), visite 2 ou 3 pages, puis reviens ici.</li>
+          <li><strong>« Do Not Track » ou « Global Privacy Control »</strong> activé (par défaut dans Brave, Firefox en mode strict, DuckDuckGo) : le site le respecte et ne compte pas.</li>
+          <li><strong>Les robots</strong> et les navigateurs pilotés par un programme.</li>
+          <li><strong>Ceux qui ont cliqué « Ne pas me compter »</strong> sur la page Confidentialité.</li>
+          <li><strong>Les bloqueurs de pub</strong> les plus stricts peuvent bloquer l'adresse de mesure.</li>
+        </ul>
+        <p class="hint">Mesures reçues aujourd'hui : <strong>{{ d.capToday }}</strong>. Si ce nombre monte quand tu visites en navigation privée, la mesure fonctionne.</p>
+      </details>
 
       <div class="tiles">
         <div class="tile" style="--d:0" title="Nombre de pages vues sur la période, comparé à la période précédente de même durée.">
           <span class="n"><CountUp :value="d.totals.views" /></span><span class="l">Pages vues</span>
           <span class="s" :class="{ up: delta(d.totals.views, d.totals.viewsBefore) > 0, down: delta(d.totals.views, d.totals.viewsBefore) < 0 }">{{ fmtDelta(delta(d.totals.views, d.totals.viewsBefore)) }} vs période précédente</span>
+        </div>
+        <div class="tile" style="--d:1" title="Visiteurs différents par jour, additionnés sur la période. Seuls ceux qui ont accepté le cookie d'audience sont comptés : c'est une partie des visiteurs, pas tous.">
+          <span class="n"><CountUp :value="d.totals.visitors" /></span><span class="l">Visiteurs (avec cookie)</span>
+          <span class="s">{{ d.totals.visitorsNew }} nouveau{{ d.totals.visitorsNew > 1 ? 'x' : '' }} · {{ d.totals.visitorsReturning }} de retour</span>
         </div>
         <div class="tile" style="--d:1" title="Temps moyen réellement passé sur une page : onglet visible et visiteur actif (souris, défilement, clavier).">
           <span class="n">{{ d.totals.avgSeconds ? mmss(d.totals.avgSeconds) : '–' }}</span><span class="l">Temps actif moyen</span><span class="s">par page consultée</span>
@@ -80,6 +95,8 @@ const cap = computed(() => (d.value ? Math.min(100, Math.round((d.value.capToday
       </div>
 
       <div class="cols one"><StatChart title="Pages vues par jour" :data="series(d.views)" :allow="['line', 'bar']" initial="line" unit="vue(s)" single style="--d:5" /></div>
+
+      <div class="cols one"><StatChart title="Visiteurs par jour (ayant accepté le cookie)" :data="series(d.visitors)" :allow="['line', 'bar']" initial="bar" unit="visiteur(s)" single style="--d:5" /></div>
 
       <div class="cols">
         <StatChart title="Pages les plus vues" :data="toData(d.pages, pageName)" unit="vue(s)" style="--d:6" />
@@ -116,6 +133,9 @@ const cap = computed(() => (d.value ? Math.min(100, Math.round((d.value.capToday
 .seg button{display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 18px;border:0;border-radius:999px;background:transparent;color:var(--fg);font:600 14px/1 var(--font);cursor:pointer;transition:background .2s,color .2s}
 .seg button:hover{background:var(--bg)}
 .seg button[aria-pressed='true']{background:var(--green);color:var(--on-green)}
+.diag{margin:0 0 16px;padding:12px 18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+.diag summary{cursor:pointer;font-weight:700}
+.diag ul{margin:10px 0;padding-left:20px;display:grid;gap:6px}
 .empty{padding:18px 20px;border:1px dashed var(--line);border-radius:var(--radius);background:var(--card)}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:20px}
 .tile{display:grid;align-content:center;justify-items:center;gap:4px;min-height:130px;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);text-align:center;transition:transform .2s,border-color .2s,box-shadow .2s}

@@ -3,8 +3,9 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
+import { takeDraft } from '../../admin/draftResume.js'
 import { DEFAULT_ITEMS } from '../../content/spidernetDefault.js'
-import VersionTools from './VersionTools.vue'
+import DraftBar from './DraftBar.vue'
 import './adminForm.css'
 
 const GROUPS = { concept: 'Concept', socle: 'Socle', valo: 'Valorisation', tech: 'Technique et sécurité' }
@@ -26,6 +27,8 @@ async function load() {
     items.value = wrap(d.items ?? DEFAULT_ITEMS)
     saved.value = snapshot()
   } catch (e) { error.value = e.message } finally { loading.value = false }
+  const dr = await takeDraft('content', 'spidernet')
+  if (dr?.items) items.value = wrap(dr.items)
 }
 const warn = (e) => { if (dirty.value) { e.preventDefault(); e.returnValue = '' } }
 onMounted(() => { load(); window.addEventListener('beforeunload', warn) })
@@ -123,7 +126,7 @@ const num = (o, f, e, min, max) => { const v = parseFloat(e.target.value); if (N
         <button class="btn btn-ghost small" type="button" @click="add(true)">+ Titre de colonne</button>
         <button v-if="custom" class="btn btn-ghost small btn-danger" type="button" :disabled="busy" @click="reset">Revenir à l'origine</button>
       </div>
-      <VersionTools kind="content" ref-key="spidernet" :get-data="() => ({ items: clean() })" @restored="load" @resume="(d) => (items = wrap(d.items))" />
+      <DraftBar kind="content" ref-key="spidernet" :get-data="() => ({ items: clean() })" />
 
       <section class="card">
         <h2>Plan du tableau</h2>

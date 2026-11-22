@@ -2,9 +2,10 @@
 // Répond toujours 204 : un refus ne doit rien révéler ni gêner le visiteur.
 import { getCountry, getIp, readJson } from './_lib/http.js'
 import { raiseAlert } from './_lib/alerts.js'
+import { clearCookie, dayHash, newVisitor, readVisitor, visitorCookie } from './_lib/visitor.js'
 import { DAY_CAP, bump, cleanPath, dayOf, deviceOf, isBot, refHost } from './_lib/stats.js'
 
-const done = () => new Response(null, { status: 204, headers: { 'Cache-Control': 'no-store' } })
+const done = (cookie) => new Response(null, { status: 204, headers: cookie ? { 'Cache-Control': 'no-store', 'Set-Cookie': cookie } : { 'Cache-Control': 'no-store' } })
 const hits = new Map() // limite par adresse IP, en mémoire seulement (rien n'est enregistré)
 function tooFast(ip) {
   const now = Date.now(), h = hits.get(ip)
@@ -15,6 +16,7 @@ let warned = '' // une seule alerte de quota par jour et par serveur (la base le
 const CLICKS = ['email', 'github', 'linkedin']
 
 export async function onRequestPost(ctx) {
+  let setCookie = null
   try {
     const { request, env } = ctx
     const h = request.headers
@@ -25,6 +27,7 @@ export async function onRequestPost(ctx) {
 
     const b = await readJson(request, 600)
     const day = dayOf()
+    if (b.t === 'optout') return done(clearCookie()) // le visiteur retire son accord : on efface son cookie d'audience
     const cap = await env.DB.prepare("SELECT n FROM stat_daily WHERE day = ? AND kind = 'events' AND key = 'all'").bind(day).first()
     const used = cap?.n ?? 0
     if (used >= DAY_CAP) {
@@ -33,11 +36,21 @@ export async function onRequestPost(ctx) {
     }
     if (used >= DAY_CAP * 0.8 && warned !== day + 'soon') { warned = day + 'soon'; await raiseAlert(env, { level: 'warn', kind: 'quota', title: 'Mesure d\'audience à 80 % du plafond du jour', detail: `${used} / ${DAY_CAP} événements. Un pic inhabituel peut venir d'un robot : regarde les statistiques.`, key: `quota_soon:${day}` }) }
     const rows = [['events', 'all', 1]]
+    // Visiteur unique du jour : seulement si le visiteur a donné son accord (b.c === 1). Le cookie n'est créé qu'une fois.
+    const visitor = async () => {
+      if (b.c !== 1) return
+      const day8 = day.replaceAll('-', '')
+      let v = readVisitor(h.get('Cookie'))
+      if (!v) { v = newVisitor(day8); setCookie = visitorCookie(v) }
+      const ins = await env.DB.prepare('INSERT OR IGNORE INTO vis_day (day, h) VALUES (?, ?)').bind(day, await dayHash(env, day, v.id)).run()
+      if (ins.meta.changes) rows.push(['uniq', 'all', 1], ['uniq', v.first === day8 ? 'new' : 'ret', 1])
+    }
 
     if (b.t === 'view') {
       const path = cleanPath(b.path)
       if (!path) return done()
       const cc = (getCountry(request) || 'XX').toUpperCase().slice(0, 2)
+      await visitor()
       rows.push(['view', path, 1], ['country', /^[A-Z]{2}$/.test(cc) ? cc : 'XX', 1], ['continent', request.cf?.continent || '??', 1], ['device', deviceOf(h.get('User-Agent') || ''), 1])
       if (b.first === true) {
         let r = refHost(b.ref, new URL(request.url).hostname)
@@ -48,6 +61,8 @@ export async function onRequestPost(ctx) {
         }
         if (r) rows.push(['ref', r, 1])
       }
+    } else if (b.t === 'visit') { // accord donné en cours de visite : on compte le visiteur sans ajouter de page vue
+      await visitor()
     } else if (b.t === 'time') {
       const path = cleanPath(b.path), s = Math.round(Number(b.s))
       if (!path || !(s >= 2)) return done()
@@ -64,6 +79,6 @@ export async function onRequestPost(ctx) {
 
     await bump(env, day, rows)
   } catch { /* une mesure perdue n'est pas grave */ }
-  return done()
+  return done(setCookie)
 }
 export const onRequest = (ctx) => (ctx.request.method === 'POST' ? onRequestPost(ctx) : new Response(null, { status: 405, headers: { Allow: 'POST' } }))

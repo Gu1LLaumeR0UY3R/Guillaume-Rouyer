@@ -3,10 +3,11 @@
 import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
+import { takeDraft } from '../../admin/draftResume.js'
 import { goodnightDefaults } from '../../content/goodnightDefaults.js'
 import ImageField from './ImageField.vue'
 import StringList from './StringList.vue'
-import VersionTools from './VersionTools.vue'
+import DraftBar from './DraftBar.vue'
 import './adminForm.css'
 
 const ICONS = { search: 'Loupe', calendar: 'Calendrier', key: 'Clé' }
@@ -23,6 +24,8 @@ async function load() {
     g.value = custom.value ? rest : goodnightDefaults()
     saved.value = snap()
   } catch (e) { error.value = e.message } finally { loading.value = false }
+  const dr = await takeDraft('content', 'goodnight')
+  if (dr) g.value = dr
 }
 const warn = (e) => { if (dirty.value) { e.preventDefault(); e.returnValue = '' } }
 onMounted(() => { load(); window.addEventListener('beforeunload', warn) })
@@ -73,7 +76,7 @@ const del = (arr, i, what) => { if (confirm(`Supprimer ${what} ?`)) arr.splice(i
         <span class="spacer" />
         <button v-if="custom" class="btn btn-ghost small btn-danger" type="button" :disabled="busy" @click="reset">Revenir à l'origine</button>
       </div>
-      <VersionTools kind="content" ref-key="goodnight" :get-data="payload" @restored="load" @resume="(d) => (g = d)" />
+      <DraftBar kind="content" ref-key="goodnight" :get-data="payload" />
 
       <section class="card">
         <h2>1. Bandeau d'en-tête</h2>

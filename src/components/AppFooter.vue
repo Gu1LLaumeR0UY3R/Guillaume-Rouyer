@@ -1,6 +1,8 @@
 <script setup>
 import { links, settings } from '../content/settings.js'
 import { track } from '../stats.js'
+import { reopenBanner } from '../consent.js'
+import { t } from '../i18n/index.js'
 </script>
 
 <template>
@@ -19,6 +21,7 @@ import { track } from '../stats.js'
         <nav aria-label="Informations légales">
           <RouterLink to="/mentions-legales">Mentions légales</RouterLink>
           <RouterLink to="/confidentialite">Confidentialité</RouterLink>
+          <button type="button" class="lk" @click="reopenBanner">{{ t('cookie.manage') }}</button>
         </nav>
       </div>
     </div>
@@ -37,5 +40,6 @@ ul a:hover{text-decoration:underline}
 .bottom p{margin:0}
 nav{display:flex;gap:20px}
 nav a{text-decoration:none}
-nav a:hover{color:var(--green);text-decoration:underline}
+nav .lk{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+nav .lk:hover,nav a:hover{color:var(--green);text-decoration:underline}
 </style>

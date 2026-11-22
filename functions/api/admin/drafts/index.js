@@ -7,9 +7,16 @@ import { requireAdmin } from '../../../_lib/auth.js'
 import { checkRef, parseFor } from '../../../_lib/versions.js'
 import { log } from '../../../_lib/logger.js'
 
-export const onRequest = (ctx) => route(ctx, { GET, PUT, DELETE })
+export const onRequest = (ctx) => route(ctx, { GET, PUT, PATCH, DELETE })
 
 const MIN_AHEAD = 60_000, MAX_AHEAD = 366 * 86400000
+function checkDate(v) {
+  if (v === null || v === undefined) return null
+  const now = Date.now()
+  if (!Number.isInteger(v) || v < now + MIN_AHEAD) throw new HttpError(400, 'La date de publication doit être dans le futur (au moins 1 minute)')
+  if (v > now + MAX_AHEAD) throw new HttpError(400, 'La date de publication est trop lointaine (1 an maximum)')
+  return v
+}
 
 async function GET(ctx) {
   await requireAdmin(ctx)
@@ -30,18 +37,24 @@ async function PUT(ctx) {
   checkRef(b.kind, b.ref)
   if (b.kind === 'project' && !(await ctx.env.DB.prepare('SELECT 1 FROM projects WHERE slug = ?').bind(b.ref).first())) throw new HttpError(404, 'Projet introuvable')
   const data = parseFor(b.kind, b.ref, b.data)
-  let at = null
-  if (b.publishAt !== null && b.publishAt !== undefined) {
-    const now = Date.now()
-    if (!Number.isInteger(b.publishAt) || b.publishAt < now + MIN_AHEAD) throw new HttpError(400, 'La date de publication doit être dans le futur (au moins 1 minute)')
-    if (b.publishAt > now + MAX_AHEAD) throw new HttpError(400, 'La date de publication est trop lointaine (1 an maximum)')
-    at = b.publishAt
-  }
+  const at = checkDate(b.publishAt)
   const now = Date.now()
   // Un projet garde sa forme d'entrée (revalidée à la publication) ; un bloc de contenu est déjà normalisé.
   await ctx.env.DB.prepare('INSERT INTO drafts (kind, ref, data, publish_at, error, created_at, updated_at) VALUES (?, ?, ?, ?, NULL, ?, ?) ON CONFLICT(kind, ref) DO UPDATE SET data = excluded.data, publish_at = excluded.publish_at, error = NULL, updated_at = excluded.updated_at')
     .bind(b.kind, b.ref, JSON.stringify(b.kind === 'project' ? b.data : data), at, now, now).run()
   await log(ctx, 'info', at ? 'publish_scheduled' : 'draft_saved', { kind: b.kind, ref: b.ref, at })
+  return json({ ok: true })
+}
+
+// Change seulement la date de publication d'un brouillon existant (null = simple brouillon).
+async function PATCH(ctx) {
+  await requireAdmin(ctx)
+  const b = await readJson(ctx.request)
+  checkRef(b.kind, b.ref)
+  const at = checkDate(b.publishAt)
+  const r = await ctx.env.DB.prepare('UPDATE drafts SET publish_at = ?, error = NULL, updated_at = ? WHERE kind = ? AND ref = ?').bind(at, Date.now(), b.kind, b.ref).run()
+  if (!r.meta.changes) throw new HttpError(404, 'Aucun brouillon')
+  await log(ctx, 'info', at ? 'publish_scheduled' : 'publish_unscheduled', { kind: b.kind, ref: b.ref, at })
   return json({ ok: true })
 }
 

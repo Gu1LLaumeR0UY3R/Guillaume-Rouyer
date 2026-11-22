@@ -3,8 +3,9 @@
 import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
+import { takeDraft } from '../../admin/draftResume.js'
 import { defaults } from '../../content/siteDefaults.js'
-import VersionTools from './VersionTools.vue'
+import DraftBar from './DraftBar.vue'
 import './adminForm.css'
 
 const TABS = [['home', 'Accueil'], ['about', 'À propos'], ['skills', 'Compétences'], ['timeline', 'Parcours'], ['contact', 'Contact'], ['legal', 'Mentions légales'], ['privacy', 'Confidentialité']]
@@ -41,6 +42,8 @@ async function load() {
       saved[k] = snap(k)
     }))
   } catch (e) { error.value = e.message } finally { loading.value = false }
+  const d = await takeDraft('content', tab.value)
+  if (d) data[tab.value] = d
 }
 const warn = (e) => { if (anyDirty.value) { e.preventDefault(); e.returnValue = '' } }
 onMounted(() => { load(); window.addEventListener('beforeunload', warn) })
@@ -101,7 +104,7 @@ const TL = [['formation', 'Formation', 'cette formation'], ['experience', 'Expé
           <button v-if="custom[key]" class="btn btn-ghost small btn-danger" type="button" :disabled="busy" @click="reset(key)">Revenir à l'origine</button>
         </div>
 
-        <VersionTools v-if="tab === key" kind="content" :ref-key="key" :get-data="() => clean(key)" @restored="load" @resume="(d) => (data[key] = d)" />
+        <DraftBar v-if="tab === key" kind="content" :ref-key="key" :get-data="() => clean(key)" />
 
         <!-- ACCUEIL -->
         <section v-if="key === 'home'" class="card">

@@ -26,19 +26,23 @@ export const LEGAL_DEFAULT = {
 }
 
 export const PRIVACY_DEFAULT = {
-  updated: '20 novembre 2026',
+  updated: '22 novembre 2026',
   sections: [
   {
     "title": "En résumé",
-    "body": "Ce site ne collecte de donnée personnelle que si tu m'écris avec le formulaire de contact (voir « Contact par e-mail et formulaire »). Sinon : pas de compte visiteur, pas de cookie pour les visiteurs, pas de publicité. Il compte seulement, de façon anonyme et agrégée, combien de personnes viennent (voir « Mesure d'audience »), et tu peux le refuser en un clic."
+    "body": "Ce site ne collecte de donnée personnelle que si tu m'écris avec le formulaire de contact (voir « Contact par e-mail et formulaire »). Sinon : pas de compte visiteur, pas de publicité. Il compte seulement, de façon anonyme et agrégée, combien de personnes viennent (voir « Mesure d'audience »). Un cookie d'audience n'est posé que si tu l'acceptes, et tu peux le refuser ou le retirer à tout moment avec le lien « Cookies » en bas de page."
   },
   {
     "title": "Ce que le site enregistre dans ton navigateur",
-    "body": "Rien, sauf si tu choisis de ne pas être compté (voir ci-dessous) : ce choix est alors gardé dans ton navigateur pour être respecté. Le choix du mode clair ou sombre n'est pas mémorisé : le site démarre toujours en mode clair."
+    "body": "Ton choix pour le cookie d'audience (accepté ou refusé), pour qu'il soit respecté pendant 13 mois, puis redemandé. Si tu acceptes, un cookie d'audience est aussi posé (voir « Cookie d'audience »). Si tu choisis de ne pas être compté, ce choix est gardé dans ton navigateur pour être respecté. Le choix du mode clair ou sombre n'est pas mémorisé : le site démarre toujours en mode clair."
   },
   {
     "title": "Mesure d'audience",
-    "body": "Pour savoir si le site est consulté, il compte des visites de façon anonyme, sans cookie et sans identifiant. Il enregistre uniquement des compteurs par jour : les pages vues, le temps passé actif sur une page, le pays et le continent (déduits au moment de la visite, sans conserver ton adresse IP), le type d'appareil (ordinateur, mobile ou tablette), le site d'où tu viens, le thème clair ou sombre choisi, les clics sur les liens de contact et le nombre d'arbres plantés dans le décor. Il n'y a aucune ligne par visiteur : personne ne peut être reconnu d'une visite à l'autre, et ces compteurs ne sont croisés avec aucune autre donnée. Ils servent uniquement à l'éditeur, sont conservés 13 mois, puis supprimés. Les robots sont exclus.\n\nTu peux refuser : le site respecte « Do Not Track » et « Global Privacy Control », et tu peux aussi cliquer ci-dessous.\n\n[[mesure]]"
+    "body": "Pour savoir si le site est consulté, il compte des visites de façon anonyme, sans cookie et sans identifiant. Il enregistre uniquement des compteurs par jour : les pages vues, le temps passé actif sur une page, le pays et le continent (déduits au moment de la visite, sans conserver ton adresse IP), le type d'appareil (ordinateur, mobile ou tablette), le site d'où tu viens, le thème clair ou sombre choisi, les clics sur les liens de contact et le nombre d'arbres plantés dans le décor. Sans ton accord, il n'y a aucune ligne par visiteur : personne ne peut être reconnu d'une visite à l'autre, et ces compteurs ne sont croisés avec aucune autre donnée. Ils servent uniquement à l'éditeur, sont conservés 13 mois, puis supprimés. Les robots sont exclus.\n\nTu peux refuser : le site respecte « Do Not Track » et « Global Privacy Control », et tu peux aussi cliquer ci-dessous.\n\n[[mesure]]"
+  },
+  {
+    "title": "Cookie d'audience (avec ton accord)",
+    "body": "Si tu acceptes la bannière, le site pose un cookie nommé « __Host-vid » qui contient un numéro choisi au hasard et le jour de ta première visite. Il sert uniquement à compter combien de visiteurs différents viennent chaque jour, et combien sont déjà venus avant. Il dure 13 mois au maximum (sans être prolongé), n'est lu que par ce site et n'est transmis à personne.\n\nLe serveur ne garde pas ce numéro : il n'en conserve qu'une empreinte valable pour la journée, effacée sous 3 jours, qui ne permet pas de te suivre d'un jour à l'autre. Si tu refuses, ou si tu retires ton accord avec le lien « Cookies » en bas de page, le cookie est effacé et plus aucun numéro n'est utilisé. Le site respecte aussi « Do Not Track » et « Global Privacy Control » : dans ce cas, aucun cookie n'est posé et la bannière n'apparaît pas."
   },
   {
     "title": "Journaux de sécurité",
