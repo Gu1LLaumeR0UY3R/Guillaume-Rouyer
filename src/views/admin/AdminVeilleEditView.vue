@@ -1,12 +1,17 @@
 <script setup>
 // Création et modification d'un article de veille : identité, résumé, sujets, couverture, contenu (Markdown).
 // « Enregistrer » garde l'état (brouillon ou publié) ; « Publier » enregistre puis met en ligne.
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, onMounted, reactive, ref, watch } from 'vue'
 import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
 import { slugify } from '../../admin/slug.js'
 import ArticleEditor from '../../components/veille/ArticleEditor.vue'
+const VisualEditor = defineAsyncComponent(() => import('../../components/veille/VisualEditor.vue'))
+let saved = 'visual'
+try { saved = localStorage.getItem('veille-editor-mode') === 'markdown' ? 'markdown' : 'visual' } catch { /* stockage indisponible */ }
+const editorMode = ref(saved)
+function setMode(m) { editorMode.value = m; try { localStorage.setItem('veille-editor-mode', m) } catch { /* ignoré */ } }
 import './adminForm.css'
 
 const route = useRoute()
@@ -141,8 +146,15 @@ async function setStatus(next) {
       </fieldset>
 
       <div class="field-body">
-        <span class="lab">Contenu de l'article</span>
-        <ArticleEditor v-model="f.body" :maxlength="60000" />
+        <div class="labrow">
+          <span class="lab">Contenu de l'article</span>
+          <span class="seg" role="group" aria-label="Mode d'édition">
+            <button type="button" :aria-pressed="editorMode === 'visual'" :class="{ on: editorMode === 'visual' }" @click="setMode('visual')">Visuel</button>
+            <button type="button" :aria-pressed="editorMode === 'markdown'" :class="{ on: editorMode === 'markdown' }" @click="setMode('markdown')">Markdown</button>
+          </span>
+        </div>
+        <VisualEditor v-if="editorMode === 'visual'" v-model="f.body" />
+        <ArticleEditor v-else v-model="f.body" :maxlength="60000" />
         <span class="hint">{{ words }} mot(s) · environ {{ minutes }} min de lecture · {{ f.body.length.toLocaleString('fr-FR') }} / 60 000 caractères</span>
       </div>
 
@@ -170,6 +182,11 @@ async function setStatus(next) {
 .locked{opacity:.65;cursor:not-allowed}
 .field-body{display:grid;gap:8px}
 .field-body .lab{font-weight:600}
+.labrow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.seg{display:inline-flex;padding:3px;border:1px solid var(--line);border-radius:999px;background:var(--card)}
+.seg button{min-height:32px;padding:0 14px;border:0;border-radius:999px;background:none;color:var(--fg);font:700 14px var(--font);cursor:pointer}
+.seg button.on{background:var(--green);color:var(--on-green)}
+.seg button:focus-visible{outline:3px solid var(--green);outline-offset:1px}
 .cover{margin:0;max-width:420px}
 .cover img{display:block;width:100%;height:auto;border-radius:12px}
 .cover figcaption{margin-top:6px;color:var(--muted);font-size:14px}

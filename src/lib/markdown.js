@@ -108,6 +108,11 @@ md.core.ruler.push('veille_image_figures', (state) => {
 md.renderer.rules.image = (tokens, idx, options, env, self) => {
   const t = tokens[idx]
   const src = t.attrGet('src') ?? ''
+  if (env.editor) {
+    const m = t.meta ?? {}
+    const ttl = t.attrGet('title')
+    return `<img src="${esc(src)}" alt="${esc(self.renderInlineAsText(t.children, options, env))}"${ttl ? ` title="${esc(ttl)}"` : ''} data-width="${m.width ?? 100}" data-align="${m.align ?? 'center'}"${m.zoom ? ' data-zoom="1"' : ''}>`
+  }
   if (!isHttps(src)) return '<span class="art-img-error">[Image refusée : un lien https est obligatoire]</span>'
   const alt = esc(self.renderInlineAsText(t.children, options, env))
   const title = t.attrGet('title')
@@ -127,12 +132,13 @@ function demoBlock(code, title) {
 }
 
 // ---------- Code : ```js fichier.js ----------
-md.renderer.rules.fence = (tokens, idx) => {
+md.renderer.rules.fence = (tokens, idx, options, env) => {
   const t = tokens[idx]
   const [rawLang = '', ...rest] = t.info.trim().split(/\s+/)
   const lang = /^[a-z0-9+#-]{1,20}$/i.test(rawLang) ? rawLang.toLowerCase() : ''
   const file = rest.join(' ').slice(0, 80)
   const code = t.content.replace(/\n$/, '')
+  if (env.editor) return `<pre${file ? ` data-file="${esc(file)}"` : ''}><code${lang ? ` class="language-${esc(lang)}"` : ''}>${esc(code)}</code></pre>\n`
   if (rawLang.toLowerCase() === 'demo') return demoBlock(code, rest.join(' ').slice(0, 80))
   const known = lang && hljs.getLanguage(lang) ? hljs.getLanguage(lang) : null
   const html = known ? hljs.highlight(code, { language: lang, ignoreIllegals: true }).value : esc(code)
@@ -141,15 +147,27 @@ md.renderer.rules.fence = (tokens, idx) => {
 }
 
 // ---------- Tableaux défilants ----------
-md.renderer.rules.table_open = () => '<div class="table-wrap"><table>\n'
-md.renderer.rules.table_close = () => '</table></div>\n'
+md.renderer.rules.table_open = (tokens, idx, options, env) => (env.editor ? '<table>\n' : '<div class="table-wrap"><table>\n')
+md.renderer.rules.table_close = (tokens, idx, options, env) => (env.editor ? '</table>\n' : '</table></div>\n')
 
 // ---------- Blocs ::: ----------
 const infoOf = (tokens, idx, name) => tokens[idx].info.trim().slice(name.length).trim()
+// Mode éditeur (env.editor) : balises neutres lues par l'éditeur visuel (data-*), sans mise en forme de lecture.
+const attr = (v) => esc(String(v ?? ''))
+const EDITOR_BLOCKS = {
+  callout: (name, info) => `<div data-callout="${name}" data-title="${attr(info)}">\n`,
+  details: (name, info) => `<div data-fold data-title="${attr(info)}">\n`,
+  quote: (name, info) => { const [a = '', s = ''] = info.split('|').map((x) => x.trim()); return `<div data-pullquote data-author="${attr(a)}" data-source="${attr(s)}">\n` },
+  link: (name, info) => { const [u = '', ...w] = info.split(/\s+/); return `<div data-linkcard data-url="${attr(u)}" data-title="${attr(w.join(' '))}">\n` },
+  align: (name) => `<div data-align="${name}">\n`,
+}
 function block(name, open, close) {
+  const kind = ALIGN_BLOCKS.includes(name) ? 'align' : CALLOUTS[name] ? 'callout' : name
   md.use(container, name, {
     render(tokens, idx, options, env) {
-      return tokens[idx].nesting === 1 ? open(infoOf(tokens, idx, name), env) : close(env)
+      const info = infoOf(tokens, idx, name)
+      if (env.editor) return tokens[idx].nesting === 1 ? EDITOR_BLOCKS[kind](name, info) : '</div>\n'
+      return tokens[idx].nesting === 1 ? open(info, env) : close(env)
     },
   })
 }
@@ -192,4 +210,9 @@ export function renderMarkdown(src) {
   const raw = md.render(String(src ?? ''), env)
   const html = DOMPurify.isSupported ? DOMPurify.sanitize(raw, PURIFY) : ''
   return { html, toc: env.toc ?? [] }
+}
+
+// HTML neutre pour l'éditeur visuel (aucun traitement de lecture ; l'éditeur filtre lui-même ce qu'il comprend).
+export function markdownToEditorHtml(src) {
+  return md.render(String(src ?? ''), { editor: true })
 }
