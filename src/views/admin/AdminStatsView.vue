@@ -25,7 +25,7 @@ const CONT = { AF: 'Afrique', AN: 'Antarctique', AS: 'Asie', EU: 'Europe', NA: '
 const DEVICE = { ordinateur: 'Ordinateur', mobile: 'Mobile', tablette: 'Tablette' }
 const THEME = { light: 'Mode clair', dark: 'Mode sombre' }
 const CLICK = { email: 'E-mail', github: 'GitHub', linkedin: 'LinkedIn' }
-const PAGE = { '/': 'Accueil', '/projets': 'Projets', '/a-propos': 'À propos', '/contact': 'Contact', '/mentions-legales': 'Mentions légales', '/confidentialite': 'Confidentialité', '/(autre)': 'Autre page' }
+const PAGE = { '/': 'Accueil', '/projets': 'Projets', '/veille': 'Veille', '/a-propos': 'À propos', '/contact': 'Contact', '/mentions-legales': 'Mentions légales', '/confidentialite': 'Confidentialité', '/(autre)': 'Autre page' }
 const pageName = (k) => PAGE[k] ?? k
 
 const toData = (list, name = (k) => k) => (list ?? []).map((x) => ({ label: name(x.key), value: x.n }))

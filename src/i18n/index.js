@@ -20,6 +20,10 @@ export const MESSAGES = {
     'contactForm.privacy': "Ton message n'est lu que par moi et conservé 12 mois au plus.", 'contactForm.privacyLink': 'Politique de confidentialité', 'contactForm.fail': "Envoi impossible pour le moment. Réessaie, ou écris-moi par e-mail.",
     'about.title': 'À propos', 'about.level': 'niveau',
     'journey.title': 'Parcours', 'journey.formation': 'Formation', 'journey.experience': 'Expériences',
+    'veille.title': 'Veille technologique', 'veille.lead': "Ce que je lis, teste et découvre : des articles sur tout ce qui me passionne, sans me limiter à un seul sujet.", 'veille.metaDescription': "Veille technologique de Guillaume Rouyer (Er1gon359) : articles sur le développement web, le self-hosting, l'IA et tout ce qui le passionne.", 'veille.frOnly': 'Les articles sont rédigés en français.',
+    'veille.filter': 'Filtrer par sujet', 'veille.all': 'Tous', 'veille.article': 'article', 'veille.articles': 'articles', 'veille.empty': 'Aucun article pour le moment.', 'veille.emptyTopic': 'Aucun article pour ce sujet.',
+    'veille.loading': 'Chargement…', 'veille.error': 'Impossible de charger la veille pour le moment.', 'veille.retry': 'Réessayer', 'veille.back': 'Toute la veille', 'veille.minutes': 'min de lecture',
+    'veille.toc': 'Sommaire', 'veille.related': 'À lire aussi', 'veille.notFoundTitle': 'Article introuvable', 'veille.notFound': "Cet article n'existe pas ou n'est plus en ligne.",
   },
   en: {
     skip: 'Skip to content',
@@ -35,6 +39,10 @@ export const MESSAGES = {
     'contactForm.privacy': 'Your message is read only by me and kept for 12 months at most.', 'contactForm.privacyLink': 'Privacy policy', 'contactForm.fail': 'Sending is not possible right now. Please try again, or email me.',
     'about.title': 'About', 'about.level': 'level',
     'journey.title': 'Journey', 'journey.formation': 'Education', 'journey.experience': 'Experience',
+    'veille.title': 'Tech watch', 'veille.lead': 'What I read, test and discover: articles on everything that fascinates me, without sticking to a single topic.', 'veille.metaDescription': 'Tech watch by Guillaume Rouyer (Er1gon359): articles on web development, self-hosting, AI and everything he is curious about.', 'veille.frOnly': 'Articles are written in French.',
+    'veille.filter': 'Filter by topic', 'veille.all': 'All', 'veille.article': 'article', 'veille.articles': 'articles', 'veille.empty': 'No articles yet.', 'veille.emptyTopic': 'No articles for this topic.',
+    'veille.loading': 'Loading…', 'veille.error': 'The tech watch cannot be loaded right now.', 'veille.retry': 'Try again', 'veille.back': 'All articles', 'veille.minutes': 'min read',
+    'veille.toc': 'Contents', 'veille.related': 'Keep reading', 'veille.notFoundTitle': 'Article not found', 'veille.notFound': 'This article does not exist or is no longer online.',
   },
 }
 

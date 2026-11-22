@@ -5,6 +5,8 @@ import { checkSession } from '../admin/api.js'
 const routes = [
   { path: '/', name: 'home', component: HomeView, meta: { title: 'Accueil' } },
   { path: '/projets', name: 'projects', component: () => import('../views/ProjectsView.vue'), meta: { title: 'Projets' } },
+  { path: '/veille', name: 'veille', component: () => import('../views/VeilleView.vue'), meta: { title: 'Veille technologique' } },
+  { path: '/veille/:slug', name: 'veille-article', component: () => import('../views/VeilleArticleView.vue'), meta: { title: 'Veille technologique' } },
   { path: '/a-propos', name: 'about', component: () => import('../views/AboutView.vue'), meta: { title: 'À propos' } },
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue'), meta: { title: 'Contact' } },
   { path: '/projets/spidernet', redirect: '/projets/spidernet/tableau' },
@@ -26,6 +28,9 @@ const routes = [
   { path: '/admin/projets/:slug', name: 'admin-project-edit', component: () => import('../views/admin/AdminProjectEditView.vue'), meta: { title: 'Modifier un projet', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/contenu', name: 'admin-content', component: () => import('../views/admin/AdminContentHubView.vue'), meta: { title: 'Contenu du site', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/contenu/pages', name: 'admin-content-pages', component: () => import('../views/admin/AdminSiteContentView.vue'), meta: { title: 'Modifier un texte du site', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/veille', name: 'admin-veille', component: () => import('../views/admin/AdminVeilleView.vue'), meta: { title: 'Veille (admin)', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/veille/nouveau', name: 'admin-veille-new', component: () => import('../views/admin/AdminVeilleEditView.vue'), meta: { title: 'Nouvel article', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/veille/:slug', name: 'admin-veille-edit', component: () => import('../views/admin/AdminVeilleEditView.vue'), meta: { title: 'Modifier un article', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/contenu/goodnight', name: 'admin-goodnight', component: () => import('../views/admin/AdminGoodnightView.vue'), meta: { title: 'Étude de cas Goodnight', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/contenu/spidernet', name: 'admin-spidernet', component: () => import('../views/admin/AdminSpidernetView.vue'), meta: { title: 'Tableau SpiderNet', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/securite', name: 'admin-security', component: () => import('../views/admin/AdminSecurityView.vue'), meta: { title: 'Sécurité', noindex: true, admin: true, adminLayout: true } },
@@ -44,7 +49,14 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior: (to, from, saved) => saved || { top: 0 },
+  scrollBehavior(to, from, saved) {
+    if (saved) return saved
+    if (to.hash) { // ancre (sommaire d'un article) : défile jusqu'au titre, en laissant la place de l'en-tête fixe
+      const el = document.getElementById(decodeURIComponent(to.hash.slice(1)))
+      if (el) return { el, top: 96, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }
+    }
+    return { top: 0 }
+  },
 })
 
 const BASE_TITLE = 'Guillaume Rouyer (Er1gon359) · Développeur Web & PHP'
