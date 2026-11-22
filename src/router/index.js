@@ -5,6 +5,8 @@ import { checkSession } from '../admin/api.js'
 const routes = [
   { path: '/', name: 'home', component: HomeView, meta: { title: 'Accueil' } },
   { path: '/projets', name: 'projects', component: () => import('../views/ProjectsView.vue'), meta: { title: 'Projets' } },
+  { path: '/veille', name: 'veille', component: () => import('../views/VeilleView.vue'), meta: { title: 'Veille technologique' } },
+  { path: '/veille/:slug', name: 'veille-article', component: () => import('../views/VeilleArticleView.vue'), meta: { title: 'Veille technologique' } },
   { path: '/a-propos', name: 'about', component: () => import('../views/AboutView.vue'), meta: { title: 'À propos' } },
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue'), meta: { title: 'Contact' } },
   { path: '/projets/spidernet', redirect: '/projets/spidernet/tableau' },
@@ -44,7 +46,14 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior: (to, from, saved) => saved || { top: 0 },
+  scrollBehavior(to, from, saved) {
+    if (saved) return saved
+    if (to.hash) { // ancre (sommaire d'un article) : défile jusqu'au titre, en laissant la place de l'en-tête fixe
+      const el = document.getElementById(decodeURIComponent(to.hash.slice(1)))
+      if (el) return { el, top: 96, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' }
+    }
+    return { top: 0 }
+  },
 })
 
 const BASE_TITLE = 'Guillaume Rouyer (Er1gon359) · Développeur Web & PHP'

@@ -3,3 +3,4 @@ Allow: /
 Disallow: /admin
 Disallow: /api/
 Sitemap: https://er1gon359.com/sitemap.xml
+Sitemap: https://er1gon359.com/sitemap-veille.xml
