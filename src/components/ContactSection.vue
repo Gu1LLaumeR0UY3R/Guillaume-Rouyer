@@ -1,4 +1,5 @@
 <script setup>
+import { openCv } from '../content/cvGate.js'
 import { links } from '../content/settings.js'
 import { track } from '../stats.js'
 import ContactForm from './ContactForm.vue'
@@ -24,7 +25,7 @@ const text = () => pick(contact.value, 'text') || 'Un projet, une mission ou une
           :class="l.primary ? 'light' : 'outline'"
           :href="l.href"
           :rel="l.external ? 'noopener' : null"
-          @click="track.click(l.kind)"
+          @click="l.cv ? (($event.preventDefault(), openCv())) : track.click(l.kind)"
         >{{ l.label }}</a>
       </div>
       <ContactForm />

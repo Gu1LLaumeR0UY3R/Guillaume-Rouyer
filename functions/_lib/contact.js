@@ -17,6 +17,7 @@ async function key(env) {
   return crypto.subtle.importKey('raw', enc.encode(JSON.parse(row.value)), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify'])
 }
 const sign = async (k, text) => hex(await crypto.subtle.sign('HMAC', k, enc.encode(text)))
+export { key as signingKey, sign, randomHex }
 
 export async function makeChallenge(env) {
   const k = await key(env)

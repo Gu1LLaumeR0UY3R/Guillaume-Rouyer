@@ -1,4 +1,5 @@
 <script setup>
+import { openCv } from '../content/cvGate.js'
 import { links, settings } from '../content/settings.js'
 import { track } from '../stats.js'
 import { reopenBanner } from '../consent.js'
@@ -12,7 +13,7 @@ import { t } from '../i18n/index.js'
         <p class="title">Me contacter</p>
         <ul>
           <li v-for="l in links" :key="l.label">
-            <a :href="l.href" :target="l.external ? '_blank' : null" :rel="l.external ? 'noopener' : null" @click="track.click(l.kind)">{{ l.label }}</a>
+            <a :href="l.href" :target="l.external ? '_blank' : null" :rel="l.external ? 'noopener' : null" @click="l.cv ? (($event.preventDefault(), openCv())) : track.click(l.kind)">{{ l.label }}</a>
           </li>
         </ul>
       </aside>

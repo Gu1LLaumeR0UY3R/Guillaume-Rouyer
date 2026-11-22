@@ -2,6 +2,7 @@
 import ForestScene from './ForestScene.vue'
 import { home, loadSite } from '../content/site.js'
 import { loadSettings, settings } from '../content/settings.js'
+import { openCv } from '../content/cvGate.js'
 import { pick, t } from '../i18n/index.js'
 
 loadSite()
@@ -20,7 +21,7 @@ const txt = (key) => pick(home.value, key) || t(`hero.${key}`)
       <div class="cta">
         <RouterLink class="btn btn-primary" to="/projets">{{ txt('cta') }}</RouterLink>
         <a class="btn btn-ghost" href="https://github.com/Gu1LLaumeR0UY3R" rel="noopener">GitHub</a>
-        <a v-if="settings.hasCv === true" class="btn btn-ghost" href="/cv.pdf" target="_blank" rel="noopener">{{ t('cv.download') }}</a>
+        <button v-if="settings.hasCv === true" class="btn btn-ghost" type="button" aria-haspopup="dialog" @click="openCv">{{ t('cv.download') }}</button>
       </div>
     </div>
   </section>
