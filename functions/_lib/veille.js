@@ -33,6 +33,9 @@ function checkMarkdown(body) {
     httpsUrl(url, 'lien d\'image')
     if (!url) throw new HttpError(400, 'Une image n\'a pas de lien')
   }
+  for (const m of text.matchAll(/^:{3,}\s*link\s+(\S*)/gim)) { // carte lien : ::: link https://... Titre
+    if (!/^https:\/\//i.test(m[1])) throw new HttpError(400, 'Une carte lien doit avoir une adresse https')
+  }
   for (const m of text.matchAll(/\]\(\s*([^)\s]*)/g)) {
     if (m[1] && !/^(https:\/\/|mailto:|#|\/)/i.test(m[1])) throw new HttpError(400, 'Un lien du texte est refusé (https, mailto ou lien interne uniquement)')
   }
