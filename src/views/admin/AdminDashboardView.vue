@@ -122,7 +122,7 @@ async function setMaintenance(on) {
 <style scoped>
 .dash{max-width:1360px}
 .dash h2{margin:0 0 14px;font-size:22px}
-.dash section{margin-top:28px}
+.dash section{margin-top:28px;padding:0}
 .dash section.card{padding:22px}
 .tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:20px}
 .tile,.card,.chart,.cols>*{animation:rise .55s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d, 0) * 70ms)}
