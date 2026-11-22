@@ -22,7 +22,7 @@ import { STATUS, STATUS_NOTE } from '../../data/bataille.js'
 .status{padding:96px 0;background:var(--sand)}
 .kicker{margin:0 0 14px;color:#1d7a74;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
 h2{margin:0 0 32px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif);color:var(--deep)}
-.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:20px}
 article{padding:26px;border-radius:18px;background:var(--paper);border:1px solid #e3d7b6}
 h3{display:flex;align-items:center;gap:10px;margin:0 0 14px;font:600 20px var(--serif);color:var(--deep)}
 .dot{width:12px;height:12px;border-radius:50%}

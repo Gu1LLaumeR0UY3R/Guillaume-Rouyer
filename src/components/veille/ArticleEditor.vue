@@ -256,7 +256,7 @@ function submitDialog() {
 .pv :deep(.art){font-size:17px}
 .help{border:1px solid var(--line);border-radius:12px;background:var(--card)}
 .help summary{padding:12px 16px;font-weight:700;cursor:pointer}
-.helpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:4px 24px;padding:0 16px 8px;font-size:14px}
+.helpgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:4px 24px;padding:0 16px 8px;font-size:14px}
 .helpgrid p{margin:.35em 0}
 .helpgrid code{padding:1px 5px;border:1px solid var(--line);border-radius:5px;background:var(--bg);font-size:12.5px}
 .dlg{width:min(520px,94vw);padding:0;border:1px solid var(--line);border-radius:16px;background:var(--bg);color:var(--fg)}

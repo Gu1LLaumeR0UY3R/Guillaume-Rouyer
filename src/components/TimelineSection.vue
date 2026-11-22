@@ -30,7 +30,7 @@ const points = (item) => { const p = item[`points_${lang.value}`]; return p?.len
 </template>
 
 <style scoped>
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:56px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:56px}
 h3{margin-bottom:22px;color:var(--green);font-size:24px}
 .timeline{position:relative;margin:0;padding:0 0 0 30px;list-style:none}
 .timeline::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:2px;background:linear-gradient(var(--green),var(--line));transform:scaleY(0);transform-origin:top;transition:transform 1.4s cubic-bezier(.2,.8,.2,1) .2s}

@@ -271,7 +271,7 @@ const dropOk = (e) => { if (dragging.value) e.preventDefault() }
 .selbar.on{border-color:var(--green)}
 .selbar label{display:flex;align-items:center;gap:6px;font-size:.88rem;font-weight:600}
 .selbar select{font:inherit;padding:5px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--fg)}
-.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:14px}
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,168px),1fr));gap:14px}
 .tile{position:relative;display:grid;justify-items:center;align-content:start;gap:4px;padding:14px 10px 12px;border:2px solid transparent;border-radius:14px;text-align:center;cursor:pointer;user-select:none;outline:none;transition:background .15s,border-color .15s,transform .15s}
 .tile:hover{background:color-mix(in srgb,var(--green) 7%,transparent)}
 .tile:focus-visible{border-color:var(--fg)}

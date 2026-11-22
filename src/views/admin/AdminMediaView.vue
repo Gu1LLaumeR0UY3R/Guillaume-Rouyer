@@ -199,7 +199,7 @@ async function erase(m) {
 .qbar{display:block;width:110px;height:8px;border-radius:999px;background:var(--line);overflow:hidden}
 .qbar span{display:block;height:100%;background:var(--green)}
 .empty{padding:28px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px;margin:0;padding:0;list-style:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:18px;margin:0;padding:0;list-style:none}
 .card-m{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);transition:transform .2s,border-color .2s,box-shadow .2s;animation:rise .45s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--d) * 45ms)}
 .card-m:hover{transform:translateY(-4px);border-color:var(--green);box-shadow:0 16px 30px -20px var(--glow)}
 .thumb{display:block;aspect-ratio:16/10;background:var(--bg);overflow:hidden}

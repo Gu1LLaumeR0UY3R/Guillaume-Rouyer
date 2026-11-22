@@ -29,5 +29,11 @@ export function hourNow() {
   const n = parseFloat(new URLSearchParams(location.search).get('heure'))
   if (Number.isFinite(n)) return ((n % 24) + 24) % 24
   const d = new Date()
-  return d.getHours() + d.getMinutes() / 60
+  const h = d.getHours() + d.getMinutes() / 60
+  // Le thème choisi prime sur l'horloge : thème sombre = ciel de nuit, thème clair = ciel de jour (sinon texte illisible).
+  const day = h >= 7 && h < 19.5
+  const dark = typeof document !== 'undefined' && document.documentElement.dataset.theme === 'dark'
+  if (dark && day) return 22.5
+  if (!dark && !day) return 13
+  return h
 }

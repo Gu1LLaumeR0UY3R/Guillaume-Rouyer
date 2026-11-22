@@ -30,7 +30,7 @@ const INTRO = computed(() => G.value.intro)
 
 <style scoped>
 .intro{padding:96px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:56px;align-items:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:56px;align-items:center}
 .kicker{margin:0 0 16px;color:var(--muted);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
 h2{margin:0 0 20px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif)}
 .para{margin:0 0 14px;color:var(--muted)}

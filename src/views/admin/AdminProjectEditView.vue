@@ -315,7 +315,7 @@ input.locked{background:var(--card);color:var(--muted)}
 .chip:hover{border-color:var(--green);transform:translateY(-1px)}
 .chip.on{border-color:var(--green);background:var(--green);color:var(--on-green)}
 .chip-in{width:120px!important;min-height:38px!important;border-radius:999px!important}
-.status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.status-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:12px}
 .status-card{position:relative;display:grid;align-content:start;gap:4px;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--bg);cursor:pointer;transition:border-color .2s,transform .15s,box-shadow .2s}
 .status-card:hover{transform:translateY(-2px);border-color:var(--green)}
 .status-card.on{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 20%,transparent);background:color-mix(in srgb,var(--green) 6%,var(--bg))}

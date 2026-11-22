@@ -109,7 +109,7 @@ h3{margin:0;font-size:16px}
 .row{display:flex;flex-wrap:wrap;gap:8px}
 .progress{display:block;height:8px;border-radius:999px;background:var(--bg);overflow:hidden}
 .progress span{display:block;height:100%;background:var(--green);transition:width .15s}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px;margin:0;padding:0;list-style:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:12px;margin:0;padding:0;list-style:none}
 .pick{display:grid;gap:6px;width:100%;padding:6px;border:2px solid transparent;border-radius:12px;background:var(--bg);color:var(--fg);font:500 13px var(--font);text-align:left;cursor:pointer;transition:transform .15s,border-color .15s}
 .pick:hover{transform:translateY(-3px);border-color:var(--green)}
 .pick.on{border-color:var(--green);box-shadow:0 0 0 3px color-mix(in srgb,var(--green) 25%,transparent)}

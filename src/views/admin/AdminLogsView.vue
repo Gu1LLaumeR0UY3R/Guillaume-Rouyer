@@ -129,7 +129,7 @@ const fmt = (t) => new Date(t).toLocaleString('fr-FR')
 .tab[aria-pressed='true']{border-color:var(--green);background:var(--green);color:var(--on-green)}
 .filters label{min-width:0}
 .filters input,.filters select{width:100%}
-.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:12px}
 .inline{display:flex;align-items:center;gap:10px;font-weight:600}
 .empty{padding:24px;border:1px dashed var(--line);border-radius:var(--radius);text-align:center}
 .tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius)}

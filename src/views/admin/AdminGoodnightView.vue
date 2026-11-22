@@ -186,7 +186,7 @@ const del = (arr, i, what) => { if (confirm(`Supprimer ${what} ?`)) arr.splice(i
 .sticky{position:sticky;top:0;z-index:20;padding:10px 0;background:var(--bg)}
 .dirty{color:#b45309;font-weight:700}
 [data-theme=dark] .dirty{color:#fbbf24}
-.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr));gap:16px}
 .thumb{display:grid;gap:6px}
 .btns{display:flex;gap:6px;flex-wrap:wrap}
 .entry{display:grid;gap:12px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--bg)}

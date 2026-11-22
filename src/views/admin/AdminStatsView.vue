@@ -137,7 +137,7 @@ const cap = computed(() => (d.value ? Math.min(100, Math.round((d.value.capToday
 .diag summary{cursor:pointer;font-weight:700}
 .diag ul{margin:10px 0;padding-left:20px;display:grid;gap:6px}
 .empty{padding:18px 20px;border:1px dashed var(--line);border-radius:var(--radius);background:var(--card)}
-.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:20px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:16px;margin-top:20px}
 .tile{display:grid;align-content:center;justify-items:center;gap:4px;min-height:130px;padding:18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);text-align:center;transition:transform .2s,border-color .2s,box-shadow .2s}
 .tile:hover{border-color:var(--green);transform:translateY(-4px);box-shadow:0 16px 30px -18px var(--glow)}
 .n{font:600 34px/1.1 var(--serif);font-variant-numeric:tabular-nums}

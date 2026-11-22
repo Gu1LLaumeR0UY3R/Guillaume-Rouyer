@@ -30,7 +30,7 @@ const featured = computed(() => projects.value.filter((p) => p.featured))
 
 <style scoped>
 .intro{max-width:60ch;margin:0 0 32px;color:var(--muted);font-size:18px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:24px}
 .card{display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);text-decoration:none;transition:transform .3s,box-shadow .3s,border-color .3s}
 .card:hover{transform:translateY(-6px);box-shadow:0 24px 40px -18px var(--glow);border-color:var(--neon)}
 .big{grid-column:1/-1}

@@ -118,7 +118,7 @@ h2{margin:0 0 14px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif);color:var(--d
 .tabs button{min-height:44px;padding:0 22px;border:1px solid #b9d3d3;border-radius:999px;background:#fff;color:var(--deep);font:600 15px var(--sans);cursor:pointer;transition:background .25s,color .25s,transform .25s}
 .tabs button:hover{transform:translateY(-2px)}
 .tabs button.on{background:var(--deep);border-color:var(--deep);color:#fff}
-.detail{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:32px;align-items:start}
+.detail{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:32px;align-items:start}
 h3{margin:0 0 10px;font:600 24px var(--serif);color:var(--deep)}
 .detail p{margin:0;color:var(--muted)}
 .code{margin:0;overflow:hidden;border-radius:16px;background:#0B3550;color:#e6f3f7}
@@ -130,7 +130,7 @@ pre{margin:0;padding:16px 18px;overflow-x:auto;font:12.5px/1.65 ui-monospace,SFM
 .controls button:hover{transform:translateY(-2px)}
 .go{border:0;background:var(--sun);color:#10293a}
 .ghost{border:1px solid #b9d3d3;background:#fff;color:var(--deep)}
-.grids{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px}
+.grids{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:24px}
 .grids figure{margin:0}
 .grid{display:grid;grid-template-columns:repeat(10,1fr);gap:2px;padding:6px;border-radius:12px;background:#0f6a90}
 .grid i{aspect-ratio:1;border-radius:3px;background:rgba(255,255,255,.14);transition:background .2s}

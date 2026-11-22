@@ -28,7 +28,7 @@ import { pick, t } from '../i18n/index.js'
 </template>
 
 <style scoped>
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:48px;align-items:start}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:48px;align-items:start}
 .bio{max-width:62ch;margin:0 0 16px;color:var(--muted);font-size:18px}
 .bio:first-of-type::first-letter{float:left;margin:4px 12px 0 0;color:var(--green);font:600 64px/0.8 var(--serif);text-shadow:0 0 18px var(--glow)}
 .facts,.pills{display:flex;flex-wrap:wrap;margin:0;padding:0;list-style:none}

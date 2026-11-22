@@ -21,7 +21,7 @@
 .admin textarea{min-height:90px;resize:vertical}
 .admin select{min-height:44px}
 .admin .hint{margin:0;color:var(--muted);font-size:14px;font-weight:400}
-.admin .grid2{align-items:start;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.admin .grid2{align-items:start;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px}
 .admin fieldset{display:grid;gap:12px;padding:16px;border:1px solid var(--line);border-radius:12px}
 .admin legend{padding:0 8px;font-weight:700}
 .admin .check{display:flex;align-items:center;gap:10px;font-weight:600}
@@ -54,3 +54,5 @@
 [data-theme=dark] .admin .btn-danger{border-color:#ff7b6e;color:#ff9a90;background:transparent}
 [data-theme=dark] .admin .globe{--globe-land:#2c3330;--globe-sea:#0f1a24;--globe-sea2:#1b2b3a}
 [data-theme=dark] .admin .err{color:#ff9a90}
+
+@media (max-width:860px){.admin{padding:28px 16px}.admin form{padding:16px}}

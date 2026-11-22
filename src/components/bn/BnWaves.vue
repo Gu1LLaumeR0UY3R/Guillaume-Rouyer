@@ -138,11 +138,11 @@ onBeforeUnmount(() => { cancelAnimationFrame(raf); io?.disconnect(); window.remo
 
 <style scoped>
 .waves{padding:96px 0;background:linear-gradient(180deg,#126184,#0B3550);color:#e6f3f7}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:40px;align-items:start;margin-bottom:40px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:40px;align-items:start;margin-bottom:40px}
 .kicker{margin:0 0 14px;color:var(--sun);font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
 h2{margin:0 0 16px;font:italic 500 clamp(30px,4.4vw,48px)/1.1 var(--serif);color:#fff}
 .text p{margin:0 0 12px;color:#cfe6ee}
-.params{margin-top:18px;font-size:13px}
+.params{margin-top:18px;max-width:100%;overflow-x:auto;font-size:13px}
 .params summary{cursor:pointer;color:var(--sun);font-weight:600}
 .params table{width:100%;margin-top:10px;border-collapse:collapse}
 .params th,.params td{padding:8px 6px;border-bottom:1px solid rgba(255,255,255,.14);text-align:left;font-weight:500}

@@ -1,6 +1,6 @@
 <script setup>
 // Cadre de toutes les pages d'admin : barre latérale à gauche (pastilles comprises) + notifications.
-import { onBeforeUnmount, onMounted, reactive } from 'vue'
+import { onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { api } from '../../admin/api.js'
 import { badges, startBadges, stopBadges } from '../../admin/badges.js'
@@ -58,13 +58,21 @@ onBeforeUnmount(stopBadges)
 async function logout() {
   try { await api('/api/admin/logout', { method: 'POST' }) } finally { router.push('/admin') }
 }
+
+// Petit écran : le menu se replie derrière un bouton et se referme à chaque changement de page.
+const menuOpen = ref(false)
+watch(() => route.fullPath, () => { menuOpen.value = false })
 </script>
 
 <template>
   <div class="admin-shell">
-    <aside class="side">
+    <aside class="side" :class="{ open: menuOpen }">
       <p class="brand">Administration</p>
-      <nav aria-label="Administration">
+      <button type="button" class="burger" :aria-expanded="menuOpen" aria-controls="admin-nav" @click="menuOpen = !menuOpen">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path v-if="!menuOpen" d="M4 7h16M4 12h16M4 17h16" /><path v-else d="M6 6l12 12M18 6L6 18" /></svg>
+        Menu
+      </button>
+      <nav id="admin-nav" aria-label="Administration">
         <ul>
           <li v-for="(i, n) in top" :key="i.to" :style="{ '--i': n }">
             <RouterLink :to="i.to" :title="i.tip">
@@ -144,10 +152,14 @@ nav a:hover .ico{transform:scale(1.15) rotate(-6deg)}
 .toast button{flex:none;width:28px;height:28px;border:0;border-radius:8px;background:transparent;color:var(--fg);font-size:20px;line-height:1;cursor:pointer}
 @keyframes toastin{from{opacity:0;transform:translateX(30px)}}
 @media (prefers-reduced-motion:reduce){nav li,.grp,.badge,.toast{animation:none}nav a,.ico,.gb,.chev{transition:none}nav a:hover .ico{transform:none}}
+.burger{display:none;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:12px;background:var(--bg);color:var(--fg);font:700 15px var(--font);cursor:pointer}
+.burger:focus-visible{outline:3px solid var(--neon);outline-offset:2px}
 @media (max-width:860px){
-  .admin-shell{grid-template-columns:1fr}
-  .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;border-right:0;border-bottom:1px solid var(--line)}
-  nav ul{display:flex;flex-wrap:wrap}
-  .foot{display:flex;margin-top:0}
+  .admin-shell{grid-template-columns:minmax(0,1fr)}
+  .side{position:sticky;top:0;z-index:30;display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;height:auto;max-height:100vh;padding:10px 16px;border-right:0;border-bottom:1px solid var(--line);overflow-y:auto}
+  .burger{display:inline-flex}
+  nav,.foot{grid-column:1/-1;display:none}
+  .side.open nav{display:grid}
+  .side.open .foot{display:flex;flex-wrap:wrap;gap:8px;margin-top:0}
 }
 </style>

@@ -42,7 +42,7 @@ import { spotlight as vSpotlight } from '../../directives/spotlight.js'
 
 <style scoped>
 .play{padding:96px 0 88px;background:var(--paper)}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:48px;align-items:center;margin-bottom:64px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:48px;align-items:center;margin-bottom:64px}
 .kicker{margin:0 0 14px;color:#1d7a74;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
 h2{margin:0 0 18px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif);color:var(--deep)}
 .text p{margin:0 0 12px;color:var(--muted)}
@@ -54,7 +54,7 @@ h2{margin:0 0 18px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif);color:var(--d
 @media (prefers-reduced-motion:reduce){.dots i{transform:none;animation:none!important}}
 .shot{box-shadow:0 30px 60px -30px rgba(11,53,80,.5);border:6px solid var(--sand)}
 .sub{margin:0 0 20px;font:500 26px var(--serif);color:var(--deep)}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:20px}
 .card{position:relative;padding:24px;border:1px solid #e3d7b6;border-radius:18px;background:var(--sand);transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .35s ease-out,box-shadow .35s}
 .card::before{content:'';position:absolute;inset:0;border-radius:inherit;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.55),transparent 62%);opacity:0;transition:opacity .3s;pointer-events:none}
 .card:hover::before{opacity:1}
