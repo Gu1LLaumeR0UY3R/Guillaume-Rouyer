@@ -11,9 +11,12 @@ import '@fontsource-variable/playfair-display/wght-italic.css'
 import '@fontsource-variable/dm-sans'
 import './styles/base.css'
 import './styles/motion.css'
+import './styles/a11y.css'
+import { setupA11y } from './composables/useA11y.js'
 import { reveal } from './directives/reveal.js'
 import { initStats } from './stats.js'
 
 loadProjects()
 createApp(App).directive('reveal', reveal).use(router).mount('#app')
+setupA11y()
 initStats(router)

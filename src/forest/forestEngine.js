@@ -65,7 +65,7 @@ function makeCloud(w, r) {
 
 export function createForest(canvas, host, hooks = {}) {
   const ctx = canvas.getContext('2d')
-  const reduced = typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches
+  const reduced = (typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches) || document.documentElement.dataset.motion === 'reduced'
   let W = 0, H = 0, PX = 3, t = 0, last = 0, raf = 0, visible = true, lastPlant = -9, skyTimer = 99, isNight = false
   let trees = [], flowers = [], wild = [], fauna = [], parts = [], clouds = [], stars = [], tufts = [], hillA = [], hillB = []
   let sky = skyAt(hourNow())

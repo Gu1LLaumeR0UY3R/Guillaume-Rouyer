@@ -36,6 +36,7 @@ const routes = [
   { path: '/admin/securite', name: 'admin-security', component: () => import('../views/admin/AdminSecurityView.vue'), meta: { title: 'Sécurité', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/sante', name: 'admin-health', component: () => import('../views/admin/AdminHealthView.vue'), meta: { title: 'Santé du site', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/statistiques', name: 'admin-stats', component: () => import('../views/admin/AdminStatsView.vue'), meta: { title: 'Statistiques', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/cv', name: 'admin-cv', component: () => import('../views/admin/AdminCvView.vue'), meta: { title: 'CV', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/medias', name: 'admin-media', component: () => import('../views/admin/AdminMediaView.vue'), meta: { title: 'Médias', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/annonce', name: 'admin-announcement', component: () => import('../views/admin/AdminAnnouncementView.vue'), meta: { title: 'Annonce', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/journaux', name: 'admin-logs', component: () => import('../views/admin/AdminLogsView.vue'), meta: { title: 'Journaux', noindex: true, admin: true, adminLayout: true } },
@@ -59,7 +60,7 @@ const router = createRouter({
   },
 })
 
-const BASE_TITLE = 'Guillaume Rouyer (Er1gon359) · Développeur Web & PHP'
+const BASE_TITLE = 'Guillaume Rouyer (Er1gon359) · Développeur full stack & cybersécurité'
 // Les pages protégées demandent au serveur si la session est valide (le vrai contrôle reste côté API).
 router.beforeEach(async (to) => {
   if (to.meta.admin && !(await checkSession())) return { name: 'admin-login' }

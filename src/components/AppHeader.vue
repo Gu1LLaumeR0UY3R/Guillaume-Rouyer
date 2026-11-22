@@ -1,6 +1,7 @@
 <script setup>
 import { NAV } from '../data/nav.js'
 import ThemeToggle from './ThemeToggle.vue'
+import A11yPanel from './A11yPanel.vue'
 </script>
 
 <template>
@@ -9,6 +10,7 @@ import ThemeToggle from './ThemeToggle.vue'
     <nav aria-label="Navigation principale">
       <ul>
         <li v-for="item in NAV" :key="item.to"><RouterLink :to="item.to">{{ item.label }}</RouterLink></li>
+        <li><A11yPanel /></li>
         <li><ThemeToggle /></li>
       </ul>
     </nav>

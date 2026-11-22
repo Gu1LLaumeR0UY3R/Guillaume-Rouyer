@@ -5,5 +5,7 @@ import { getSettings, publicSettings } from '../_lib/settings.js'
 export const onRequest = (ctx) => route(ctx, { GET })
 
 async function GET({ env }) {
-  return json({ settings: publicSettings(await getSettings(env)) }, 200, { 'Cache-Control': 'public, max-age=10' })
+  const settings = publicSettings(await getSettings(env))
+  try { settings.hasCv = !!(await env.DB.prepare('SELECT 1 x FROM cv WHERE id = 1').first()) } catch { settings.hasCv = false } // table absente avant la migration
+  return json({ settings }, 200, { 'Cache-Control': 'public, max-age=10' })
 }

@@ -1,0 +1,11 @@
+/* Options d'accessibilité choisies par le visiteur (voir composables/useA11y.js). */
+:root[data-a11y-font=readable]{--font:Verdana,Tahoma,"DejaVu Sans",sans-serif;--serif:Verdana,Tahoma,"DejaVu Sans",sans-serif}
+:root[data-a11y-spacing=wide] body{line-height:1.9;letter-spacing:.04em;word-spacing:.12em}
+:root[data-a11y-spacing=wide] p,:root[data-a11y-spacing=wide] li{line-height:1.9;margin-bottom:1.2em}
+:root[data-a11y-links=on] a:not(.btn){text-decoration:underline!important;text-underline-offset:3px;text-decoration-thickness:2px}
+:root[data-a11y-focus=strong] :focus-visible{outline:4px solid #ffbf00!important;outline-offset:3px!important;box-shadow:0 0 0 7px #000!important}
+:root[data-a11y-motion=reduced] *,:root[data-a11y-motion=reduced] *::before,:root[data-a11y-motion=reduced] *::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+:root[data-a11y-contrast=high][data-theme=light]{--bg:#fff;--fg:#000;--muted:#1a1a1a;--card:#fff;--line:#000;--green:#00531f;--on-green:#fff}
+:root[data-a11y-contrast=high][data-theme=dark]{--bg:#000;--fg:#fff;--muted:#f0f0f0;--card:#000;--line:#fff;--green:#4dff9a;--neon:#4dff9a;--on-green:#000}
+:root[data-a11y-contrast=high] body{background-image:none}
+:root[data-a11y-contrast=high] .btn{border-width:2px}

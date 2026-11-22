@@ -25,6 +25,7 @@ export const links = computed(() => {
     EMAIL.test(s.contactEmail) && { label: s.contactEmail, kind: 'email', href: `mailto:${s.contactEmail}`, primary: true },
     https(s.githubUrl) && { label: 'GitHub', kind: 'github', href: https(s.githubUrl), external: true },
     https(s.linkedinUrl) && { label: 'LinkedIn', kind: 'linkedin', href: https(s.linkedinUrl), external: true },
+    s.hasCv === true && { label: 'CV', kind: 'cv', href: '/cv.pdf', external: true },
   ].filter(Boolean)
 })
 

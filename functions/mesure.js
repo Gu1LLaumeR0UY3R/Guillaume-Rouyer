@@ -13,7 +13,7 @@ function tooFast(ip) {
   return ++h.n > 90
 }
 let warned = '' // une seule alerte de quota par jour et par serveur (la base les regroupe aussi)
-const CLICKS = ['email', 'github', 'linkedin']
+const CLICKS = ['email', 'github', 'linkedin', 'cv']
 
 export async function onRequestPost(ctx) {
   let setCookie = null

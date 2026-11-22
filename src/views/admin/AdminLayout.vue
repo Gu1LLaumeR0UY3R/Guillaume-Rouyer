@@ -22,6 +22,7 @@ const groups = [
     { to: '/admin/projets', icon: 'projects', label: 'Projets', tip: 'Créer, modifier, masquer ou mettre en maintenance' },
     { to: '/admin/veille', icon: 'veille', label: 'Veille', tip: 'Articles de veille technologique : rédiger, publier, ranger par sujet' },
     { to: '/admin/contenu', icon: 'content', label: 'Contenu', tip: 'Textes de l\'accueil, À propos, compétences, parcours, tableau SpiderNet' },
+    { to: '/admin/cv', icon: 'content', label: 'CV', tip: 'Ton CV en PDF, proposé en téléchargement sur le site' },
     { to: '/admin/medias', icon: 'media', label: 'Médias', tip: 'Images du site : envoi par glisser-déposer, corbeille' },
     { to: '/admin/annonce', icon: 'announce', label: 'Annonce', tip: 'Bannière affichée sur la page d\'accueil' },
   ] },
