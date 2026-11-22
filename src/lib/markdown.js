@@ -120,6 +120,12 @@ md.renderer.rules.image = (tokens, idx, options, env, self) => {
   return `<figure class="art-img w-${w} al-${a}">${inner}${title ? `<figcaption>${esc(title)}</figcaption>` : ''}</figure>\n`
 }
 
+// ---------- Démo : ```demo Titre  (HTML + CSS + JS dans un seul bloc, exécuté dans un cadre isolé ; le code reste visible) ----------
+function demoBlock(code, title) {
+  const html = hljs.highlight(code, { language: 'xml', ignoreIllegals: true }).value
+  return `<figure class="demo" data-demo><div class="demo-bar"><span class="demo-title">${esc(title || 'Démo')}</span><span class="demo-tabs" role="group" aria-label="Affichage"><button type="button" data-demo-tab="result" aria-selected="true">Résultat</button><button type="button" data-demo-tab="code" aria-selected="false">Code</button></span></div><div class="demo-stage"><p class="demo-fallback">La démo nécessite JavaScript. Le code est dans l'onglet « Code ».</p></div><div class="demo-code" hidden><button type="button" class="code-copy" data-copy aria-label="Copier le code">Copier</button><pre tabindex="0"><code class="hljs language-xml">${html}</code></pre></div></figure>\n`
+}
+
 // ---------- Code : ```js fichier.js ----------
 md.renderer.rules.fence = (tokens, idx) => {
   const t = tokens[idx]
@@ -127,6 +133,7 @@ md.renderer.rules.fence = (tokens, idx) => {
   const lang = /^[a-z0-9+#-]{1,20}$/i.test(rawLang) ? rawLang.toLowerCase() : ''
   const file = rest.join(' ').slice(0, 80)
   const code = t.content.replace(/\n$/, '')
+  if (rawLang.toLowerCase() === 'demo') return demoBlock(code, rest.join(' ').slice(0, 80))
   const known = lang && hljs.getLanguage(lang) ? hljs.getLanguage(lang) : null
   const html = known ? hljs.highlight(code, { language: lang, ignoreIllegals: true }).value : esc(code)
   const cls = known ? ` language-${esc(lang)}` : ''

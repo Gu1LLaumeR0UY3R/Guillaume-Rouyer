@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Démo</title>
+<style>html,body{margin:0}</style>
+<script>
+/* Cadre d'exécution des démos de la veille. Il n'est affiché que dans un <iframe sandbox="allow-scripts"> (origine opaque :
+   aucun accès aux cookies, au stockage ni aux pages du site) et sa politique de sécurité (voir public/_headers) interdit tout
+   accès au réseau. Il reçoit le code du parent, l'écrit dans la page, puis renvoie sa hauteur pour que le cadre s'ajuste. */
+(function () {
+  var started = false
+  addEventListener('message', function (e) {
+    if (started || e.source !== parent || !e.data || e.data.type !== 'demo-run' || typeof e.data.code !== 'string') return
+    started = true
+    var code = e.data.code.slice(0, 50000)
+    var boot = '<script>(function(){function s(){parent.postMessage({type:"demo-size",h:Math.ceil(document.documentElement.scrollHeight)},"*")}addEventListener("load",s);if(window.ResizeObserver)new ResizeObserver(s).observe(document.documentElement);setInterval(s,800)})()<\/script>'
+    document.open()
+    document.write('<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{margin:0;padding:12px;font-family:system-ui,sans-serif}</style>' + code + boot)
+    document.close()
+  })
+})()
+</script>
+</head>
+<body></body>
+</html>

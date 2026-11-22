@@ -1,9 +1,15 @@
 <script setup>
 // Affiche le HTML d'un article (produit par renderMarkdown) : bouton « Copier » des blocs de code et zoom des images.
-import { reactive, ref } from 'vue'
+import { nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from 'vue'
+import { forgetDemos, mountDemos } from '../../lib/demoFrame.js'
 import '../../styles/article.css'
 
-defineProps({ html: { type: String, default: '' } })
+const props = defineProps({ html: { type: String, default: '' } })
+const root = ref(null)
+const mount = () => nextTick(() => root.value && mountDemos(root.value))
+onMounted(mount)
+watch(() => props.html, mount)
+onBeforeUnmount(() => forgetDemos())
 const dlg = ref(null)
 const zoom = reactive({ src: '', alt: '', caption: '' })
 let opener = null
@@ -16,7 +22,7 @@ function flash(btn, label) {
 async function onClick(ev) {
   const copy = ev.target.closest?.('[data-copy]')
   if (copy) {
-    const code = copy.closest('.code')?.querySelector('code')?.textContent ?? ''
+    const code = copy.closest('.code, .demo-code')?.querySelector('code')?.textContent ?? ''
     try { await navigator.clipboard.writeText(code); flash(copy, 'Copié ✓') } catch { flash(copy, 'Échec de la copie') }
     return
   }
@@ -34,7 +40,7 @@ function close() { dlg.value.close ? dlg.value.close() : dlg.value.removeAttribu
 
 <template>
   <div>
-    <div class="art" @click="onClick" v-html="html" />
+    <div ref="root" class="art" @click="onClick" v-html="html" />
     <dialog ref="dlg" class="lightbox" aria-label="Image agrandie" @click.self="close" @cancel="opener?.focus()">
       <img v-if="zoom.src" :src="zoom.src" :alt="zoom.alt" referrerpolicy="no-referrer" />
       <p v-if="zoom.caption">{{ zoom.caption }}</p>
