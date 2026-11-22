@@ -23,7 +23,7 @@ export const MESSAGES = {
     'veille.title': 'Veille technologique', 'veille.lead': "Ce que je lis, teste et découvre : des articles sur tout ce qui me passionne, sans me limiter à un seul sujet.", 'veille.metaDescription': "Veille technologique de Guillaume Rouyer (Er1gon359) : articles sur le développement web, le self-hosting, l'IA et tout ce qui le passionne.", 'veille.frOnly': 'Les articles sont rédigés en français.',
     'veille.filter': 'Filtrer par sujet', 'veille.all': 'Tous', 'veille.article': 'article', 'veille.articles': 'articles', 'veille.empty': 'Aucun article pour le moment.', 'veille.emptyTopic': 'Aucun article pour ce sujet.',
     'veille.loading': 'Chargement…', 'veille.error': 'Impossible de charger la veille pour le moment.', 'veille.retry': 'Réessayer', 'veille.back': 'Toute la veille', 'veille.minutes': 'min de lecture',
-    'veille.toc': 'Sommaire', 'veille.related': 'À lire aussi', 'veille.notFoundTitle': 'Article introuvable', 'veille.notFound': "Cet article n'existe pas ou n'est plus en ligne.",
+    'veille.toc': 'Sommaire', 'veille.search': 'Rechercher un article', 'veille.searchHint': 'Titre, résumé ou sujet', 'veille.sort': 'Trier par', 'veille.sortRecent': 'Plus récents', 'veille.sortOld': 'Plus anciens', 'veille.sortShort': 'Lecture la plus courte', 'veille.sortAz': 'Titre (A à Z)', 'veille.noMatch': 'Aucun article ne correspond à ta recherche.', 'veille.clear': 'Effacer la recherche', 'veille.progress': 'Progression de lecture', 'veille.top': 'Haut de page', 'veille.related': 'À lire aussi', 'veille.notFoundTitle': 'Article introuvable', 'veille.notFound': "Cet article n'existe pas ou n'est plus en ligne.",
   },
   en: {
     skip: 'Skip to content',
@@ -42,7 +42,7 @@ export const MESSAGES = {
     'veille.title': 'Tech watch', 'veille.lead': 'What I read, test and discover: articles on everything that fascinates me, without sticking to a single topic.', 'veille.metaDescription': 'Tech watch by Guillaume Rouyer (Er1gon359): articles on web development, self-hosting, AI and everything he is curious about.', 'veille.frOnly': 'Articles are written in French.',
     'veille.filter': 'Filter by topic', 'veille.all': 'All', 'veille.article': 'article', 'veille.articles': 'articles', 'veille.empty': 'No articles yet.', 'veille.emptyTopic': 'No articles for this topic.',
     'veille.loading': 'Loading…', 'veille.error': 'The tech watch cannot be loaded right now.', 'veille.retry': 'Try again', 'veille.back': 'All articles', 'veille.minutes': 'min read',
-    'veille.toc': 'Contents', 'veille.related': 'Keep reading', 'veille.notFoundTitle': 'Article not found', 'veille.notFound': 'This article does not exist or is no longer online.',
+    'veille.toc': 'Contents', 'veille.search': 'Search articles', 'veille.searchHint': 'Title, summary or topic', 'veille.sort': 'Sort by', 'veille.sortRecent': 'Newest', 'veille.sortOld': 'Oldest', 'veille.sortShort': 'Shortest read', 'veille.sortAz': 'Title (A to Z)', 'veille.noMatch': 'No article matches your search.', 'veille.clear': 'Clear search', 'veille.progress': 'Reading progress', 'veille.top': 'Back to top', 'veille.related': 'Keep reading', 'veille.notFoundTitle': 'Article not found', 'veille.notFound': 'This article does not exist or is no longer online.',
   },
 }
 

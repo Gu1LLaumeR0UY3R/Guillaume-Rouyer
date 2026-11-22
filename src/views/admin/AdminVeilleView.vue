@@ -16,7 +16,25 @@ const busy = ref('') // identifiant de l'article ou du sujet en cours de traitem
 const FILTERS = [['all', 'Tous'], ['published', 'Publiés'], ['draft', 'Brouillons']]
 const topicMap = computed(() => Object.fromEntries(topics.value.map((t) => [t.slug, t])))
 const counts = computed(() => ({ all: articles.value.length, published: articles.value.filter((a) => a.status === 'published').length, draft: articles.value.filter((a) => a.status === 'draft').length }))
-const shown = computed(() => (filter.value === 'all' ? articles.value : articles.value.filter((a) => a.status === filter.value)))
+const q = ref('')
+const topicFilter = ref('')
+const sort = ref('updated')
+const norm = (v) => String(v ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+const SORTS = {
+  updated: (a, b) => b.updatedAt - a.updatedAt,
+  published: (a, b) => (b.publishedAt ?? 0) - (a.publishedAt ?? 0),
+  title: (a, b) => a.title.localeCompare(b.title, 'fr'),
+  status: (a, b) => (a.status === b.status ? b.updatedAt - a.updatedAt : a.status === 'draft' ? -1 : 1),
+}
+const shown = computed(() => {
+  let list = filter.value === 'all' ? articles.value : articles.value.filter((a) => a.status === filter.value)
+  if (topicFilter.value) list = list.filter((a) => a.topics.includes(topicFilter.value))
+  const terms = norm(q.value).split(/\s+/).filter(Boolean)
+  if (terms.length) list = list.filter((a) => { const hay = norm(`${a.title} ${a.slug} ${a.excerpt ?? ''}`); return terms.every((w) => hay.includes(w)) })
+  return [...list].sort(SORTS[sort.value])
+})
+const filtering = computed(() => !!(q.value.trim() || topicFilter.value || filter.value !== 'all'))
+function resetFilters() { q.value = ''; topicFilter.value = ''; filter.value = 'all' }
 const fmt = (ms) => (ms ? new Date(ms).toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }) : '—')
 
 async function load() {
@@ -95,8 +113,20 @@ async function move(i, d) {
         <RouterLink class="btn btn-primary" to="/admin/veille/nouveau">+ Nouvel article</RouterLink>
       </div>
 
+      <div v-if="articles.length" class="tools">
+        <label class="grow"><span class="lab">Rechercher</span><input v-model="q" type="search" maxlength="80" placeholder="Titre, adresse ou résumé" /></label>
+        <label><span class="lab">Sujet</span>
+          <select v-model="topicFilter"><option value="">Tous les sujets</option><option v-for="t in topics" :key="t.slug" :value="t.slug">{{ t.name }}</option></select>
+        </label>
+        <label><span class="lab">Trier par</span>
+          <select v-model="sort"><option value="updated">Dernière modification</option><option value="published">Date de publication</option><option value="title">Titre (A à Z)</option><option value="status">Brouillons d'abord</option></select>
+        </label>
+        <button v-if="filtering" type="button" class="btn btn-ghost small" @click="resetFilters">Réinitialiser</button>
+      </div>
+      <p v-if="articles.length" class="hint" aria-live="polite">{{ shown.length }} article(s) affiché(s) sur {{ articles.length }}</p>
+
       <p v-if="loaded && !articles.length" class="hint">Aucun article pour l'instant. Crée d'abord quelques sujets ci-dessous, puis ton premier article.</p>
-      <p v-else-if="loaded && !shown.length" class="hint">Aucun article dans cette catégorie.</p>
+      <p v-else-if="loaded && !shown.length" class="hint">Aucun article ne correspond à ces filtres.</p>
       <table v-else-if="shown.length">
         <thead><tr><th>Article</th><th>Statut</th><th>Sujets</th><th>Mis à jour</th><th /></tr></thead>
         <tbody>
@@ -165,6 +195,10 @@ async function move(i, d) {
 .veille h2{margin:0;font-size:22px}
 .veille .topics{margin-top:48px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
+.tools{display:flex;flex-wrap:wrap;gap:12px;align-items:end;margin:14px 0 6px}
+.tools label{display:grid;gap:4px;font-weight:600;font-size:14px}
+.tools .grow{flex:1 1 220px}
+.tools .lab{color:var(--muted);font-size:13px}
 .chip{min-height:36px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--fg);font:600 14px var(--font);cursor:pointer}
 .chip.on{background:var(--green);border-color:var(--green);color:var(--on-green)}
 .state{display:inline-block;padding:3px 10px;border-radius:999px;font:700 13px/1.4 var(--font);background:var(--bg);border:1px solid var(--line)}
