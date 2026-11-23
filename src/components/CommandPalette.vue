@@ -9,6 +9,7 @@ import { projects, loadProjects, projectLink } from '../content/projects.js'
 import { fetchList } from '../content/veille.js'
 import { links, settings } from '../content/settings.js'
 import { openCv } from '../content/cvGate.js'
+import { unlock } from '../lib/achievements.js'
 
 const router = useRouter()
 const { toggle: toggleTheme } = useTheme()
@@ -37,6 +38,8 @@ const items = computed(() => {
   out.push(
     { group: 'Actions', label: 'Changer de thème clair / sombre', extra: 'theme dark light nuit', run: toggleTheme },
     { group: 'Actions', label: lang.value === 'fr' ? 'Passer le site en anglais' : 'Passer le site en français', extra: 'langue english french', run: () => { lang.value = lang.value === 'fr' ? 'en' : 'fr' } },
+    { group: 'Actions', label: 'Ouvrir le terminal', extra: 'terminal console shell commande', run: fire('open-terminal') },
+    { group: 'Actions', label: 'Voir mes succès', extra: 'succes achievements trophees', run: fire('open-succes') },
     { group: 'Actions', label: 'Ouvrir les réglages d\'accessibilité', extra: 'a11y handicap contraste taille', run: fire('open-a11y') },
   )
   if (settings.value.hasCv === true) out.push({ group: 'Actions', label: 'Télécharger le CV', extra: 'cv resume pdf', run: openCv })
@@ -75,6 +78,7 @@ function show() {
   dlg.value.showModal()
   nextTick(() => input.value?.focus())
   ensureData()
+  unlock('curieux')
 }
 function hide() { dlg.value?.close() }
 function pick(i) { const it = results.value[i]; if (!it) return; hide(); it.run() }

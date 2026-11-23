@@ -6,6 +6,8 @@ import AppFooter from './components/AppFooter.vue'
 import CookieBanner from './components/CookieBanner.vue'
 import CvGate from './components/CvGate.vue'
 import SiteDock from './components/SiteDock.vue'
+import TerminalMode from './components/TerminalMode.vue'
+import AchievementsPanel from './components/AchievementsPanel.vue'
 import CommandPalette from './components/CommandPalette.vue'
 import AdminPreviewFlag from './components/AdminPreviewFlag.vue'
 import SiteMaintenance from './components/SiteMaintenance.vue'
@@ -42,6 +44,8 @@ const blocked = computed(() => settings.value.maintenanceOn && !isAdmin.value &&
     <CookieBanner />
     <CvGate />
     <CommandPalette />
+    <TerminalMode />
+    <AchievementsPanel />
     <SiteDock v-if="!route.meta.fullscreen" />
   </template>
 </template>

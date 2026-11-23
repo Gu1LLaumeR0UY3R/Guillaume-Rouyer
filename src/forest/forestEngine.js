@@ -429,7 +429,7 @@ export function createForest(canvas, host, hooks = {}) {
     if (ev.target.closest?.('a,button,input,textarea,select,label,[data-no-plant]')) return
     if (window.getSelection?.().toString()) return // on est en train de sélectionner du texte
     const r = canvas.getBoundingClientRect()
-    plantAt(ev.clientX - r.left, ev.clientY - r.top)
+    plantAt(ev.clientX - r.left, ev.clientY - r.top); window.dispatchEvent(new CustomEvent("forest-plant"))
   }
   let ro, io
   function mount() {
