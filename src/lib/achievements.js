@@ -35,14 +35,20 @@ export const unlocked = ref(read()) // { id: timestamp }
 export const toasts = ref([])
 export const count = computed(() => BASE.filter((a) => unlocked.value[a.id]).length)
 
+// File d'attente : une notification à la fois, chacune visible 5,2 s.
+function next() {
+  setTimeout(() => {
+    toasts.value = toasts.value.slice(1)
+    if (toasts.value.length) next()
+  }, 5200)
+}
 export function unlock(id) {
   const a = items.value.find((x) => x.id === id)
   if (!a || unlocked.value[id]) return
   unlocked.value = { ...unlocked.value, [id]: Date.now() }
   try { localStorage.setItem(KEY, JSON.stringify(unlocked.value)) } catch { /* stockage indisponible */ }
-  const n = { key: id + Date.now(), ...a }
-  toasts.value = [...toasts.value, n].slice(-3)
-  setTimeout(() => { toasts.value = toasts.value.filter((x) => x !== n) }, 5000)
+  toasts.value = [...toasts.value, { key: id + Date.now(), ...a }]
+  if (toasts.value.length === 1) next()
 }
 export function reset() {
   unlocked.value = {}

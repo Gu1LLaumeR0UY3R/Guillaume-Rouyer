@@ -3,8 +3,10 @@
 // Écoute aussi les événements qui débloquent des succès.
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { CATS, RARITY, TOTAL, count, items, loadCustom, onPage, reset, toasts, unlock, unlocked } from '../lib/achievements.js'
+import { CATS, RARITY, TOTAL, count, items, loadCustom, onPage, reset, unlock, unlocked } from '../lib/achievements.js'
 import AchEmblem from './AchEmblem.vue'
+import AchMedal from './AchMedal.vue'
+import AchievementToast from './AchievementToast.vue'
 const route = useRoute()
 const dlg = ref(null)
 const cat = ref('Tout')
@@ -30,13 +32,7 @@ onBeforeUnmount(() => { window.removeEventListener('keydown', onKey); for (const
 </script>
 
 <template>
-  <div class="toasts" role="status" aria-live="polite">
-    <div v-for="t in toasts" :key="t.key" :class="['toast', 'r' + t.rarity]">
-      <span class="burst" aria-hidden="true"><i v-for="n in 8" :key="n" :style="{ '--a': n * 45 + 'deg' }">✦</i></span>
-      <AchEmblem :kind="t.emblem" :rarity="t.rarity" :size="52" />
-      <div><small>Succès débloqué · {{ stars(t.rarity) }}</small><b>{{ t.title }}</b></div>
-    </div>
-  </div>
+  <AchievementToast />
 
   <dialog ref="dlg" class="ach" aria-labelledby="ach-t" @click="(e) => e.target === dlg && dlg.close()">
     <header>
@@ -53,7 +49,8 @@ onBeforeUnmount(() => { window.removeEventListener('keydown', onKey); for (const
     </div>
 
     <section v-if="detail" class="detail" aria-live="polite">
-      <AchEmblem :kind="detail.emblem" :rarity="detail.rarity" :locked="!unlocked[detail.id]" :size="96" />
+      <span v-if="unlocked[detail.id]" class="bigmedal"><AchMedal /></span>
+      <AchEmblem v-else :kind="detail.emblem" :rarity="detail.rarity" locked :size="96" />
       <div>
         <p class="rar" :class="'r' + detail.rarity">{{ stars(detail.rarity) }} {{ RARITY[detail.rarity] }} · {{ detail.cat }}</p>
         <h3>{{ detail.title }}</h3>
@@ -81,18 +78,6 @@ onBeforeUnmount(() => { window.removeEventListener('keydown', onKey); for (const
 
 <style scoped>
 /* Palette carnet : fond #EDE7DA, cartes #FBF7ED, bordures #D7C49A, doré #C5A45D, texte #49443D / #918879, obtenu #78A66A. Indépendante du thème du site. */
-.toasts{position:fixed;left:14px;bottom:14px;z-index:60;display:grid;gap:10px;pointer-events:none}
-.toast{position:relative;display:flex;gap:14px;align-items:center;min-width:270px;padding:8px 24px 8px 10px;border-radius:999px 16px 16px 999px;background:#49443d;color:#fbf7ed;border:1px solid #c5a45d;box-shadow:0 10px 28px rgba(0,0,0,.35);animation:in .5s cubic-bezier(.2,.9,.3,1.1)}
-.toast div{display:grid;line-height:1.3}
-.toast small{color:#e3cf9c;font:600 12px var(--font);letter-spacing:.05em;text-transform:uppercase}
-.toast b{font:600 18px var(--serif)}
-@keyframes in{from{transform:translateX(-120%);opacity:0}}
-/* explosion d'étoiles dorées autour de l'emblème */
-.burst{position:absolute;left:36px;top:50%;width:0;height:0}
-.burst i{position:absolute;color:#e8c872;font-style:normal;font-size:14px;opacity:0;animation:spark 1s .35s ease-out}
-@keyframes spark{0%{opacity:1;transform:rotate(var(--a)) translateX(0) scale(.5)}100%{opacity:0;transform:rotate(var(--a)) translateX(46px) scale(1.2)}}
-@media(prefers-reduced-motion:reduce){.toast{animation:none}.burst{display:none}}
-
 .ach{width:min(600px,calc(100vw - 20px));max-height:90vh;margin:auto;padding:0;border:0;border-radius:18px;background:#ede7da;color:#49443d;box-shadow:0 24px 70px rgba(0,0,0,.5);overflow:hidden}
 .ach[open]{display:flex;flex-direction:column}
 .ach::backdrop{background:rgba(30,26,20,.65)}
@@ -108,6 +93,7 @@ h2{margin:0 0 8px;font:600 26px var(--serif);letter-spacing:.02em}
 .tabs button small{margin-left:4px;font-weight:600}
 .tabs button.on{background:#fbf7ed;color:#49443d}
 .detail{position:relative;flex:none;display:flex;gap:18px;align-items:center;margin:0 12px;padding:16px 50px 16px 16px;border:1px solid #d7c49a;border-radius:0 0 12px 12px;background:#fbf7ed;background-image:radial-gradient(circle at 12% 20%,rgba(197,164,93,.18),transparent 55%)}
+.bigmedal{flex:none;width:104px;height:104px}
 .detail .x{position:absolute;right:10px;top:10px}
 .detail h3{margin:2px 0 4px;font:600 22px var(--serif)} .detail p{margin:0 0 4px}
 .detail .when{color:#918879;font-size:14px}
