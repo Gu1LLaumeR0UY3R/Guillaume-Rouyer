@@ -2,7 +2,7 @@
 // Fenêtre de choix des cookies : au centre de l'écran, deux boutons de même poids. Échap la ferme sans choisir (elle reviendra à la visite suivante).
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { bannerOpen, choose, consent } from '../consent.js'
+import { bannerOpen, choose, consent, dntOn } from '../consent.js'
 import { t } from '../i18n/index.js'
 const route = useRoute()
 const dlg = ref(null)
@@ -21,6 +21,7 @@ function dismiss() { bannerOpen.value = false }
   <dialog ref="dlg" class="cb" aria-labelledby="cb-t" aria-describedby="cb-d" @cancel.prevent="dismiss">
     <h2 id="cb-t">{{ t('cookie.title') }}</h2>
     <p id="cb-d">{{ t('cookie.text') }} <RouterLink to="/confidentialite" @click="dismiss">{{ t('cookie.more') }}</RouterLink></p>
+    <p v-if="dntOn" class="now">Ton navigateur demande de ne pas être suivi : je le respecte, rien ne sera compté.</p>
     <p v-if="consent" class="now">{{ consent === 'yes' ? t('cookie.nowYes') : t('cookie.nowNo') }}</p>
     <div class="row">
       <button type="button" class="b" @click="choose('no', route.path)">{{ t('cookie.refuse') }}</button>

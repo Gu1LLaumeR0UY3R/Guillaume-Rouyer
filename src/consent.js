@@ -12,11 +12,12 @@ function read() {
   } catch { /* stockage indisponible ou valeur abîmée : on redemande */ }
   return null
 }
-// Les visiteurs qui ont activé « Do Not Track » ou « Global Privacy Control » ne reçoivent jamais de cookie : inutile de les déranger.
-const noTrack = () => typeof navigator !== 'undefined' && (navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.globalPrivacyControl === true || navigator.webdriver === true)
+// « Do Not Track » ou « Global Privacy Control » : le popup s'affiche quand même (navigation privée comprise), mais le serveur ne compte jamais ces visiteurs.
+export const dntOn = typeof navigator !== 'undefined' && (navigator.doNotTrack === '1' || window.doNotTrack === '1' || navigator.globalPrivacyControl === true)
+const isBot = () => typeof navigator !== 'undefined' && navigator.webdriver === true
 
 export const consent = ref(read()) // 'yes' | 'no' | null (pas encore choisi)
-export const bannerOpen = ref(consent.value === null && !noTrack())
+export const bannerOpen = ref(consent.value === null && !isBot())
 
 const beacon = (data) => {
   try { navigator.sendBeacon?.('/mesure', new Blob([JSON.stringify(data)], { type: 'application/json' })) } catch { /* ignoré */ }
