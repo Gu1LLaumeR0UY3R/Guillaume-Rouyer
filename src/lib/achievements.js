@@ -2,21 +2,24 @@
 import { ref, computed } from 'vue'
 import { loadBlock } from '../content/blocks.js'
 
+// rarity : 1 commun, 2 inhabituel, 3 rare, 4 épique. emblem : forme de l'emblème (voir AchEmblem.vue). cat : catégorie d'affichage.
 export const BASE = [
-  { id: 'bienvenue', icon: '👋', title: 'Premier pas', desc: 'Visiter le site.' },
-  { id: 'explorateur', icon: '🧭', title: 'Explorateur', desc: 'Visiter 5 pages différentes.' },
-  { id: 'lecteur', icon: '📖', title: 'Lecteur', desc: 'Ouvrir un article de veille.' },
-  { id: 'curieux', icon: '🔎', title: 'Curieux', desc: 'Ouvrir la palette de commandes (Ctrl K).' },
-  { id: 'nocturne', icon: '🌙', title: 'Oiseau de nuit', desc: 'Passer en mode sombre.' },
-  { id: 'accessible', icon: '♿', title: 'Pour tous', desc: 'Ouvrir les réglages d\'accessibilité.' },
-  { id: 'hacker', icon: '⌨️', title: 'Hacker', desc: 'Ouvrir le terminal (touche « ` »).' },
-  { id: 'jardinier', icon: '🌱', title: 'Main verte', desc: 'Planter un arbre dans le décor.' },
-  { id: 'cv', icon: '📄', title: 'Recruteur', desc: 'Ouvrir le téléchargement du CV.' },
-  { id: 'contact', icon: '✉️', title: 'Prise de contact', desc: 'Visiter la page Contact.' },
-  { id: 'veilleur', icon: '🦉', title: 'Veilleur de nuit', desc: 'Visiter le site entre minuit et 5 h.' },
-  { id: 'konami', icon: '🎮', title: 'Vieille école', desc: 'Saisir le code Konami.' },
-  { id: 'sudo', icon: '🔐', title: 'Tentative d\'intrusion', desc: 'Essayer « sudo » dans le terminal.' },
+  { id: 'bienvenue', emblem: 'star', rarity: 1, cat: 'Découverte', title: 'Premier pas', desc: 'Visiter le site.' },
+  { id: 'contact', emblem: 'mail', rarity: 1, cat: 'Découverte', title: 'Prise de contact', desc: 'Visiter la page Contact.' },
+  { id: 'explorateur', emblem: 'compass', rarity: 2, cat: 'Exploration', title: 'Explorateur', desc: 'Visiter 5 pages différentes.' },
+  { id: 'lecteur', emblem: 'feather', rarity: 2, cat: 'Exploration', title: 'Lecteur', desc: 'Ouvrir un article de veille.' },
+  { id: 'curieux', emblem: 'search', rarity: 2, cat: 'Découverte', title: 'Curieux', desc: 'Ouvrir la palette de commandes (Ctrl K).' },
+  { id: 'nocturne', emblem: 'moon', rarity: 2, cat: 'Collection', title: 'Oiseau de nuit', desc: 'Passer en mode sombre.' },
+  { id: 'accessible', emblem: 'person', rarity: 2, cat: 'Découverte', title: 'Pour tous', desc: 'Ouvrir les réglages d\'accessibilité.' },
+  { id: 'jardinier', emblem: 'sprout', rarity: 2, cat: 'Collection', title: 'Main verte', desc: 'Planter un arbre dans le décor.' },
+  { id: 'cv', emblem: 'doc', rarity: 3, cat: 'Exploration', title: 'Recruteur', desc: 'Ouvrir le téléchargement du CV.' },
+  { id: 'hacker', emblem: 'terminal', rarity: 3, cat: 'Maîtrise', title: 'Hacker', desc: 'Ouvrir le terminal (touche « ` »).' },
+  { id: 'veilleur', emblem: 'eye', rarity: 3, cat: 'Collection', title: 'Veilleur de nuit', desc: 'Visiter le site entre minuit et 5 h.' },
+  { id: 'konami', emblem: 'pad', rarity: 4, cat: 'Maîtrise', title: 'Vieille école', desc: 'Saisir le code Konami.' },
+  { id: 'sudo', emblem: 'key', rarity: 4, cat: 'Maîtrise', title: 'Tentative d\'intrusion', desc: 'Essayer « sudo » dans le terminal.' },
 ]
+export const CATS = ['Exploration', 'Collection', 'Découverte', 'Maîtrise']
+export const RARITY = { 1: 'Commun', 2: 'Inhabituel', 3: 'Rare', 4: 'Épique' }
 // Textes modifiables depuis l'admin (bloc « succes ») : remplacent le nom, la description et l'icône d'origine.
 const custom = ref({})
 export const items = computed(() => BASE.map((a) => ({ ...a, ...(custom.value[a.id] ?? {}) })))
@@ -24,7 +27,7 @@ export const TOTAL = BASE.length
 export async function loadCustom() {
   const d = await loadBlock('succes')
   if (!d?.items) return
-  custom.value = Object.fromEntries(d.items.map((o) => [o.id, { ...(o.title && { title: o.title }), ...(o.desc !== undefined && { desc: o.desc }), ...(o.icon && { icon: o.icon }) }]))
+  custom.value = Object.fromEntries(d.items.map((o) => [o.id, { ...(o.title && { title: o.title }), ...(o.desc !== undefined && { desc: o.desc }), }]))
 }
 const KEY = 'succes'
 const read = () => { try { const v = JSON.parse(localStorage.getItem(KEY)); return v && typeof v === 'object' ? v : {} } catch { return {} } }
