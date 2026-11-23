@@ -66,6 +66,7 @@ const STAR = 'M20 1.5c1.9 11.9 6.6 16.6 18.5 18.5C26.6 21.9 21.9 26.6 20 38.5 18
   --medal-size: clamp(9.5rem, 17vw, 13.2rem);
   position: relative;
   width: min(64rem, 83vw);
+  zoom: 0.5; /* notification discrète : moitié de la maquette d'origine */
   opacity: 0;
   filter: blur(9px);
   transform: translateX(4rem) scale(0.98);
@@ -141,7 +142,7 @@ h1 {
 @keyframes aura-pulse { 50% { opacity: 0.65; transform: scale(1.04); } }
 
 @media (max-width: 720px) {
-  .achievement { --medal-size: clamp(6.7rem, 28vw, 8.5rem); width: min(36rem, 96vw); }
+  .achievement { --medal-size: clamp(6.7rem, 28vw, 8.5rem); width: min(36rem, 96vw); zoom: 0.75; }
   .achievement-card { height: clamp(6.2rem, 25vw, 7.6rem); margin-left: calc(var(--medal-size) * 0.48); padding-right: 3.3rem; padding-left: calc(var(--medal-size) * 0.58); }
   .eyebrow { font-size: clamp(0.53rem, 2.7vw, 0.85rem); letter-spacing: 0.04em; }
   h1 { font-size: clamp(1.8rem, 8.8vw, 2.7rem); }
