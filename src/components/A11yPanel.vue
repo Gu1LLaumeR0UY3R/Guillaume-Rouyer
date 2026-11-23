@@ -3,6 +3,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { prefs, resetPrefs, SIZES } from '../composables/useA11y.js'
 
+defineProps({ headless: Boolean })
 const dlg = ref(null)
 const opener = ref(null)
 const open = ref(false)
@@ -24,7 +25,7 @@ const TOGGLES = [
 </script>
 
 <template>
-  <button ref="opener" type="button" class="btn btn-ghost a11y-btn" aria-haspopup="dialog" :aria-expanded="open" @click="show">
+  <button v-if="!headless" ref="opener" type="button" class="btn btn-ghost a11y-btn" aria-haspopup="dialog" :aria-expanded="open" @click="show">
     <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="1.6" /><path d="M5 8.5l7 1.5 7-1.5M12 10v5m0 0l-3 5.5M12 15l3 5.5" /></svg>
     <span>Accessibilité</span>
   </button>
