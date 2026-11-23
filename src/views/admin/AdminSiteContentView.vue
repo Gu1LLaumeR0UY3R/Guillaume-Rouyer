@@ -8,13 +8,13 @@ import { defaults } from '../../content/siteDefaults.js'
 import DraftBar from './DraftBar.vue'
 import './adminForm.css'
 
-const TABS = [['home', 'Accueil'], ['about', 'À propos'], ['skills', 'Compétences'], ['timeline', 'Parcours'], ['contact', 'Contact'], ['legal', 'Mentions légales'], ['privacy', 'Confidentialité']]
+const TABS = [['home', 'Accueil'], ['about', 'À propos'], ['skills', 'Compétences'], ['timeline', 'Parcours'], ['contact', 'Contact'], ['legal', 'Mentions légales'], ['privacy', 'Confidentialité'], ['now', 'Maintenant'], ['tools', 'Mes outils'], ['changelog', 'Changelog']]
 const tab = ref(new URLSearchParams(location.search).get('onglet') || 'home')
 if (!TABS.some(([k]) => k === tab.value)) tab.value = 'home'
 
-const data = reactive({ home: null, about: null, skills: null, timeline: null, contact: null, legal: null, privacy: null })
-const saved = reactive({ home: '', about: '', skills: '', timeline: '', contact: '', legal: '', privacy: '' })
-const custom = reactive({ home: false, about: false, skills: false, timeline: false, contact: false, legal: false, privacy: false })
+const data = reactive({ home: null, about: null, skills: null, timeline: null, contact: null, legal: null, privacy: null, now: null, tools: null, changelog: null })
+const saved = reactive({ home: '', about: '', skills: '', timeline: '', contact: '', legal: '', privacy: '', now: '', tools: '', changelog: '' })
+const custom = reactive({ home: false, about: false, skills: false, timeline: false, contact: false, legal: false, privacy: false, now: false, tools: false, changelog: false })
 const busy = ref(false), error = ref(''), loading = ref(true)
 
 const lines = (a) => (a ?? []).map((x) => x.trim()).filter(Boolean)
@@ -186,8 +186,8 @@ const TL = [['formation', 'Formation', 'cette formation'], ['experience', 'Expé
         </section>
 
         <!-- PAGES LÉGALES -->
-        <template v-if="key === 'legal' || key === 'privacy'">
-          <p class="hint warn">Texte à valeur juridique : relis-le avant d'enregistrer. Pense à changer la date de mise à jour quand tu modifies le fond.</p>
+        <template v-if="['legal', 'privacy', 'now', 'tools', 'changelog'].includes(key)">
+          <p v-if="key === 'legal' || key === 'privacy'" class="hint warn">Texte à valeur juridique : relis-le avant d'enregistrer. Pense à changer la date de mise à jour quand tu modifies le fond.</p>
           <section class="card">
             <div class="updated-row">
               <label>Dernière mise à jour (texte affiché)<input v-model="data[key].updated" maxlength="40"></label>

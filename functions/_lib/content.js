@@ -153,7 +153,7 @@ function goodnight(b) {
   }
 }
 
-export const BLOCKS = { spidernet, home, about, skills, timeline, contact, legal, privacy: legal, goodnight }
+export const BLOCKS = { spidernet, home, about, skills, timeline, contact, legal, privacy: legal, now: legal, tools: legal, changelog: legal, goodnight }
 export const isBlock = (k) => Object.hasOwn(BLOCKS, k)
 export const parseBlock = (key, body) => BLOCKS[key](body)
 

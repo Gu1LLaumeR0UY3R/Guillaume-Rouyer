@@ -1,6 +1,6 @@
 <script setup>
 // Bouton « Accessibilité » + panneau de réglages (boîte de dialogue : focus piégé, Échap pour fermer).
-import { ref } from 'vue'
+import { onBeforeUnmount, onMounted, ref } from 'vue'
 import { prefs, resetPrefs, SIZES } from '../composables/useA11y.js'
 
 const dlg = ref(null)
@@ -9,6 +9,8 @@ const open = ref(false)
 function show() { open.value = true; dlg.value.showModal() }
 function hide() { dlg.value.close() }
 function onClose() { open.value = false; opener.value?.focus() }
+onMounted(() => window.addEventListener('open-a11y', show))
+onBeforeUnmount(() => window.removeEventListener('open-a11y', show))
 function onBackdrop(e) { if (e.target === dlg.value) hide() }
 
 const TOGGLES = [

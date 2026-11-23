@@ -19,6 +19,11 @@ import { t } from '../i18n/index.js'
       </aside>
       <div class="bottom">
         <p>{{ settings.footerText }}</p>
+        <nav aria-label="Le site">
+          <RouterLink to="/maintenant">Maintenant</RouterLink>
+          <RouterLink to="/outils">Mes outils</RouterLink>
+          <RouterLink to="/changelog">Changelog</RouterLink>
+        </nav>
         <nav aria-label="Informations légales">
           <RouterLink to="/mentions-legales">Mentions légales</RouterLink>
           <RouterLink to="/confidentialite">Confidentialité</RouterLink>

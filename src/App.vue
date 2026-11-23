@@ -5,6 +5,7 @@ import AppHeader from './components/AppHeader.vue'
 import AppFooter from './components/AppFooter.vue'
 import CookieBanner from './components/CookieBanner.vue'
 import CvGate from './components/CvGate.vue'
+import CommandPalette from './components/CommandPalette.vue'
 import AdminPreviewFlag from './components/AdminPreviewFlag.vue'
 import SiteMaintenance from './components/SiteMaintenance.vue'
 import { checkSession } from './admin/api.js'
@@ -39,5 +40,6 @@ const blocked = computed(() => settings.value.maintenanceOn && !isAdmin.value &&
     <AppFooter v-if="!route.meta.fullscreen" />
     <CookieBanner />
     <CvGate />
+    <CommandPalette />
   </template>
 </template>

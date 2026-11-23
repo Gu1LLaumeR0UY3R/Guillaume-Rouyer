@@ -15,6 +15,9 @@ const routes = [
   { path: '/projets/goodnight', name: 'goodnight', component: () => import('../views/ProjectGate.vue'), meta: { title: 'Goodnight', project: 'goodnight', view: () => import('../views/GoodnightView.vue') } },
   { path: '/projets/:slug', name: 'project', component: () => import('../views/ProjectView.vue'), meta: { title: 'Projet' } },
   { path: '/mentions-legales', name: 'legal', component: () => import('../views/LegalView.vue'), meta: { title: 'Mentions légales' } },
+  { path: '/maintenant', name: 'now', component: () => import('../views/InfoPageView.vue'), meta: { title: 'Maintenant', block: 'now', desc: 'Ce sur quoi je travaille et ce que j\'apprends en ce moment.' } },
+  { path: '/outils', name: 'tools', component: () => import('../views/InfoPageView.vue'), meta: { title: 'Mes outils', block: 'tools', desc: 'Les langages, frameworks et outils que j\'utilise au quotidien.' } },
+  { path: '/changelog', name: 'changelog', component: () => import('../views/InfoPageView.vue'), meta: { title: 'Changelog', block: 'changelog', desc: 'Le journal des évolutions de mon portfolio et de mes projets.' } },
   { path: '/confidentialite', name: 'privacy', component: () => import('../views/PrivacyView.vue'), meta: { title: 'Confidentialité' } },
   // Administration : jamais indexée, tableau de bord protégé par la session
   { path: '/admin', name: 'admin-login', component: () => import('../views/admin/AdminLoginView.vue'), meta: { title: 'Administration', noindex: true } },

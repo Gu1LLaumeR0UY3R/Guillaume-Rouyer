@@ -4,6 +4,7 @@ import { EXPERIENCES, FORMATION } from '../data/timeline.js'
 import { MESSAGES } from '../i18n/index.js'
 import { BIO } from './site.js'
 import { LEGAL_DEFAULT, PRIVACY_DEFAULT } from './legalDefaults.js'
+import { CHANGELOG_DEFAULT, NOW_DEFAULT, TOOLS_DEFAULT } from './pageDefaults.js'
 
 const entries = (list) => list.map((i) => ({
   when_fr: i.when, when_en: i.when, title_fr: i.title, title_en: i.title, place_fr: i.where ?? '', place_en: i.where ?? '',
@@ -23,5 +24,8 @@ export function defaults() {
     contact: { title_fr: 'Travaillons ensemble', title_en: "Let's work together", text_fr: 'Un projet, une mission ou une simple question : écris-moi.', text_en: 'A project, an assignment or just a question: write to me.' },
     legal: JSON.parse(JSON.stringify(LEGAL_DEFAULT)),
     privacy: JSON.parse(JSON.stringify(PRIVACY_DEFAULT)),
+    now: JSON.parse(JSON.stringify(NOW_DEFAULT)),
+    tools: JSON.parse(JSON.stringify(TOOLS_DEFAULT)),
+    changelog: JSON.parse(JSON.stringify(CHANGELOG_DEFAULT)),
   }
 }

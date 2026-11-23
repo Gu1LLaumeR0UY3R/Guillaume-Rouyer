@@ -20,7 +20,7 @@ export function deviceOf(ua) {
 }
 
 // Seules les pages réelles du site sont comptées ; le reste est regroupé sous « autre » (pas de pollution par des chemins inventés).
-const PAGE = /^\/(projets(\/[a-z0-9-]{1,60}(\/[a-z0-9-]{1,40})?)?|veille(\/[a-z0-9-]{1,60})?|a-propos|contact|mentions-legales|confidentialite)?$/
+const PAGE = /^\/(projets(\/[a-z0-9-]{1,60}(\/[a-z0-9-]{1,40})?)?|veille(\/[a-z0-9-]{1,60})?|a-propos|contact|maintenant|outils|changelog|mentions-legales|confidentialite)?$/
 export function cleanPath(p) {
   if (typeof p !== 'string' || p.length > 120) return null
   let s = p.split(/[?#]/)[0].toLowerCase()
