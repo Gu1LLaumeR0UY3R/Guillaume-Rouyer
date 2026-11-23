@@ -59,7 +59,7 @@ const STAR = 'M20 1.5c1.9 11.9 6.6 16.6 18.5 18.5C26.6 21.9 21.9 26.6 20 38.5 18
 
 <style scoped>
 /* Zone plein écran transparente, non cliquable, qui centre la notification. */
-.stage{position:fixed;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;background:none;overflow:visible;pointer-events:none;display:grid;place-items:center;color:inherit;z-index:80}
+.stage{position:fixed;inset:0;width:100%;height:100%;margin:0;padding:0;border:0;background:none;overflow:visible;pointer-events:none;display:grid;place-items:start center;padding-top:clamp(64px,9vh,96px);box-sizing:border-box;color:inherit;z-index:80}
 .stage[popover]:not(:popover-open){display:none}
 
 .achievement {
