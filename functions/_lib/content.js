@@ -153,7 +153,18 @@ function goodnight(b) {
   }
 }
 
-export const BLOCKS = { spidernet, home, about, skills, timeline, contact, legal, privacy: legal, now: legal, tools: legal, changelog: legal, goodnight }
+// Succès : noms, descriptions et icônes modifiables. L'identifiant relie chaque ligne au succès du code.
+function succes(b) {
+  const items = list(b?.items, 40, 'Succès').map((o, i) => {
+    const n = `Succès ${i + 1}`
+    const id = text(o?.id, 20, `${n} (identifiant)`, true)
+    if (!/^[a-z]+$/.test(id)) throw new HttpError(400, `${n} : identifiant invalide`)
+    return { id, title: text(o?.title, 40, `${n} (nom)`, true), desc: text(o?.desc, 120, `${n} (description)`), icon: text(o?.icon, 8, `${n} (icône)`) }
+  })
+  return { items }
+}
+
+export const BLOCKS = { succes, spidernet, home, about, skills, timeline, contact, legal, privacy: legal, now: legal, tools: legal, changelog: legal, goodnight }
 export const isBlock = (k) => Object.hasOwn(BLOCKS, k)
 export const parseBlock = (key, body) => BLOCKS[key](body)
 

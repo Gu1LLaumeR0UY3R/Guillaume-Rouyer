@@ -35,6 +35,7 @@ const routes = [
   { path: '/admin/veille/nouveau', name: 'admin-veille-new', component: () => import('../views/admin/AdminVeilleEditView.vue'), meta: { title: 'Nouvel article', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/veille/:slug', name: 'admin-veille-edit', component: () => import('../views/admin/AdminVeilleEditView.vue'), meta: { title: 'Modifier un article', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/contenu/goodnight', name: 'admin-goodnight', component: () => import('../views/admin/AdminGoodnightView.vue'), meta: { title: 'Étude de cas Goodnight', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/contenu/succes', name: 'admin-succes', component: () => import('../views/admin/AdminAchievementsView.vue'), meta: { title: 'Modifier les succès', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/contenu/spidernet', name: 'admin-spidernet', component: () => import('../views/admin/AdminSpidernetView.vue'), meta: { title: 'Tableau SpiderNet', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/securite', name: 'admin-security', component: () => import('../views/admin/AdminSecurityView.vue'), meta: { title: 'Sécurité', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/sante', name: 'admin-health', component: () => import('../views/admin/AdminHealthView.vue'), meta: { title: 'Santé du site', noindex: true, admin: true, adminLayout: true } },

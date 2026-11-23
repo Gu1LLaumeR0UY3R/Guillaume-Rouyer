@@ -10,6 +10,7 @@ export const PAGES = [
   { key: 'now', title: 'Maintenant', desc: 'Page « Maintenant » : ce que tu fais en ce moment', to: '/admin/contenu/pages?onglet=now' },
   { key: 'tools', title: 'Mes outils', desc: 'Page « Mes outils » : ton environnement de travail', to: '/admin/contenu/pages?onglet=tools' },
   { key: 'changelog', title: 'Changelog', desc: 'Journal des évolutions du portfolio et des projets', to: '/admin/contenu/pages?onglet=changelog' },
+  { key: 'succes', title: 'Succès', desc: 'Noms, descriptions et icônes des succès du site', to: '/admin/contenu/succes' },
   { key: 'goodnight', title: 'Étude de cas Goodnight', desc: 'Bandeau, aperçu, étapes, technique et images', to: '/admin/contenu/goodnight' },
   { key: 'spidernet', title: 'Tableau SpiderNet', desc: "Cartes et colonnes du tableau d'enquête", to: '/admin/contenu/spidernet' },
 ]

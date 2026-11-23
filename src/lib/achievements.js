@@ -1,7 +1,8 @@
 // Succès : stockés uniquement dans le navigateur (localStorage), sans compte ni envoi au serveur.
 import { ref, computed } from 'vue'
+import { loadBlock } from '../content/blocks.js'
 
-export const LIST = [
+export const BASE = [
   { id: 'bienvenue', icon: '👋', title: 'Premier pas', desc: 'Visiter le site.' },
   { id: 'explorateur', icon: '🧭', title: 'Explorateur', desc: 'Visiter 5 pages différentes.' },
   { id: 'lecteur', icon: '📖', title: 'Lecteur', desc: 'Ouvrir un article de veille.' },
@@ -16,14 +17,23 @@ export const LIST = [
   { id: 'konami', icon: '🎮', title: 'Vieille école', desc: 'Saisir le code Konami.' },
   { id: 'sudo', icon: '🔐', title: 'Tentative d\'intrusion', desc: 'Essayer « sudo » dans le terminal.' },
 ]
+// Textes modifiables depuis l'admin (bloc « succes ») : remplacent le nom, la description et l'icône d'origine.
+const custom = ref({})
+export const items = computed(() => BASE.map((a) => ({ ...a, ...(custom.value[a.id] ?? {}) })))
+export const TOTAL = BASE.length
+export async function loadCustom() {
+  const d = await loadBlock('succes')
+  if (!d?.items) return
+  custom.value = Object.fromEntries(d.items.map((o) => [o.id, { ...(o.title && { title: o.title }), ...(o.desc !== undefined && { desc: o.desc }), ...(o.icon && { icon: o.icon }) }]))
+}
 const KEY = 'succes'
 const read = () => { try { const v = JSON.parse(localStorage.getItem(KEY)); return v && typeof v === 'object' ? v : {} } catch { return {} } }
 export const unlocked = ref(read()) // { id: timestamp }
 export const toasts = ref([])
-export const count = computed(() => LIST.filter((a) => unlocked.value[a.id]).length)
+export const count = computed(() => BASE.filter((a) => unlocked.value[a.id]).length)
 
 export function unlock(id) {
-  const a = LIST.find((x) => x.id === id)
+  const a = items.value.find((x) => x.id === id)
   if (!a || unlocked.value[id]) return
   unlocked.value = { ...unlocked.value, [id]: Date.now() }
   try { localStorage.setItem(KEY, JSON.stringify(unlocked.value)) } catch { /* stockage indisponible */ }
