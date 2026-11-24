@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
 import { PAGES } from '../../admin/pages.js'
+import { compact, diffLines, flatten } from '../../lib/diff.js'
 import './adminForm.css'
 
 const route = useRoute(), router = useRouter()
@@ -68,6 +69,17 @@ const dropDraft = () => run(async () => {
   if (!confirm('Supprimer ce brouillon ?')) return
   await api(`/api/admin/drafts?kind=${kind.value}&ref=${encodeURIComponent(ref_.value)}`, { method: 'DELETE' })
 })
+// Comparaison d'une ancienne version avec l'état actuel
+const cmp = ref(null), cmpDlg = ref(null)
+const cmpStats = computed(() => (cmp.value ? { add: cmp.value.lines.filter((l) => l.t === 'add').length, del: cmp.value.lines.filter((l) => l.t === 'del').length } : null))
+async function compare(v) {
+  try {
+    const d = await api(`/api/admin/versions/${v.id}`)
+    const all = diffLines(flatten(d.data), flatten(d.current ?? {}))
+    cmp.value = { at: v.at, lines: compact(all), identical: all.every((l) => l.t === 'same') }
+    cmpDlg.value?.showModal()
+  } catch (e) { toast(e.message, 'danger') }
+}
 const restore = (v) => run(async () => {
   if (!confirm(`Restaurer la version du ${fmt(v.at)} ? La version actuelle est gardée dans l'historique.`)) return
   await api(`/api/admin/versions/${v.id}`, { method: 'POST' }); toast('Version restaurée', 'ok')
@@ -139,13 +151,29 @@ const restore = (v) => run(async () => {
             <ul v-else class="hist">
               <li v-for="v in detail.versions" :key="v.id">
                 <span>{{ fmt(v.at) }}<small v-if="v.label"> · {{ v.label }}</small></span>
-                <button class="btn btn-ghost small" type="button" :disabled="busy" @click="restore(v)">Restaurer</button>
+                <span class="vbtn">
+                  <button class="btn btn-ghost small" type="button" :disabled="busy" @click="compare(v)">Comparer</button>
+                  <button class="btn btn-ghost small" type="button" :disabled="busy" @click="restore(v)">Restaurer</button>
+                </span>
               </li>
             </ul>
           </section>
         </template>
       </main>
     </div>
+
+    <dialog ref="cmpDlg" class="diff" aria-labelledby="diff-t" @click="(e) => e.target === cmpDlg && cmpDlg.close()">
+      <header><h2 id="diff-t">Version du {{ cmp && fmt(cmp.at) }} → état actuel</h2><button type="button" class="btn btn-ghost small" @click="cmpDlg.close()">Fermer</button></header>
+      <template v-if="cmp">
+        <p v-if="cmp.identical" class="hint">Aucune différence : cette version est identique à l'état actuel.</p>
+        <template v-else>
+          <p class="legend"><span class="d">− {{ cmpStats.del }} ligne(s) de la version ancienne</span><span class="a">+ {{ cmpStats.add }} ligne(s) dans l'état actuel</span></p>
+          <ul class="lines">
+            <li v-for="(l, i) in cmp.lines" :key="i" :class="l.t"><b aria-hidden="true">{{ l.t === 'add' ? '+' : l.t === 'del' ? '−' : '' }}</b><span>{{ l.s }}</span><span class="sr">{{ l.t === 'add' ? ' (ajouté)' : l.t === 'del' ? ' (retiré)' : '' }}</span></li>
+          </ul>
+        </template>
+      </template>
+    </dialog>
   </div>
 </template>
 
@@ -177,4 +205,17 @@ label input{font:inherit;padding:6px 8px;border:1px solid var(--line);border-rad
 .hist{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:420px;overflow:auto}
 .hist li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:6px 10px;border:1px solid var(--line);border-radius:8px}
 .hist small{color:var(--muted)}
+.vbtn{display:flex;gap:6px}
+.diff{width:min(860px,calc(100vw - 24px));max-height:86vh;margin:auto;padding:20px;border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--fg)}
+.diff::backdrop{background:rgba(0,0,0,.5)}
+.diff header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+.diff h2{margin:0;font-size:1.1rem}
+.legend{display:flex;flex-wrap:wrap;gap:16px;font-size:.85rem;font-weight:700}
+.legend .a{color:#1b7a3a}.legend .d{color:#b42318}
+.lines{list-style:none;margin:8px 0 0;padding:0;max-height:62vh;overflow:auto;border:1px solid var(--line);border-radius:10px;font:13px/1.5 ui-monospace,Menlo,Consolas,monospace}
+.lines li{display:grid;grid-template-columns:22px 1fr;padding:1px 10px;white-space:pre-wrap;word-break:break-word}
+.lines b{text-align:center}
+.lines .add{background:#e3f6e8;color:#14532d}.lines .del{background:#fde8e6;color:#7a1d14}
+.lines .gap{color:var(--muted);background:var(--bg)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 </style>
