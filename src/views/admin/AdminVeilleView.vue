@@ -4,6 +4,8 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
 import { slugify } from '../../admin/slug.js'
+import { useBulk } from '../../admin/bulk.js'
+import BulkBar from './BulkBar.vue'
 import './adminForm.css'
 
 const articles = ref([])
@@ -46,6 +48,22 @@ async function load() {
   } catch (e) { error.value = e.message } finally { loaded.value = true }
 }
 onMounted(load)
+
+// ---------- Actions groupées ----------
+const bulk = useBulk((a) => a.slug)
+async function bulkStatus(status) {
+  const r = await bulk.run(articles.value, (a) => (a.status === status ? Promise.resolve() : api(`/api/admin/veille/articles/${a.slug}`, { method: 'PATCH', body: { status } })))
+  report(r, status === 'published' ? 'publié(s)' : 'repassé(s) en brouillon')
+}
+async function bulkDelete() {
+  if (!window.confirm(`Supprimer ${bulk.count.value} article(s) ? Ils iront dans la corbeille pendant 30 jours.`)) return
+  report(await bulk.run(articles.value, (a) => api(`/api/admin/veille/articles/${a.slug}`, { method: 'DELETE' })), 'supprimé(s)')
+}
+async function report(r, what) {
+  if (r.ok) toast(`${r.ok} article(s) ${what}.`, 'ok')
+  if (r.failed.length) error.value = r.failed.map((f) => `« ${f.item.title} » : ${f.message}`).join(' · ')
+  bulk.clear(); await load()
+}
 
 // ---------- Articles ----------
 async function setStatus(a, status) {
@@ -127,10 +145,16 @@ async function move(i, d) {
 
       <p v-if="loaded && !articles.length" class="hint">Aucun article pour l'instant. Crée d'abord quelques sujets ci-dessous, puis ton premier article.</p>
       <p v-else-if="loaded && !shown.length" class="hint">Aucun article ne correspond à ces filtres.</p>
-      <table v-else-if="shown.length">
-        <thead><tr><th>Article</th><th>Statut</th><th>Sujets</th><th>Mis à jour</th><th /></tr></thead>
+      <BulkBar :count="bulk.count.value" :busy="bulk.busy.value" @clear="bulk.clear">
+        <button class="btn btn-ghost small" type="button" :disabled="bulk.busy.value" @click="bulkStatus('published')">Publier</button>
+        <button class="btn btn-ghost small" type="button" :disabled="bulk.busy.value" @click="bulkStatus('draft')">Repasser en brouillon</button>
+        <button class="btn btn-ghost btn-danger small" type="button" :disabled="bulk.busy.value" @click="bulkDelete">Supprimer</button>
+      </BulkBar>
+      <table v-if="shown.length">
+        <thead><tr><th class="chk"><input type="checkbox" :checked="bulk.allOn(shown)" aria-label="Tout sélectionner" @change="bulk.toggleAll(shown)" /></th><th>Article</th><th>Statut</th><th>Sujets</th><th>Mis à jour</th><th /></tr></thead>
         <tbody>
-          <tr v-for="a in shown" :key="a.slug">
+          <tr v-for="a in shown" :key="a.slug" :class="{ sel: bulk.has(a) }">
+            <td class="chk"><input type="checkbox" :checked="bulk.has(a)" :aria-label="`Sélectionner ${a.title}`" @change="bulk.toggle(a)" /></td>
             <td><span class="name">{{ a.title }}</span><br /><span class="hint">/{{ a.slug }} · {{ a.readingMinutes }} min de lecture</span></td>
             <td>
               <span class="state" :class="a.status">{{ a.status === 'published' ? 'Publié' : 'Brouillon' }}</span>
@@ -212,4 +236,6 @@ async function move(i, d) {
 .inline input:not([type=color]){width:auto;flex:1 1 180px}
 .inline input[type=color]{width:52px;min-height:44px;padding:2px;flex:none}
 .add{margin-top:16px;padding:14px;border:1px dashed var(--line);border-radius:12px}
+.chk{width:36px}.chk input{width:18px;height:18px;accent-color:var(--green)}
+tr.sel{background:color-mix(in srgb,var(--green) 10%,transparent)}
 </style>

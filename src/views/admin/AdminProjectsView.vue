@@ -5,6 +5,8 @@ import { api } from '../../admin/api.js'
 import { projectLink } from '../../content/projects.js'
 import { toast } from '../../admin/toasts.js'
 import ToggleSwitch from './ToggleSwitch.vue'
+import { useBulk } from '../../admin/bulk.js'
+import BulkBar from './BulkBar.vue'
 import './adminForm.css'
 
 const projects = ref([])
@@ -39,6 +41,23 @@ async function move(i, d) {
   try { await api('/api/admin/projects/reorder', { method: 'POST', body: { slugs: list.map((p) => p.slug) } }) } catch (e) { error.value = e.message; await load() }
 }
 onMounted(load)
+
+// Actions groupées : changer le statut ou supprimer (vers la corbeille).
+const bulk = useBulk((p) => p.slug)
+async function bulkStatus(status) {
+  error.value = ''
+  const r = await bulk.run(projects.value, (p) => api(`/api/admin/projects/${p.slug}`, { method: 'PATCH', body: { status } }))
+  finish(r, 'mis à jour')
+}
+async function bulkDelete() {
+  if (!window.confirm(`Supprimer ${bulk.count.value} projet(s) ? Ils iront dans la corbeille pendant 30 jours.`)) return
+  finish(await bulk.run(projects.value, (p) => api(`/api/admin/projects/${p.slug}`, { method: 'DELETE' })), 'supprimé(s)')
+}
+async function finish(r, what) {
+  if (r.ok) toast(`${r.ok} projet(s) ${what}.`, 'ok')
+  if (r.failed.length) error.value = r.failed.map((f) => `« ${f.item.name} » : ${f.message}`).join(' · ')
+  bulk.clear(); await load()
+}
 </script>
 
 <template>
@@ -47,10 +66,18 @@ onMounted(load)
     <p>Les modifications apparaissent sur le site en moins d'une minute.</p>
     <div class="bar"><RouterLink class="btn btn-primary" to="/admin/projets/nouveau">+ Nouveau projet</RouterLink></div>
     <p v-if="error" class="err" role="alert">{{ error }}</p>
+    <BulkBar :count="bulk.count.value" :busy="bulk.busy.value" @clear="bulk.clear">
+      <select aria-label="Changer le statut de la sélection" :disabled="bulk.busy.value" @change="$event.target.value && bulkStatus($event.target.value); $event.target.value = ''">
+        <option value="">Changer le statut…</option>
+        <option v-for="[v, l] in STATUS" :key="v" :value="v">{{ l }}</option>
+      </select>
+      <button class="btn btn-ghost btn-danger small" type="button" :disabled="bulk.busy.value" @click="bulkDelete">Supprimer</button>
+    </BulkBar>
     <table>
-      <thead><tr><th>Ordre</th><th>Projet</th><th>Statut</th><th>Maintenance</th><th /></tr></thead>
+      <thead><tr><th class="chk"><input type="checkbox" :checked="bulk.allOn(projects)" aria-label="Tout sélectionner" @change="bulk.toggleAll(projects)" /></th><th>Ordre</th><th>Projet</th><th>Statut</th><th>Maintenance</th><th /></tr></thead>
       <tbody>
-        <tr v-for="(p, i) in projects" :key="p.slug">
+        <tr v-for="(p, i) in projects" :key="p.slug" :class="{ sel: bulk.has(p) }">
+          <td class="chk"><input type="checkbox" :checked="bulk.has(p)" :aria-label="`Sélectionner ${p.name}`" @change="bulk.toggle(p)" /></td>
           <td>
             <button class="btn btn-ghost small" type="button" :disabled="i === 0" :aria-label="`Monter ${p.name}`" @click="move(i, -1)">↑</button>
             <button class="btn btn-ghost small" type="button" :disabled="i === projects.length - 1" :aria-label="`Descendre ${p.name}`" @click="move(i, 1)">↓</button>
@@ -73,3 +100,8 @@ onMounted(load)
     </table>
   </div>
 </template>
+
+<style scoped>
+.chk{width:36px}.chk input{width:18px;height:18px;accent-color:var(--green)}
+tr.sel{background:color-mix(in srgb,var(--green) 10%,transparent)}
+</style>
