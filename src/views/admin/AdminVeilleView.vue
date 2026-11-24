@@ -74,6 +74,14 @@ async function setStatus(a, status) {
     await load()
   } catch (e) { error.value = e.message } finally { busy.value = '' }
 }
+async function toggleFeatured(a) {
+  busy.value = a.slug; error.value = ''
+  try {
+    await api(`/api/admin/veille/articles/${a.slug}`, { method: 'PATCH', body: { featured: !a.featured } })
+    toast(a.featured ? `« ${a.title} » n'est plus à la une.` : `« ${a.title} » est à la une.`, 'ok')
+    await load()
+  } catch (e) { error.value = e.message } finally { busy.value = '' }
+}
 async function removeArticle(a) {
   if (!window.confirm(`Supprimer « ${a.title} » ? Il ira dans la corbeille pendant 30 jours.`)) return
   busy.value = a.slug; error.value = ''
@@ -168,6 +176,7 @@ async function move(i, d) {
             <td>
               <div class="actions">
                 <RouterLink v-if="a.status === 'published'" class="btn btn-ghost small" :to="`/veille/${a.slug}`" target="_blank" title="Ouvre la page publique dans un nouvel onglet">Voir</RouterLink>
+                <button v-if="a.status === 'published'" class="btn btn-ghost small" type="button" :disabled="busy === a.slug" :aria-pressed="a.featured" :title="a.featured ? 'Retirer de la une' : 'Mettre en avant sur la page Veille (3 au maximum)'" @click="toggleFeatured(a)">{{ a.featured ? '★ À la une' : '☆ Mettre à la une' }}</button>
                 <button v-if="a.status === 'draft'" class="btn btn-ghost small" type="button" :disabled="busy === a.slug" @click="setStatus(a, 'published')">Publier</button>
                 <button v-else class="btn btn-ghost small" type="button" :disabled="busy === a.slug" @click="setStatus(a, 'draft')">Dépublier</button>
                 <RouterLink class="btn btn-primary small" :to="`/admin/veille/${a.slug}`">Modifier</RouterLink>

@@ -27,7 +27,9 @@ const shown = computed(() => {
     })
   }
   const by = { recent: (a, b) => b.publishedAt - a.publishedAt, old: (a, b) => a.publishedAt - b.publishedAt, short: (a, b) => a.readingMinutes - b.readingMinutes || b.publishedAt - a.publishedAt, az: (a, b) => a.title.localeCompare(b.title, 'fr') }
-  return [...list].sort(by[sort.value])
+  const sorted = [...list].sort(by[sort.value])
+  // Sans recherche, les articles « à la une » passent en premier (l'ordre choisi est gardé dans chaque groupe).
+  return terms.length ? sorted : [...sorted.filter((a) => a.featured), ...sorted.filter((a) => !a.featured)]
 })
 // La recherche et le tri vivent dans l'adresse (?q=…&tri=…) : on peut partager ou rafraîchir la page.
 let urlTimer
@@ -99,9 +101,10 @@ onMounted(load)
       <p v-if="!shown.length" class="status">{{ q.trim() ? t('veille.noMatch') : active ? t('veille.emptyTopic') : t('veille.empty') }}</p>
       <ul v-else class="grid">
         <li v-for="a in shown" :key="a.slug">
-          <article class="vcard" lang="fr">
+          <article class="vcard" :class="{ star: a.featured }" lang="fr">
             <img v-if="safeHttps(a.cover?.url)" :src="a.cover.url" :alt="a.cover.alt" width="640" height="360" loading="lazy" decoding="async" referrerpolicy="no-referrer" />
             <div class="body">
+              <span v-if="a.featured" class="badge"><span aria-hidden="true">★</span> {{ t('veille.featured') }}</span>
               <ul v-if="a.topics.length" class="pills" aria-label="Sujets">
                 <li v-for="s in a.topics" :key="s"><i :style="{ background: safeColor(topicMap[s]?.color) }" aria-hidden="true" />{{ topicMap[s]?.name ?? s }}</li>
               </ul>
@@ -143,6 +146,8 @@ h1{margin:0 0 12px;font:700 clamp(34px,6vw,52px)/1.1 var(--serif)}
 .retry{min-height:44px;padding:0 20px;border:1px solid var(--green);border-radius:12px;background:transparent;color:var(--fg);font:600 15px var(--font);cursor:pointer}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:24px;margin:0;padding:0;list-style:none}
 .vcard{position:relative;display:flex;flex-direction:column;height:100%;overflow:hidden;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);transition:transform .3s,box-shadow .3s,border-color .3s}
+.vcard.star{border-color:#c5a45d;box-shadow:0 0 0 1px #c5a45d inset}
+.badge{justify-self:start;align-self:flex-start;margin-bottom:10px;padding:3px 12px;border-radius:999px;background:#49443d;color:#f1dca0;border:1px solid #c5a45d;font:700 13px var(--font);letter-spacing:.03em}
 .vcard:hover{transform:translateY(-6px);box-shadow:0 24px 40px -18px var(--glow);border-color:var(--neon)}
 .vcard:focus-within{outline:3px solid var(--neon);outline-offset:3px}
 .vcard img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}

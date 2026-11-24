@@ -8,6 +8,7 @@ export { validSlug }
 const COLOR = /^#[0-9a-f]{6}$/i
 export const ARTICLE_STATUSES = ['draft', 'published']
 const MAX_TOPICS_PER_ARTICLE = 8
+export const MAX_FEATURED = 3
 
 // ---------- Sujets ----------
 export function parseTopic(b) {
@@ -76,11 +77,11 @@ export function assertPublishable(row) {
   if (!row.excerpt.trim() || !row.body.trim()) throw new HttpError(400, 'Pour publier, l\'article a besoin d\'un résumé et d\'un contenu')
 }
 
-export const ARTICLE_COLUMNS = 'slug, title, excerpt, cover_url, cover_alt, cover_caption, status, reading_minutes, published_at, created_at, updated_at'
+export const ARTICLE_COLUMNS = 'slug, title, excerpt, cover_url, cover_alt, cover_caption, status, featured, reading_minutes, published_at, created_at, updated_at'
 
 export function articleToApi(r, topics = []) {
   const a = {
-    slug: r.slug, title: r.title, excerpt: r.excerpt, status: r.status, readingMinutes: r.reading_minutes,
+    slug: r.slug, title: r.title, excerpt: r.excerpt, status: r.status, featured: !!r.featured, readingMinutes: r.reading_minutes,
     cover: r.cover_url ? { url: r.cover_url, alt: r.cover_alt ?? '', caption: r.cover_caption ?? '' } : null,
     publishedAt: r.published_at, createdAt: r.created_at, updatedAt: r.updated_at, topics,
   }
