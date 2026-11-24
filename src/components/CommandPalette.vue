@@ -90,6 +90,7 @@ function onKey(e) {
 }
 const typing = (e) => /^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName) || e.target?.isContentEditable
 function onGlobal(e) {
+  if (location.pathname.startsWith('/admin')) return // l'admin a sa propre recherche
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); dlg.value?.open ? hide() : show() }
   else if (e.key === '/' && !e.ctrlKey && !e.metaKey && !e.altKey && !typing(e) && !dlg.value?.open) { e.preventDefault(); show() }
 }

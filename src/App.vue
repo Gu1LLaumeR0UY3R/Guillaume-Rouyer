@@ -46,6 +46,6 @@ const blocked = computed(() => settings.value.maintenanceOn && !isAdmin.value &&
     <CommandPalette />
     <TerminalMode />
     <AchievementsPanel />
-    <SiteDock v-if="!route.meta.fullscreen" />
+    <SiteDock v-if="!route.meta.fullscreen && !route.path.startsWith('/admin')" />
   </template>
 </template>

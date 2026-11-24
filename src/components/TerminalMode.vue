@@ -92,6 +92,7 @@ function show() {
 }
 const typing = (e) => /^(INPUT|TEXTAREA|SELECT)$/.test(e.target?.tagName) || e.target?.isContentEditable
 function onGlobal(e) {
+  if (location.pathname.startsWith('/admin')) return
   if (e.key === '`' && !e.altKey && !e.metaKey && (!typing(e) || e.ctrlKey) && !document.querySelector('dialog[open]')) { e.preventDefault(); show() }
 }
 onMounted(() => { window.addEventListener('keydown', onGlobal); window.addEventListener('open-terminal', show) })

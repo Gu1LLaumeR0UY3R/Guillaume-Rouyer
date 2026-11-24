@@ -5,6 +5,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { api } from '../../admin/api.js'
 import { badges, startBadges, stopBadges } from '../../admin/badges.js'
 import { dismiss, toasts } from '../../admin/toasts.js'
+import AdminPalette from './AdminPalette.vue'
 import './adminForm.css'
 
 // Icônes du menu (tracés simples, 24×24)
@@ -44,6 +45,7 @@ const groups = [
 ]
 
 const route = useRoute()
+const allPages = [...top, ...groups.flatMap((g) => g.items)].map((i) => ({ to: i.to, label: i.label, tip: i.tip }))
 const STORE = 'admin-nav-open'
 const saved = (() => { try { return JSON.parse(localStorage.getItem(STORE)) ?? {} } catch { return {} } })()
 const openMap = reactive(Object.fromEntries(groups.map((g) => [g.id, saved[g.id] ?? g.id === 'contenu'])))
@@ -107,6 +109,7 @@ watch(() => route.fullPath, () => { menuOpen.value = false })
     </aside>
 
     <div class="content"><slot /></div>
+    <AdminPalette :pages="allPages" />
 
     <div class="toasts" role="status" aria-live="polite">
       <div v-for="t in toasts" :key="t.id" class="toast" :class="t.level">
