@@ -6,6 +6,7 @@ import { onBeforeRouteLeave, useRoute, useRouter } from 'vue-router'
 import { api } from '../../admin/api.js'
 import { toast } from '../../admin/toasts.js'
 import { slugify } from '../../admin/slug.js'
+import QualityPanel from '../../components/veille/QualityPanel.vue'
 import ArticleEditor from '../../components/veille/ArticleEditor.vue'
 const VisualEditor = defineAsyncComponent(() => import('../../components/veille/VisualEditor.vue'))
 let saved = 'visual'
@@ -157,6 +158,8 @@ async function setStatus(next) {
         <ArticleEditor v-else v-model="f.body" :maxlength="60000" />
         <span class="hint">{{ words }} mot(s) · environ {{ minutes }} min de lecture · {{ f.body.length.toLocaleString('fr-FR') }} / 60 000 caractères</span>
       </div>
+
+      <QualityPanel :article="f" />
 
       <p v-if="error" class="err" role="alert">{{ error }}</p>
       <div class="bar">

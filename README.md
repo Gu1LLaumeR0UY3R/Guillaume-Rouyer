@@ -11,13 +11,17 @@ Portfolio de développeur web avec un espace d'administration.
 - **Veille technologique** : articles avec sommaire fixe, progression de lecture, recherche et tri (`?q=…&tri=…`), filtre par sujet
 - Thème clair / sombre, français / anglais, polices auto-hébergées (aucun service tiers)
 - Mesure d'audience sans traceur tiers ; cookie de visiteur unique uniquement après consentement (bandeau, bouton « Cookies » en pied de page)
-- Accessibilité : lien d'évitement, focus visible, `prefers-reduced-motion`
+- Accessibilité : lien d'évitement, focus visible, `prefers-reduced-motion`, panneau de réglages (taille, contraste, police, animations)
+- Palette de commandes (`Ctrl K` ou `/`), mode terminal (touche `` ` ``), succès stockés dans le navigateur
+- Pages Maintenant, Mes outils et Changelog, modifiables depuis l'admin ; CV téléchargeable derrière un petit défi anti-robot
 
 **Administration** (`/admin`, connexion + double authentification)
 - Contenu : projets, pages du site, veille (articles et sujets), médias, annonce ; dossiers pour ranger projets et pages
 - Éditeur d'articles **visuel** (TipTap) ou **Markdown**, le Markdown étant toujours le format stocké
 - Bloc `demo` : code HTML/CSS/JS exécuté dans l'article, dans un cadre isolé (sans accès au site, au stockage ni au réseau)
-- Versions et restauration, brouillons, publication programmée (déclenchée par les visites), export / import JSON
+- Corbeille (30 jours) pour projets et articles, actions groupées, recherche globale `Ctrl K`, raccourcis clavier (`?` pour la liste)
+- Assistant qualité des articles (titre, résumé, structure, accessibilité)
+- Versions avec comparaison visuelle et restauration, brouillons, publication programmée (déclenchée par les visites), export / import JSON
 - Messages reçus (conservés 12 mois), statistiques, alertes, journaux, sécurité, santé du site
 
 ## Développement
