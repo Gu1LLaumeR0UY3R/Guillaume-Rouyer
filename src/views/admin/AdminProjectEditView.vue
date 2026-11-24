@@ -119,7 +119,7 @@ async function save() {
   } catch (e) { error.value = e.message; busy.value = false }
 }
 async function remove() {
-  if (!window.confirm(`Supprimer définitivement « ${f.name} » ? Pour seulement le cacher, passe-le en statut « Masqué ».`)) return
+  if (!window.confirm(`Supprimer « ${f.name} » ? Il ira dans la corbeille pendant 30 jours. Pour seulement le cacher, passe-le en statut « Masqué ».`)) return
   try { await api(`/api/admin/projects/${f.slug}`, { method: 'DELETE' }); dirty.value = false; router.push('/admin/projets') } catch (e) { error.value = e.message }
 }
 </script>

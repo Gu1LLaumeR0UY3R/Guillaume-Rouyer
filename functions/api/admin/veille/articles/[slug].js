@@ -1,4 +1,5 @@
 // Admin : lire (avec le texte), enregistrer (PUT), publier / repasser en brouillon (PATCH) ou supprimer un article.
+import { stash } from '../../../../_lib/trash.js'
 import { HttpError, json, readJson, route } from '../../../../_lib/http.js'
 import { requireAdmin } from '../../../../_lib/auth.js'
 import { ARTICLE_COLUMNS, ARTICLE_STATUSES, articleToApi, assertPublishable, assertTopicsExist, parseArticle, validSlug } from '../../../../_lib/veille.js'
@@ -56,6 +57,7 @@ async function PATCH(ctx) {
 async function DELETE(ctx) {
   await requireAdmin(ctx)
   const slug = validSlug(ctx.params.slug)
+  await stash(ctx.env, 'article', slug)
   const res = await ctx.env.DB.prepare('DELETE FROM veille_articles WHERE slug = ?').bind(slug).run()
   if (!res.meta.changes) throw new HttpError(404, 'Article introuvable')
   await log(ctx, 'warn', 'veille_article_deleted', { slug })

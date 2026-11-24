@@ -46,6 +46,7 @@ const routes = [
   { path: '/admin/journaux', name: 'admin-logs', component: () => import('../views/admin/AdminLogsView.vue'), meta: { title: 'Journaux', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/versions', name: 'admin-versions', component: () => import('../views/admin/AdminVersionsView.vue'), meta: { title: 'Versions et publication', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/sauvegarde', name: 'admin-backup', component: () => import('../views/admin/AdminBackupView.vue'), meta: { title: 'Sauvegarde', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/corbeille', name: 'admin-trash', component: () => import('../views/admin/AdminTrashView.vue'), meta: { title: 'Corbeille', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/reglages', name: 'admin-settings', component: () => import('../views/admin/AdminSettingsView.vue'), meta: { title: 'Réglages', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/compte', name: 'admin-account', component: () => import('../views/admin/AdminAccountView.vue'), meta: { title: 'Compte et sécurité', noindex: true, admin: true, adminLayout: true } },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: () => import('../views/NotFoundView.vue'), meta: { title: 'Page introuvable' } },

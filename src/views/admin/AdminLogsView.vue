@@ -10,6 +10,7 @@ const EVENTS = {
   login_ok: 'Connexion réussie', login_failed: 'Échec de connexion', login_locked: 'Connexion verrouillée', logout: 'Déconnexion',
   reauth_failed: 'Confirmation d\'identité refusée', origin_refused: 'Origine refusée', unhandled: 'Erreur interne',
   project_created: 'Projet créé', project_updated: 'Projet modifié', project_patched: 'Projet modifié (rapide)', project_deleted: 'Projet supprimé', projects_reordered: 'Ordre des projets modifié',
+  veille_article_deleted: 'Article supprimé', trash_restored: 'Restauré depuis la corbeille', trash_purged: 'Effacé de la corbeille', trash_emptied: 'Corbeille vidée',
   settings_updated: 'Réglages modifiés', site_maintenance_on: 'Maintenance du site activée', site_maintenance_off: 'Maintenance du site désactivée',
   password_changed: 'Mot de passe modifié', totp_change_started: 'Changement de 2FA commencé', totp_changed: '2FA régénéré', totp_change_bad_code: 'Code 2FA refusé (changement)',
   media_uploaded: 'Image ajoutée', media_updated: 'Image modifiée', media_trashed: 'Image mise à la corbeille', media_restored: 'Image restaurée', media_deleted: 'Image supprimée définitivement',

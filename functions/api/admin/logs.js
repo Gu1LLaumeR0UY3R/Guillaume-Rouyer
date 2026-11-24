@@ -10,7 +10,7 @@ export const onRequest = (ctx) => route(ctx, { GET, POST })
 // Onglet « Activité admin » : ce que fait l'administrateur (et la vie du compte)
 const ADMIN_EVENTS = [
   'login_ok', 'logout', 'setup_started', 'setup_done',
-  'project_created', 'project_updated', 'project_patched', 'project_deleted', 'projects_reordered',
+  'project_created', 'project_updated', 'project_patched', 'project_deleted', 'projects_reordered', 'veille_article_deleted', 'trash_restored', 'trash_purged', 'trash_emptied',
   'settings_updated', 'site_maintenance_on', 'site_maintenance_off',
   'password_changed', 'totp_change_started', 'totp_changed', 'session_revoked', 'sessions_revoked_all', 'logs_purged',
 ]

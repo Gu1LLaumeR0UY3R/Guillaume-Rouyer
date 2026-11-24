@@ -1,4 +1,5 @@
 // Admin : lire, remplacer (PUT), modifier quelques champs (PATCH) ou supprimer un projet.
+import { stash } from '../../../_lib/trash.js'
 import { HttpError, json, readJson, route } from '../../../_lib/http.js'
 import { requireAdmin } from '../../../_lib/auth.js'
 import { COLUMNS, nextPrevStatus, parseProject, restoredStatus, toApi, validSlug } from '../../../_lib/projects.js'
@@ -55,6 +56,7 @@ async function PATCH(ctx) {
 async function DELETE(ctx) {
   await requireAdmin(ctx)
   const slug = validSlug(ctx.params.slug)
+  await stash(ctx.env, 'project', slug)
   const res = await ctx.env.DB.prepare('DELETE FROM projects WHERE slug = ?').bind(slug).run()
   if (!res.meta.changes) throw new HttpError(404, 'Projet introuvable')
   await log(ctx, 'warn', 'project_deleted', { slug })

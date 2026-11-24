@@ -28,6 +28,7 @@ const groups = [
   ] },
   { id: 'publication', label: 'Publication', icon: 'versions', items: [
     { to: '/admin/versions', icon: 'versions', label: 'Versions', tip: 'Historique, brouillons et publications programmées' },
+    { to: '/admin/corbeille', icon: 'media', label: 'Corbeille', tip: 'Projets et articles supprimés : restauration pendant 30 jours' },
     { to: '/admin/sauvegarde', icon: 'backup', label: 'Sauvegarde', tip: 'Exporter ou importer tout le contenu en un fichier' },
   ] },
   { id: 'suivi', label: 'Suivi du site', icon: 'stats', items: [

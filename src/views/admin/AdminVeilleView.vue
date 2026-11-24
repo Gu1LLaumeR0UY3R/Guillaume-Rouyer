@@ -57,7 +57,7 @@ async function setStatus(a, status) {
   } catch (e) { error.value = e.message } finally { busy.value = '' }
 }
 async function removeArticle(a) {
-  if (!window.confirm(`Supprimer définitivement « ${a.title} » ? Cette action est irréversible.`)) return
+  if (!window.confirm(`Supprimer « ${a.title} » ? Il ira dans la corbeille pendant 30 jours.`)) return
   busy.value = a.slug; error.value = ''
   try { await api(`/api/admin/veille/articles/${a.slug}`, { method: 'DELETE' }); toast(`« ${a.title} » supprimé.`, 'warn'); await load() } catch (e) { error.value = e.message } finally { busy.value = '' }
 }
