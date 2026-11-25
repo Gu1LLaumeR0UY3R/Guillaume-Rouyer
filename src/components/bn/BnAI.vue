@@ -85,7 +85,7 @@ const ranks = computed(() => {
         </div>
         <figure class="code">
           <figcaption>Extrait réel de src/game/ai.ts</figcaption>
-          <pre><code>{{ CODE[level] }}</code></pre>
+          <pre tabindex="0"><code>{{ CODE[level] }}</code></pre>
         </figure>
       </div>
 

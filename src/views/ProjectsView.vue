@@ -3,5 +3,5 @@ import ProjectsSection from '../components/ProjectsSection.vue'
 </script>
 
 <template>
-  <ProjectsSection />
+  <ProjectsSection as-page />
 </template>

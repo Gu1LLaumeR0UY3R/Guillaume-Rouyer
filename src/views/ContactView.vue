@@ -3,5 +3,5 @@ import ContactSection from '../components/ContactSection.vue'
 </script>
 
 <template>
-  <ContactSection />
+  <ContactSection as-page />
 </template>

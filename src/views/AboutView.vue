@@ -38,7 +38,8 @@ loadSite()
 .saga .banner h1{font-size:clamp(34px,6vw,60px);text-shadow:0 2px 22px rgba(0,0,0,.45)}
 :root:not([data-theme=dark]) .saga .banner h1{text-shadow:0 0 18px rgba(255,248,230,.7)}
 .saga .banner .sub{margin:8px 0 0;font:600 clamp(16px,2.2vw,22px) var(--serif);letter-spacing:.06em;opacity:.9}
-.saga .banner .lang button{color:inherit}
+.saga .banner .lang{background:var(--bg)}
+.saga .banner .lang button{color:var(--fg)}
 .saga .banner .lang button[aria-pressed=true]{color:var(--on-green)}
 @keyframes glow{50%{opacity:.4}}
 </style>

@@ -7,7 +7,7 @@ const fire = (n) => () => window.dispatchEvent(new CustomEvent(n))
 </script>
 
 <template>
-  <div class="dock" role="group" aria-label="Outils du site">
+  <aside class="dock" aria-label="Outils du site">
     <button type="button" aria-label="Rechercher (Ctrl K)" title="Rechercher (Ctrl K)" @click="fire('open-palette')()">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     </button>
@@ -19,7 +19,7 @@ const fire = (n) => () => window.dispatchEvent(new CustomEvent(n))
       <svg v-else viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
     </button>
     <A11yPanel headless />
-  </div>
+  </aside>
 </template>
 
 <style scoped>

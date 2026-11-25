@@ -1,4 +1,5 @@
 <script setup>
+defineProps({ asPage: { type: Boolean, default: false } })
 import { openCv } from '../content/cvGate.js'
 import { links } from '../content/settings.js'
 import { track } from '../stats.js'
@@ -15,7 +16,7 @@ const text = () => pick(contact.value, 'text') || 'Un projet, une mission ou une
 <template>
   <section id="contact" class="contact" v-reveal>
     <div class="container">
-      <h2>{{ title() }}</h2>
+      <component :is="asPage ? 'h1' : 'h2'">{{ title() }}</component>
       <p>{{ text() }}</p>
       <div class="cta">
         <a

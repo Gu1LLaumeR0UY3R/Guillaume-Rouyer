@@ -43,7 +43,7 @@ const STAR = 'M20 1.5c1.9 11.9 6.6 16.6 18.5 18.5C26.6 21.9 21.9 26.6 20 38.5 18
             <span>Succès débloqué</span>
             <span class="tiny-diamond" />
           </div>
-          <h1>{{ head.title }}</h1>
+          <p class="ach-title">{{ head.title }}</p>
         </div>
         <svg class="end-star" viewBox="0 0 40 40" aria-hidden="true"><path :d="STAR" /></svg>
       </div>
@@ -110,7 +110,7 @@ const STAR = 'M20 1.5c1.9 11.9 6.6 16.6 18.5 18.5C26.6 21.9 21.9 26.6 20 38.5 18
   font-size: clamp(0.85rem, 2.1vw, 1.55rem); font-weight: 700; letter-spacing: 0.075em; line-height: 1.2; text-transform: uppercase; white-space: nowrap;
 }
 .tiny-diamond { width: 0.62em; height: 0.62em; flex: none; background: currentColor; clip-path: polygon(50% 0, 66% 34%, 100% 50%, 66% 66%, 50% 100%, 34% 66%, 0 50%, 34% 34%); }
-h1 {
+.ach-title {
   margin: 0; color: #604634; font-family: 'Cormorant Garamond', Georgia, serif;
   font-size: clamp(2.4rem, 5vw, 4.2rem); font-weight: 700; letter-spacing: -0.025em; line-height: 0.92; white-space: nowrap; text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -145,7 +145,7 @@ h1 {
   .achievement { --medal-size: clamp(6.7rem, 28vw, 8.5rem); width: min(36rem, 96vw); zoom: 0.75; }
   .achievement-card { height: clamp(6.2rem, 25vw, 7.6rem); margin-left: calc(var(--medal-size) * 0.48); padding-right: 3.3rem; padding-left: calc(var(--medal-size) * 0.58); }
   .eyebrow { font-size: clamp(0.53rem, 2.7vw, 0.85rem); letter-spacing: 0.04em; }
-  h1 { font-size: clamp(1.8rem, 8.8vw, 2.7rem); }
+  .ach-title { font-size: clamp(1.8rem, 8.8vw, 2.7rem); }
   .end-star { right: 1.3rem; width: 1.5rem; }
   .card-line { right: 2.9rem; }
 }

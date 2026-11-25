@@ -37,7 +37,7 @@ h2{margin:0 0 14px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px}
 .card{outline-offset:6px}
 .body{padding:16px 4px 0}
-.role{color:var(--olive);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
+.role{color:var(--muted);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase}
 h3{margin:6px 0 0;font:600 22px var(--serif)}
 .more{margin:8px 0 0;color:var(--muted);font-size:15px}
 .card{transition:transform .4s}.card:hover{transform:translateY(-4px)}

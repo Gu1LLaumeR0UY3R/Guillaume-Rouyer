@@ -1,5 +1,6 @@
 <script setup>
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+defineProps({ asPage: { type: Boolean, default: false } })
 import { projects, tags } from '../content/projects.js'
 import ProjectCard from './ProjectCard.vue'
 
@@ -32,7 +33,7 @@ onBeforeUnmount(() => clearInterval(timer))
 <template>
   <section id="projets" class="projects" v-reveal>
     <div class="container">
-      <h2>Projets</h2>
+      <component :is="asPage ? 'h1' : 'h2'">Projets</component>
       <div class="chips" role="group" aria-label="Filtrer par catégorie">
         <button
           v-for="t in tags"
@@ -58,7 +59,7 @@ onBeforeUnmount(() => clearInterval(timer))
       @pointerdown.passive="paused = true"
       @touchstart.passive="paused = true"
     >
-      <ProjectCard v-for="p in list" :key="p.name" :project="p" />
+      <ProjectCard v-for="p in list" :key="p.name" :project="p" :level="asPage ? 'h2' : 'h3'" />
     </div>
   </section>
 </template>

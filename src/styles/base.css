@@ -5,7 +5,7 @@ html{scroll-behavior:smooth;scroll-padding-top:84px}
 body{margin:0;background-color:var(--bg);background-image:radial-gradient(900px 520px at 8% -8%,color-mix(in srgb,var(--neon) 9%,transparent),transparent 70%),radial-gradient(800px 480px at 100% 30%,color-mix(in srgb,var(--green) 6%,transparent),transparent 70%),radial-gradient(color-mix(in srgb,var(--fg) 8%,transparent) 1px,transparent 1.3px);background-size:auto,auto,24px 24px;color:var(--fg);font:400 16px/1.6 var(--font)}
 a{color:inherit}
 h1,h2,h3{font-family:var(--serif);line-height:1.1;margin:0}
-h2{font-size:clamp(32px,4.5vw,44px);margin-bottom:20px}
+h2,.projects h1,.contact h1{font-size:clamp(32px,4.5vw,44px);margin-bottom:20px}
 section{padding:72px 0}
 .container{max-width:var(--max);margin:0 auto;padding:0 clamp(20px,5vw,48px)}
 .skip{position:absolute;left:-999px;top:8px;z-index:100;padding:10px 16px;border-radius:8px;background:var(--green);color:var(--on-green)}

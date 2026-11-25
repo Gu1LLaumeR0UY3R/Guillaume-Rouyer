@@ -61,12 +61,12 @@ async function submit() {
 <template>
   <div class="cf">
     <div v-if="state === 'sent'" class="done" role="status">
-      <h3>{{ t('contactForm.sentTitle') }}</h3>
+      <h2>{{ t('contactForm.sentTitle') }}</h2>
       <p>{{ t('contactForm.sentText') }}</p>
       <button class="btn outline" type="button" @click="state = 'idle'">{{ t('contactForm.again') }}</button>
     </div>
     <form v-else novalidate @submit.prevent="submit" @focusin="warmUp">
-      <h3>{{ t('contactForm.title') }}</h3>
+      <h2>{{ t('contactForm.title') }}</h2>
       <div class="two">
         <label>{{ t('contactForm.name') }}<input v-model="form.name" required minlength="2" maxlength="80" autocomplete="name"></label>
         <label>{{ t('contactForm.email') }}<input v-model="form.email" type="email" required maxlength="254" autocomplete="email" inputmode="email"></label>
@@ -88,7 +88,7 @@ async function submit() {
 .cf{max-width:640px;margin:48px auto 0;text-align:left}
 form,.done{display:grid;gap:16px;padding:28px;border:1px solid rgba(184,216,194,.35);border-radius:var(--radius);background:rgba(255,255,255,.06)}
 .done{text-align:center;justify-items:center}
-h3{margin:0;font:600 22px var(--serif);color:#f3fbf5}
+h2{margin:0;font:600 22px var(--serif);color:#f3fbf5}
 .cf p{margin:0}
 label{display:grid;gap:6px;color:#f3fbf5;font-weight:600}
 .two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:16px}

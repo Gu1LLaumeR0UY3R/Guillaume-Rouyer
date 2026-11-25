@@ -16,7 +16,7 @@ const TECH = computed(() => G.value.tech)
       </div>
       <figure class="code">
         <figcaption>{{ TECH.codeTitle }}</figcaption>
-        <pre><code>{{ TECH.code }}</code></pre>
+        <pre tabindex="0"><code>{{ TECH.code }}</code></pre>
       </figure>
     </div>
     <p class="container note">{{ TECH.note }}</p>

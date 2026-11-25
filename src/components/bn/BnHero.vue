@@ -20,7 +20,7 @@ const counter = computed(() => `${pad(index.value + 1)} / ${pad(slides.length)}`
 <template>
   <header class="hero">
     <div class="bg">
-      <img v-for="(s, i) in slides" :key="s" :src="s" alt="" :class="{ on: i === index }">
+      <img v-for="(s, i) in slides" :key="s" :src="s" alt="" decoding="async" :loading="i ? 'lazy' : 'eager'" :class="{ on: i === index }">
       <div v-if="!slides.length" class="fallback">
         <span class="sun" />
         <svg class="wave w1" viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true"><path d="M0 60C100 20 200 100 300 60S500 20 600 60 800 100 900 60 1100 20 1200 60V120H0Z" /></svg>

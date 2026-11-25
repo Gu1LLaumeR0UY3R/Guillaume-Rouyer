@@ -25,7 +25,7 @@ const counter = computed(() => `${pad(index.value + 1)} / ${pad(slides.value.len
 <template>
   <header class="hero">
     <div class="bg">
-      <img v-for="(s, i) in slides" :key="s" :src="s" alt="" :class="{ on: i === index }">
+      <img v-for="(s, i) in slides" :key="s" :src="s" alt="" decoding="async" :loading="i ? 'lazy' : 'eager'" :class="{ on: i === index }">
       <div v-if="!slides.length" class="fallback" />
       <div class="veil" />
     </div>

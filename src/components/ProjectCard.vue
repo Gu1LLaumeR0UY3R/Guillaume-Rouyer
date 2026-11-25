@@ -1,14 +1,14 @@
 <script setup>
 import { projectLink, safeUrl, statusLabel } from '../content/projects.js'
 
-defineProps({ project: { type: Object, required: true } })
+defineProps({ project: { type: Object, required: true }, level: { type: String, default: 'h3' } })
 </script>
 
 <template>
   <article class="card">
     <span v-if="statusLabel(project)" class="status">{{ statusLabel(project) }}</span>
     <span class="tag">{{ project.tag }}</span>
-    <h3>{{ project.name }}</h3>
+    <component :is="level">{{ project.name }}</component>
     <p>{{ project.desc }}</p>
     <ul class="stack"><li v-for="s in project.stack" :key="s">{{ s }}</li></ul>
     <div class="links">
@@ -19,7 +19,7 @@ defineProps({ project: { type: Object, required: true } })
         :href="safeUrl(project.repo)"
         target="_blank"
         rel="noopener"
-        :aria-label="`Voir le code de ${project.name} sur GitHub`"
+        :aria-label="`Voir le code sur GitHub : ${project.name}`"
       >Voir le code sur GitHub →</a>
       <p v-else class="note">{{ project.note || 'Code non public' }}</p>
     </div>
@@ -30,7 +30,7 @@ defineProps({ project: { type: Object, required: true } })
 .card{flex:0 0 min(340px,82vw);display:flex;flex-direction:column;gap:12px;min-height:320px;padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card);transition:transform .3s,box-shadow .3s,border-color .3s}
 .card:hover{transform:translateY(-8px) rotate(-.6deg);box-shadow:0 24px 40px -18px var(--glow);border-color:var(--neon)}
 .tag{color:var(--green);font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
-h3{font-size:26px}
+h2,h3{font-size:26px;margin:0}
 p{margin:0;color:var(--muted)}
 .status{align-self:flex-start;padding:3px 10px;border-radius:999px;background:var(--deep);color:#d9ffe6;font-size:12px}
 .stack{display:flex;flex-wrap:wrap;gap:6px;margin:auto 0 0;padding:0;list-style:none}

@@ -119,7 +119,7 @@ onBeforeUnmount(() => { cancelAnimationFrame(raf); io?.disconnect(); window.remo
       </div>
       <figure class="code">
         <figcaption>Extrait réel de src/engine/vagues.ts</figcaption>
-        <pre><code>{{ CODE.waves }}</code></pre>
+        <pre tabindex="0"><code>{{ CODE.waves }}</code></pre>
       </figure>
     </div>
     <div class="container">
