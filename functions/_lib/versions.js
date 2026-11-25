@@ -1,5 +1,6 @@
 // Versions, brouillons et publications programmées : tout ce qui écrit un contenu ou un projet passe par ici.
 import { HttpError } from './http.js'
+import { maybeBackup } from './autobackup.js'
 import { getBlock, isBlock, parseBlock } from './content.js'
 import { COLUMNS, nextPrevStatus, parseProject, toBody, validSlug } from './projects.js'
 
@@ -47,6 +48,7 @@ export const apply = (env, kind, ref, data, label) => (kind === 'content' ? appl
 // Publie les brouillons programmés dont l'heure est passée. Pas de tâche planifiée sur Pages : on vérifie au fil des visites (au plus toutes les 20 s par instance).
 let lastCheck = 0
 export async function publishDue(env, { force = false } = {}) {
+  await maybeBackup(env) // sauvegarde automatique hebdomadaire (contrôle au plus toutes les 10 minutes)
   const now = Date.now()
   if (!force && now - lastCheck < 20_000) return 0
   lastCheck = now

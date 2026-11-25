@@ -68,3 +68,4 @@ Les en-têtes de sécurité (CSP stricte, pas d'iframe) sont dans `public/_heade
 - **Nouveau texte** : `src/i18n/index.js` (français et anglais).
 - **Article de veille** : Admin → Veille → Nouvel article (mode Visuel ou Markdown).
 - **Sauvegarde** : Admin → Sauvegarde exporte tout le contenu en un fichier JSON ; l'import valide tout ou rien.
+- **Sauvegardes automatiques** : une fois par semaine (déclenchée par les visites, sans tâche planifiée) et à la demande. Incrémentale : chaque passage ne garde que les éléments modifiés ou supprimés (tables `backup_runs` / `backup_items`, migration `0016`). Historique 180 jours. Dans Admin → Sauvegarde : comparer un élément avec sa version actuelle, le restaurer seul, télécharger l'état complet à une date (copie hors site).
