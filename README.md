@@ -13,6 +13,7 @@ Portfolio de développeur web avec un espace d'administration.
 - Mesure d'audience sans traceur tiers ; cookie de visiteur unique uniquement après consentement (bandeau, bouton « Cookies » en pied de page)
 - Accessibilité : lien d'évitement, focus visible, `prefers-reduced-motion`, panneau de réglages (taille, contraste, police, animations)
 - Palette de commandes (`Ctrl K` ou `/`), mode terminal (touche `` ` ``), succès stockés dans le navigateur
+- **Laboratoire cybersécurité** (`/cybersecurite`) : 7 démos interactives (hachage et sel, robustesse des mots de passe, JWT et attaque `alg: none`, injection SQL, XSS dans un cadre isolé, analyseur d'en-têtes HTTP, double authentification TOTP). Tout tourne dans le navigateur, sauf l'analyse d'un autre domaine (`/api/cyber/headers`, protégée contre la SSRF)
 - Pages Maintenant, Mes outils et Changelog, modifiables depuis l'admin ; CV téléchargeable derrière un petit défi anti-robot
 
 **Administration** (`/admin`, connexion + double authentification)
@@ -41,6 +42,8 @@ Node 22 recommandé (voir `.nvmrc`).
 ```
 src/views/              une vue par page (src/views/admin/ pour l'administration)
 src/components/         composants (veille/ : éditeur visuel, éditeur Markdown, corps d'article)
+src/lib/cyber/          logique des démos du labo (crypto, jwt, totp, sqlSim, password, headers)
+src/components/cyber/   une démo par composant + lab.css
 src/lib/                markdown.js (rendu), mdSerialize.js (éditeur → Markdown), veilleEditor.js (blocs TipTap), demoFrame.js
 src/admin/              client d'API admin, notifications, brouillons
 src/content/            contenus par défaut et accès à la veille

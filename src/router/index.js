@@ -7,6 +7,7 @@ const routes = [
   { path: '/projets', name: 'projects', component: () => import('../views/ProjectsView.vue'), meta: { title: 'Projets' } },
   { path: '/veille', name: 'veille', component: () => import('../views/VeilleView.vue'), meta: { title: 'Veille technologique' } },
   { path: '/veille/:slug', name: 'veille-article', component: () => import('../views/VeilleArticleView.vue'), meta: { title: 'Veille technologique' } },
+  { path: '/cybersecurite', name: 'cyber', component: () => import('../views/CyberView.vue'), meta: { title: 'Cybersécurité' } },
   { path: '/a-propos', name: 'about', component: () => import('../views/AboutView.vue'), meta: { title: 'À propos' } },
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue'), meta: { title: 'Contact' } },
   { path: '/projets/spidernet', redirect: '/projets/spidernet/tableau' },

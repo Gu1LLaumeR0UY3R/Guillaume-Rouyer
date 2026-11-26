@@ -26,7 +26,7 @@ const ext = (href) => () => window.open(href, '_blank', 'noopener,noreferrer')
 const fire = (name) => () => window.dispatchEvent(new CustomEvent(name))
 
 const PAGES = [
-  ['Accueil', '/'], ['Projets', '/projets'], ['Veille technologique', '/veille'], ['À propos', '/a-propos'], ['Contact', '/contact'],
+  ['Accueil', '/'], ['Projets', '/projets'], ['Veille technologique', '/veille'], ['Cybersécurité', '/cybersecurite'], ['À propos', '/a-propos'], ['Contact', '/contact'],
   ['Maintenant', '/maintenant'], ['Mes outils', '/outils'], ['Changelog', '/changelog'],
   ['Mentions légales', '/mentions-legales'], ['Confidentialité', '/confidentialite'],
 ]

@@ -1,0 +1,42 @@
+/* Styles communs des démos du labo cybersécurité (préfixe .lab-). Couleurs du thème du site : clair et sombre. */
+.lab{display:grid;gap:18px;text-align:left}
+.lab h3{margin:0 0 4px;font:600 18px var(--serif)}
+.lab p{margin:0}
+.lab-card{display:grid;gap:12px;padding:20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+.lab-row{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
+.lab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px}
+.lab label{display:grid;gap:6px;font-weight:600;font-size:14px}
+.lab-row>label{display:flex;align-items:center;gap:8px;font-weight:500}
+.lab-input,.lab textarea,.lab select{width:100%;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:inherit;font-weight:400}
+.lab textarea{resize:vertical;min-height:90px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.lab-input:focus,.lab textarea:focus,.lab select:focus{outline:3px solid var(--neon);outline-offset:1px}
+.lab-out{margin:0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--fg) 7%,transparent);font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere;white-space:pre-wrap}
+.lab-note{color:var(--muted);font-size:14px}
+.lab-btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 16px;border:1px solid var(--green);border-radius:10px;background:transparent;color:var(--fg);font:600 14px var(--font);cursor:pointer}
+.lab-btn:hover{background:color-mix(in srgb,var(--green) 12%,transparent)}
+.lab-card>.lab-btn,.lab-card>form>.lab-btn{justify-self:start}
+.lab-btn.primary{background:var(--green);color:var(--on-green)}
+.lab-btn.danger{border-color:#c0392b;color:#c0392b}
+:root[data-theme=dark] .lab-btn.danger{border-color:#ff8a7a;color:#ff8a7a}
+.lab-chips{display:flex;flex-wrap:wrap;gap:8px}
+.lab-chip{padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--fg);font:500 13px var(--font);cursor:pointer}
+.lab-chip:hover,.lab-chip[aria-pressed=true]{border-color:var(--green);background:color-mix(in srgb,var(--green) 14%,transparent)}
+.lab-tag{display:inline-block;padding:2px 8px;border-radius:6px;font:700 12px var(--font);letter-spacing:.03em}
+.lab-tag.ok{background:#1f7a3d;color:#fff}.lab-tag.warn{background:#b7791f;color:#fff}.lab-tag.bad{background:#c0392b;color:#fff}.lab-tag.info{background:#41627a;color:#fff}
+.lab-ok{color:#1f7a3d}.lab-bad{color:#c0392b}.lab-warn{color:#9a6212}
+:root[data-theme=dark] .lab-ok{color:#5be08a}:root[data-theme=dark] .lab-bad{color:#ff8a7a}:root[data-theme=dark] .lab-warn{color:#f0c060}
+.lab-diff{background:color-mix(in srgb,#e67e22 35%,transparent);border-radius:2px}
+.lab-table{width:100%;border-collapse:collapse;font-size:14px}
+.lab-table th,.lab-table td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:left;overflow-wrap:anywhere}
+.lab-scroll{overflow-x:auto}
+.lab-meter{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.lab-meter i{height:8px;border-radius:4px;background:color-mix(in srgb,var(--fg) 14%,transparent)}
+.lab-meter i.on{background:currentColor}
+.lab-code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:13px}
+.lab-frame{border:1px dashed var(--line);border-radius:12px;overflow:hidden;background:#fff}
+.lab-frame .demo-frame{display:block;width:100%;border:0;background:#fff}
+.lab-jwt span:nth-child(1){color:#d6336c}.lab-jwt span:nth-child(2){color:#9c36b5}.lab-jwt span:nth-child(3){color:#1c7ed6}
+:root[data-theme=dark] .lab-jwt span:nth-child(1){color:#ff7aa8}:root[data-theme=dark] .lab-jwt span:nth-child(2){color:#d79cf0}:root[data-theme=dark] .lab-jwt span:nth-child(3){color:#74b9ff}
+.lab-bar{height:6px;border-radius:3px;background:color-mix(in srgb,var(--fg) 14%,transparent);overflow:hidden}
+.lab-bar>i{display:block;height:100%;background:var(--green);transition:width .9s linear}
+@media (prefers-reduced-motion:reduce){.lab-bar>i{transition:none}}
