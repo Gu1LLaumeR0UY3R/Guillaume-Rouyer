@@ -1,6 +1,7 @@
 // Formulaire de contact : défi anti-robot (preuve de travail signée), vérification de l'e-mail, limites.
 // Aucun service tiers, aucun cookie, aucune adresse IP enregistrée avec le message.
 import { HttpError } from './http.js'
+import { MOTIFS, SLOT_RE } from './availability.js'
 
 const MAX_NUMBER = 60_000 // difficulté : ~30 000 calculs en moyenne, environ une seconde sur un téléphone
 const MIN_AGE = 2_000 // un défi ne peut pas être rendu avant 2 s
@@ -97,5 +98,10 @@ export function parseMessage(b) {
   }
   const name = f(b.name, 2, 80, 'Nom'), email = f(b.email, 3, 254, 'E-mail').toLowerCase(), subject = f(b.subject, 0, 120, 'Sujet').replace(/\n/g, ' '), body = f(b.message, 10, 4000, 'Message')
   if ((body.match(/https?:\/\//gi) ?? []).length > 3) throw new HttpError(400, 'Trop de liens dans le message')
-  return { name: name.replace(/\n/g, ' '), email, subject, body }
+  // Motif (liste fermée) et créneau demandé (format strict ; sa disponibilité réelle est vérifiée dans l'API)
+  const motif = b.motif === undefined || b.motif === '' ? '' : String(b.motif)
+  if (motif && !MOTIFS.includes(motif)) throw new HttpError(400, 'Motif invalide')
+  const slot = b.slot === undefined || b.slot === '' ? '' : String(b.slot)
+  if (slot && !SLOT_RE.test(slot)) throw new HttpError(400, 'Créneau invalide')
+  return { name: name.replace(/\n/g, ' '), email, subject, body, motif, slot }
 }

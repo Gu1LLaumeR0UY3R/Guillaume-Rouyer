@@ -4,6 +4,8 @@ import { checkEmail, limited, parseMessage, verifyPow } from '../../_lib/contact
 import { newId } from '../../_lib/media.js'
 import { raiseAlert } from '../../_lib/alerts.js'
 import { log } from '../../_lib/logger.js'
+import { getSettings } from '../../_lib/settings.js'
+import { availabilityOf, validSlot } from '../../_lib/availability.js'
 
 export const onRequest = (ctx) => route(ctx, { POST })
 
@@ -24,6 +26,16 @@ async function POST(ctx) {
   try { await verifyPow(env, b.pow) } catch (e) { await refuse(e.status, e.message, 'pow') }
   await checkEmail(m.email)
 
+  if (m.slot) {
+    // Le créneau doit exister AUJOURD'HUI dans les disponibilités (jamais on ne fait confiance au calendrier du navigateur)
+    if (!validSlot(availabilityOf(await getSettings(env)), m.slot)) await refuse(400, "Ce créneau n'est pas (ou plus) disponible : choisis-en un autre.", 'slot')
+    // Un créneau déjà demandé (message non fermé) n'est plus proposé
+    if (await env.DB.prepare("SELECT 1 FROM messages WHERE slot = ? AND status != 'closed' LIMIT 1").bind(m.slot).first()) throw new HttpError(409, "Ce créneau vient d'être demandé par quelqu'un d'autre : choisis-en un autre.")
+    // Anti-abus : une même adresse ne peut pas « réserver » tout l'agenda
+    const mine = await env.DB.prepare("SELECT COUNT(*) AS n FROM messages WHERE email = ? AND slot != '' AND status != 'closed'").bind(m.email).first()
+    if (mine.n >= 2) await refuse(429, 'Tu as déjà deux demandes de créneau en attente : je te réponds très vite.', 'slot_cap')
+  }
+
   const now = Date.now()
   const today = await env.DB.prepare('SELECT COUNT(*) AS n FROM messages WHERE created_at > ?').bind(now - 86400000).first()
   if (today.n >= DAILY_CAP) {
@@ -33,8 +45,8 @@ async function POST(ctx) {
   const dup = await env.DB.prepare('SELECT 1 FROM messages WHERE email = ? AND body = ? AND created_at > ? LIMIT 1').bind(m.email, m.body, now - 86400000).first()
   if (!dup) {
     if (limited(ip, 'send', 3, 10 * 60_000)) await refuse(429, 'Tu as déjà envoyé plusieurs messages : réessaie dans quelques minutes.', 'rate_send')
-    await env.DB.prepare('INSERT INTO messages (id, name, email, subject, body, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?)')
-      .bind(newId(), m.name, m.email, m.subject, m.body, now, now).run()
+    await env.DB.prepare('INSERT INTO messages (id, name, email, subject, body, motif, slot, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)')
+      .bind(newId(), m.name, m.email, m.subject, m.body, m.motif, m.slot, now, now).run()
   }
   return json({ ok: true })
 }

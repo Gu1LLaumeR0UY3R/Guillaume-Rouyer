@@ -3,6 +3,7 @@
 import { HttpError } from './http.js'
 import { httpsUrl } from './projects.js'
 import { oneOf, str } from './validate.js'
+import { DURATIONS, HHMM } from './availability.js'
 
 export const DEFAULTS = {
   contactEmail: 'gui.rouyer@gmail.com',
@@ -20,6 +21,11 @@ export const DEFAULTS = {
   announceLinkLabel: '',
   announceStart: null, // date de début en ms (null = tout de suite)
   announceEnd: null, // date de fin en ms (null = sans fin)
+  // Disponibilités pour échanger (calendrier de la page Contact) : plages hebdomadaires, heure de Paris
+  availOn: false,
+  availDays: [], // [{ dow: 0-6 (0 = dimanche), start: 'HH:MM', end: 'HH:MM' }]
+  availDuration: 30, // durée d'un créneau, en minutes
+  availNote: '',
 }
 export const ANNOUNCE_TYPES = ['info', 'nouveau', 'important']
 export const ANNOUNCE_KEYS = Object.keys(DEFAULTS).filter((k) => k.startsWith('announce'))
@@ -78,6 +84,22 @@ export function parseSettings(b) {
     if (b[k] === undefined) continue
     if (b[k] !== null && (!Number.isInteger(b[k]) || b[k] < 0 || b[k] > 4102444800000)) throw new HttpError(400, 'Date invalide')
     out[k] = b[k]
+  }
+  if (b.availOn !== undefined) {
+    if (typeof b.availOn !== 'boolean') throw new HttpError(400, 'Valeur des disponibilités invalide')
+    out.availOn = b.availOn
+  }
+  if (b.availDuration !== undefined) {
+    if (!DURATIONS.includes(b.availDuration)) throw new HttpError(400, `Durée de créneau : ${DURATIONS.join(', ')} minutes`)
+    out.availDuration = b.availDuration
+  }
+  if (b.availNote !== undefined) out.availNote = str(b.availNote, { max: 200, name: 'note de disponibilité' }).trim()
+  if (b.availDays !== undefined) {
+    if (!Array.isArray(b.availDays) || b.availDays.length > 14) throw new HttpError(400, 'Disponibilités invalides (14 plages au maximum)')
+    out.availDays = b.availDays.map((w) => {
+      if (!w || !Number.isInteger(w.dow) || w.dow < 0 || w.dow > 6 || !HHMM.test(w.start ?? '') || !HHMM.test(w.end ?? '') || w.start >= w.end) throw new HttpError(400, 'Plage de disponibilité invalide : le début doit précéder la fin')
+      return { dow: w.dow, start: w.start, end: w.end }
+    })
   }
   if (out.announceStart && out.announceEnd && out.announceEnd <= out.announceStart) throw new HttpError(400, 'La fin doit être après le début')
   return out

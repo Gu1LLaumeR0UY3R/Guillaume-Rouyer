@@ -15,7 +15,7 @@ async function GET(ctx) {
   if (STATUSES.includes(status)) { where.push('status = ?'); args.push(status) }
   if (q) { where.push("(name LIKE ? ESCAPE '\\' OR email LIKE ? ESCAPE '\\' OR subject LIKE ? ESCAPE '\\' OR body LIKE ? ESCAPE '\\')"); const like = `%${q.replace(/[\\%_]/g, '\\$&')}%`; args.push(like, like, like, like) }
   const [rows, counts] = await ctx.env.DB.batch([
-    ctx.env.DB.prepare(`SELECT id, name, email, subject, substr(body, 1, 160) AS preview, status, note != '' AS has_note, created_at FROM messages ${where.length ? 'WHERE ' + where.join(' AND ') : ''} ORDER BY created_at DESC LIMIT 200`).bind(...args),
+    ctx.env.DB.prepare(`SELECT id, name, email, subject, motif, slot, substr(body, 1, 160) AS preview, status, note != '' AS has_note, created_at FROM messages ${where.length ? 'WHERE ' + where.join(' AND ') : ''} ORDER BY created_at DESC LIMIT 200`).bind(...args),
     ctx.env.DB.prepare('SELECT status, COUNT(*) AS n FROM messages GROUP BY status'),
   ])
   const c = { new: 0, open: 0, closed: 0 }

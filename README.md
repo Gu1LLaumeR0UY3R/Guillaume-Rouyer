@@ -14,6 +14,7 @@ Portfolio de développeur web avec un espace d'administration.
 - Accessibilité : lien d'évitement, focus visible, `prefers-reduced-motion`, panneau de réglages (taille, contraste, police, animations)
 - Palette de commandes (`Ctrl K` ou `/`), mode terminal (touche `` ` ``), succès stockés dans le navigateur
 - **Laboratoire cybersécurité** (`/cybersecurite`) : 7 démos interactives (hachage et sel, robustesse des mots de passe, JWT et attaque `alg: none`, injection SQL, XSS dans un cadre isolé, analyseur d'en-têtes HTTP, double authentification TOTP). Tout tourne dans le navigateur, sauf l'analyse d'un autre domaine (`/api/cyber/headers`, protégée contre la SSRF)
+- **Contact intelligent** : validation en direct, motif (alternance, collaboration, projet, autre) qui adapte le formulaire, copie de l'e-mail, calendrier de disponibilité (FullCalendar chargé à la demande, vue liste accessible), confirmation personnalisée. Disponibilités réglées dans l'admin ; un créneau demandé est bloqué jusqu'à la fermeture du message (migration `0017_contact_smart.sql`)
 - Pages Maintenant, Mes outils et Changelog, modifiables depuis l'admin ; CV téléchargeable derrière un petit défi anti-robot
 
 **Administration** (`/admin`, connexion + double authentification)

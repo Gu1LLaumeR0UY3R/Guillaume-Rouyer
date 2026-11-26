@@ -1,4 +1,5 @@
 <script setup>
+import { labelSlot } from '../../lib/slotFormat.js'
 // Boîte de réception : messages du formulaire de contact. Ils ne sont lus qu'ici (aucune copie par e-mail).
 import { computed, onMounted, ref, watch } from 'vue'
 import { api } from '../../admin/api.js'
@@ -52,6 +53,11 @@ async function remove() {
   } catch (e) { toast(e.message, 'danger') } finally { busy.value = false }
 }
 const mailto = computed(() => current.value && `mailto:${current.value.email}?subject=${encodeURIComponent('Re: ' + (current.value.subject || 'Ton message'))}`)
+
+// Motif et créneau demandés depuis la page Contact
+const MOTIFS = { alternance: 'Alternance', collaboration: 'Collaboration', projet: 'Projet', autre: 'Autre' }
+const slotText = (s) => labelSlot(s, 'fr').replace(' · ', ' ')
+const slotLong = (s) => labelSlot(s, 'fr')
 </script>
 
 <template>
@@ -80,7 +86,7 @@ const mailto = computed(() => current.value && `mailto:${current.value.email}?su
               <span class="top"><strong>{{ m.name }}</strong><time>{{ date(m.created_at) }}</time></span>
               <span class="subj">{{ m.subject || '(sans sujet)' }}</span>
               <span class="prev">{{ m.preview }}</span>
-              <span class="tags"><em :class="m.status">{{ LABEL[m.status] }}</em><em v-if="m.has_note" class="note">Note</em></span>
+              <span class="tags"><em :class="m.status">{{ LABEL[m.status] }}</em><em v-if="m.has_note" class="note">Note</em><em v-if="m.motif" class="note">{{ MOTIFS[m.motif] }}</em><em v-if="m.slot" class="note">📅 {{ slotText(m.slot) }}</em></span>
             </button>
           </li>
         </ul>
@@ -96,6 +102,11 @@ const mailto = computed(() => current.value && `mailto:${current.value.email}?su
             </div>
             <em :class="['pill', current.status]">{{ LABEL[current.status] }}</em>
           </header>
+          <p v-if="current.motif || current.slot" class="who">
+            <template v-if="current.motif">Motif : <strong>{{ MOTIFS[current.motif] }}</strong></template>
+            <template v-if="current.motif && current.slot"> · </template>
+            <template v-if="current.slot">Créneau demandé : <strong>{{ slotLong(current.slot) }}</strong> (heure de Paris){{ current.status === 'closed' ? ' · libéré' : ' · bloqué dans le calendrier tant que ce message n\'est pas fermé' }}</template>
+          </p>
           <p class="body">{{ current.body }}</p>
           <div class="actions left">
             <a class="btn btn-primary small" :href="mailto">Répondre par e-mail</a>

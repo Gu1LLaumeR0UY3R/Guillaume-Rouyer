@@ -10,6 +10,7 @@ export const DEFAULTS = {
   maintenanceOn: false,
   maintenanceMessage: '',
   announcement: null, // { text, type, link, linkLabel } quand une annonce est active
+  availOn: false, availDays: [], availDuration: 30, availNote: '', // disponibilités pour échanger (calendrier de contact)
 }
 
 export const settings = ref({ ...DEFAULTS })
