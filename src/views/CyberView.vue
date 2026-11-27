@@ -71,16 +71,19 @@ usePageMeta(() => ({
   <div class="cyber">
     <header class="hero">
       <div class="container">
-        <p class="eyebrow">Cybersécurité · Laboratoire</p>
-        <h1>Comprendre les attaques pour mieux les bloquer</h1>
-        <p class="lead">Sept démos interactives que j'ai construites pour expliquer des notions de sécurité. Elles tournent dans ton navigateur : rien n'est envoyé, rien n'est stocké. Les contenus sont rédigés en français.</p>
+        <p class="eyebrow"><span aria-hidden="true">$</span> cybersécurité --laboratoire</p>
+        <h1>Comprendre les attaques pour <em>mieux les bloquer</em></h1>
+        <p class="lead">Sept démos interactives que j'ai construites pour expliquer des notions de sécurité. Elles tournent dans ton navigateur : rien n'est envoyé, rien n'est stocké.</p>
+        <ul class="facts" aria-label="En bref">
+          <li><strong>7</strong> démos</li><li><strong>100 %</strong> local</li><li><strong>0</strong> donnée envoyée</li>
+        </ul>
       </div>
     </header>
 
-    <main class="container body" id="labo">
+    <div class="container body" id="labo">
       <div ref="tabs" class="tabs" role="tablist" aria-label="Outils du laboratoire" @keydown="onKey">
         <button v-for="t in TOOLS" :id="`tab-${t.id}`" :key="t.id" class="tab" role="tab" type="button"
-          :aria-selected="t.id === active.id" :aria-controls="`panel-${t.id}`" :tabindex="t.id === active.id ? 0 : -1" @click="select(t.id)">{{ t.label }}</button>
+          :aria-selected="t.id === active.id" :aria-controls="`panel-${t.id}`" :tabindex="t.id === active.id ? 0 : -1" @click="select(t.id)"><span class="num" aria-hidden="true">{{ String(TOOLS.indexOf(t) + 1).padStart(2, '0') }}</span>{{ t.label }}</button>
       </div>
 
       <section :id="`panel-${active.id}`" class="panel" role="tabpanel" :aria-labelledby="`tab-${active.id}`">
@@ -90,38 +93,57 @@ usePageMeta(() => ({
           <component :is="active.comp" :key="active.id" />
           <template #fallback><p class="lab-note" role="status">Chargement de la démo…</p></template>
         </Suspense>
-        <aside class="takeaway"><strong>À retenir.</strong> {{ active.takeaway }}</aside>
+        <aside class="takeaway"><span class="tk-label">À retenir</span><p>{{ active.takeaway }}</p></aside>
       </section>
 
       <section class="applied" aria-labelledby="applied-title">
         <h2 id="applied-title">Ce que j'applique sur ce site</h2>
         <p class="intro">Un portfolio est aussi une surface d'attaque. Voici les protections réellement en place ici.</p>
         <dl class="measures">
-          <div v-for="[k, v] in MEASURES" :key="k"><dt>{{ k }}</dt><dd>{{ v }}</dd></div>
+          <div v-for="[k, v] in MEASURES" :key="k"><dt>{{ k }}<span class="on">actif</span></dt><dd>{{ v }}</dd></div>
         </dl>
         <p class="lab-note">Tu peux le vérifier toi-même : l'onglet « En-têtes HTTP » analyse ce site en un clic.</p>
       </section>
-    </main>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.hero{padding:64px 0 36px;border-bottom:1px solid var(--line)}
-.eyebrow{margin:0 0 10px;color:var(--green);font:600 14px var(--font);letter-spacing:.08em;text-transform:uppercase}
-h1{font-size:clamp(30px,5vw,48px);max-width:20ch;margin-bottom:16px}
-.lead{max-width:62ch;margin:0;color:var(--muted);font-size:18px}
-.body{padding-top:28px;padding-bottom:72px}
-.tabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-.tab{min-height:44px;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--fg);font:600 15px var(--font);cursor:pointer}
-.tab:hover{border-color:var(--green)}
+/* Bandeau d'en-tête toujours sombre : l'identité « terminal » du labo, en thème clair comme sombre */
+.hero{position:relative;overflow:hidden;padding:72px 0 52px;background:#07140d;color:#e8f5ec;
+  background-image:radial-gradient(60% 120% at 85% 0,rgba(57,255,136,.16),transparent 60%),linear-gradient(rgba(57,255,136,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(57,255,136,.06) 1px,transparent 1px);
+  background-size:auto,44px 44px,44px 44px}
+.hero .container{position:relative}
+.eyebrow{margin:0 0 16px;color:#39ff88;font:600 14px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.04em}
+.eyebrow span{margin-right:8px;opacity:.7}
+h1{max-width:20ch;margin:0 0 16px;color:#fff;font-size:clamp(32px,5.4vw,56px);line-height:1.08}
+h1 em{font-style:normal;color:#39ff88}
+.lead{max-width:60ch;margin:0 0 26px;color:#b9d3c1;font-size:18px}
+.facts{display:flex;flex-wrap:wrap;gap:10px;margin:0;padding:0;list-style:none}
+.facts li{padding:8px 14px;border:1px solid rgba(57,255,136,.35);border-radius:999px;background:rgba(57,255,136,.08);color:#d6ecdc;font:500 14px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.facts strong{color:#39ff88}
+.body{padding-top:0;padding-bottom:72px}
+/* Onglets : une seule ligne qui défile sur mobile, collée sous l'en-tête du site */
+.tabs{position:sticky;top:var(--header-h,66px);z-index:5;display:flex;gap:6px;margin:0 calc(-1 * clamp(20px,5vw,48px)) 32px;padding:12px clamp(20px,5vw,48px);overflow-x:auto;scrollbar-width:thin;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.tab{flex:none;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border:1px solid transparent;border-radius:10px;background:transparent;color:var(--muted);font:600 15px var(--font);cursor:pointer;white-space:nowrap;transition:background .15s,color .15s}
+.tab .num{color:var(--green);font:600 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;opacity:.8}
+.tab:hover{color:var(--fg);background:color-mix(in srgb,var(--green) 10%,transparent)}
 .tab[aria-selected=true]{border-color:var(--green);background:var(--green);color:var(--on-green)}
-.panel{display:grid;gap:16px;padding:0} /* la règle globale `section` ajoute 72 px : on l'annule */
-.panel h2,.applied h2{margin:0;font-size:clamp(24px,3.4vw,32px)}
-.intro{margin:0;max-width:70ch;color:var(--muted)}
-.takeaway{padding:16px 20px;border-left:4px solid var(--green);border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--green) 9%,transparent)}
-.applied{display:grid;gap:14px;margin-top:64px;padding:40px 0 0;border-top:1px solid var(--line)}
+.tab[aria-selected=true] .num{color:inherit}
+.tab:focus-visible{outline:3px solid var(--neon);outline-offset:2px}
+.panel{display:grid;gap:18px;padding:0} /* la règle globale `section` ajoute 72 px : on l'annule */
+.panel h2,.applied h2{margin:0;font-size:clamp(26px,3.6vw,36px)}
+.intro{margin:0;max-width:70ch;color:var(--muted);font-size:17px}
+.takeaway{display:grid;gap:6px;padding:18px 22px;border:1px solid color-mix(in srgb,var(--green) 40%,var(--line));border-radius:14px;background:color-mix(in srgb,var(--green) 8%,var(--card))}
+.takeaway p{margin:0}
+.tk-label{color:var(--green);font:700 12px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.12em;text-transform:uppercase}
+.tk-label::before{content:'✓ '}
+.applied{display:grid;gap:16px;margin-top:72px;padding:48px 0 0;border-top:1px solid var(--line)}
 .measures{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:14px;margin:0}
-.measures div{padding:16px 18px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
-.measures dt{font:600 16px var(--serif)}
-.measures dd{margin:6px 0 0;color:var(--muted);font-size:15px}
+.measures div{padding:18px 20px;border:1px solid var(--line);border-top:3px solid var(--green);border-radius:var(--radius);background:var(--card)}
+.measures dt{display:flex;justify-content:space-between;gap:10px;align-items:center;font:600 16px var(--serif)}
+.on{padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--green) 16%,transparent);color:var(--green);font:600 11px ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;letter-spacing:.06em;text-transform:uppercase}
+.on::before{content:'';display:inline-block;width:6px;height:6px;margin-right:6px;border-radius:50%;background:currentColor}
+.measures dd{margin:8px 0 0;color:var(--muted);font-size:15px}
+@media (max-width:600px){.hero{padding:48px 0 36px}}
 </style>
