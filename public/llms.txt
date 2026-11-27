@@ -1,4 +1,4 @@
-# Guillaume Rouyer (Er1gon359)
+# Guillaume Rouyer
 
 > Portfolio d'un développeur full stack et cybersécurité en alternance (Vue 3, PHP/Laravel, Python/FastAPI, Cloudflare). Projets, veille technologique et laboratoire de cybersécurité interactif.
 

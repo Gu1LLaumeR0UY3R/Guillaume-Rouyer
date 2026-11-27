@@ -36,7 +36,7 @@ function go(to, label) { print(`→ ${label}`); dlg.value.close(); router.push(t
 const CMDS = {
   help: () => print('Commandes :', '  ls                 pages du site', '  open <nom>         ouvrir une page, un projet ou un article', '  projets            liste des projets', '  veille             derniers articles', '  whoami             qui suis-je', '  theme [dark|light] changer de thème', '  lang               changer de langue', '  cv                 télécharger le CV', '  contact            écrire un message', '  succes             voir les succès', '  clear              effacer l\'écran', '  exit               fermer (ou Échap)'),
   ls: () => print(Object.keys(PAGES).map((p) => p + '/').join('  ')),
-  whoami: () => print('Guillaume Rouyer (Er1gon359)', 'Développeur full stack & cybersécurité · Brive-la-Gaillarde'),
+  whoami: () => print('Guillaume Rouyer', 'Développeur full stack & cybersécurité · Brive-la-Gaillarde'),
   projets: () => { loadProjects(); print(...(projects.value.length ? projects.value.map((p) => `  ${p.slug.padEnd(22)} ${p.name}`) : ['Aucun projet pour l\'instant.'])) },
   veille: async () => { const a = await loadArticles(); print(...(a.length ? a.slice(0, 10).map((x) => `  ${x.slug.padEnd(28)} ${x.title}`) : ['Aucun article.'])) },
   theme: (a) => { const want = a === 'dark' || a === 'light' ? a : theme.value === 'dark' ? 'light' : 'dark'; if (want !== theme.value) toggle(); print(`Thème : ${want === 'dark' ? 'sombre' : 'clair'}`); if (want === 'dark') unlock('nocturne') },
@@ -85,7 +85,7 @@ function onKey(e) {
 }
 function show() {
   if (dlg.value?.open) return
-  if (!out.value.length) print('Terminal Er1gon359 — tape « help » pour la liste des commandes.')
+  if (!out.value.length) print('Terminal Guillaume Rouyer — tape « help » pour la liste des commandes.')
   dlg.value.showModal()
   nextTick(() => inp.value?.focus())
   unlock('hacker')

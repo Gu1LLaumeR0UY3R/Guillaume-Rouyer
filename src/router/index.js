@@ -67,7 +67,7 @@ const router = createRouter({
   },
 })
 
-const BASE_TITLE = 'Guillaume Rouyer (Er1gon359) · Développeur full stack & cybersécurité'
+const BASE_TITLE = 'Guillaume Rouyer · Développeur full stack & cybersécurité'
 // Les pages protégées demandent au serveur si la session est valide (le vrai contrôle reste côté API).
 router.beforeEach(async (to) => {
   if (to.meta.admin && !(await checkSession())) return { name: 'admin-login' }
@@ -78,7 +78,7 @@ router.afterEach((to) => {
     if (!m) { m = document.createElement('meta'); m.name = 'robots'; document.head.append(m) }
     m.content = 'noindex, nofollow'
   } else m?.remove()
-  document.title = to.name === 'home' ? BASE_TITLE : `${to.meta.title} · Er1gon359`
+  document.title = to.name === 'home' ? BASE_TITLE : `${to.meta.title} · Guillaume Rouyer`
   if (!to.meta.noindex) {
     // canonique et description par défaut de chaque page ; les pages dynamiques (article, projet) les précisent ensuite
     const set = (sel, make, attr, v) => { let e = document.head.querySelector(sel); if (!e) { e = make(); document.head.append(e) } e.setAttribute(attr, v) }

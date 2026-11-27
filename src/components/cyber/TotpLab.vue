@@ -12,7 +12,7 @@ const guess = ref('')
 const verdict = ref(null)
 let timer
 
-const uri = computed(() => `otpauth://totp/Labo:visiteur?secret=${secret.value}&issuer=Er1gon359-labo`)
+const uri = computed(() => `otpauth://totp/Labo:visiteur?secret=${secret.value}&issuer=Labo`)
 // QR généré localement : le secret ne quitte jamais la page
 const qr = computed(() => { const q = qrcode(0, 'M'); q.addData(uri.value); q.make(); return q.createSvgTag({ cellSize: 4, margin: 2, scalable: true }) })
 

@@ -1,4 +1,4 @@
-# Portfolio · Guillaume Rouyer (Er1gon359)
+# Portfolio · Guillaume Rouyer
 
 Portfolio de développeur web avec un espace d'administration.
 **Vue 3 + Vite** (JavaScript, Composition API) pour le site, **Cloudflare Pages Functions** pour l'API, **Cloudflare D1** (SQLite) pour les données.

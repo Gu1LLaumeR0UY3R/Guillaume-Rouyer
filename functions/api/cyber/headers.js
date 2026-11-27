@@ -44,7 +44,7 @@ async function GET(ctx) {
     try {
       res = await fetch(url.href, {
         method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(5000),
-        headers: { 'User-Agent': 'Er1gon359-HeaderCheck/1.0 (+https://guillaume-rouyer.pages.dev/cybersecurite)', Accept: 'text/html,*/*;q=0.5' },
+        headers: { 'User-Agent': 'GRouyer-HeaderCheck/1.0 (+https://guillaume-rouyer.pages.dev/cybersecurite)', Accept: 'text/html,*/*;q=0.5' },
       })
     } catch { throw new HttpError(502, 'Le site n\'a pas répondu (ou son certificat HTTPS est invalide).') }
     res.body?.cancel() // on ne lit jamais le corps : seuls les en-têtes nous intéressent

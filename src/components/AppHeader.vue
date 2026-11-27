@@ -4,7 +4,7 @@ import { NAV } from '../data/nav.js'
 
 <template>
   <header class="site-header">
-    <RouterLink class="brand" to="/">Er1gon<span>359</span></RouterLink>
+    <RouterLink class="brand" to="/">Guillaume <span>Rouyer</span></RouterLink>
     <nav aria-label="Navigation principale">
       <ul>
         <li v-for="item in NAV" :key="item.to"><RouterLink :to="item.to">{{ item.label }}</RouterLink></li>

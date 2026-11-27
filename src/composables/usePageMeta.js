@@ -18,7 +18,7 @@ export function usePageMeta(source) {
 
   watchEffect(() => {
     const m = toValue(source) ?? {}
-    if (m.title) document.title = `${m.title} · Er1gon359`
+    if (m.title) document.title = `${m.title} · Guillaume Rouyer`
     meta('name', 'description', m.description)
     meta('property', 'og:title', m.title)
     meta('property', 'og:description', m.description)

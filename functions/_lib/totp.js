@@ -37,7 +37,7 @@ async function hotp(keyBytes, counter) {
 }
 
 export const generateSecret = () => base32Encode(crypto.getRandomValues(new Uint8Array(20)))
-export const otpauthUri = (secret, label = 'admin', issuer = 'Portfolio Er1gon359') =>
+export const otpauthUri = (secret, label = 'admin', issuer = 'Portfolio Guillaume Rouyer') =>
   `otpauth://totp/${encodeURIComponent(issuer)}:${encodeURIComponent(label)}?secret=${secret}&issuer=${encodeURIComponent(issuer)}&digits=6&period=30`
 
 // Renvoie le numéro de tranche de 30 s du code valide, ou null.

@@ -27,7 +27,7 @@ watch(() => route.params.slug, async (slug) => {
   project.value = p
   loading.value = false
   if (!p) { router.replace('/'); return }
-  document.title = `${p.name} · Er1gon359`
+  document.title = `${p.name} · Guillaume Rouyer`
 }, { immediate: true })
 </script>
 

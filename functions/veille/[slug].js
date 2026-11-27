@@ -12,7 +12,7 @@ export async function onRequestGet(ctx) {
       row = await ctx.env.DB.prepare(`SELECT slug, title, excerpt, cover_url, published_at, updated_at FROM veille_articles WHERE slug = ? AND status = 'published'`).bind(slug).first()
     }
     const html = await res.text()
-    if (!row) return htmlResponse(res, injectMeta(html, { title: 'Article introuvable · Er1gon359', noindex: true }), { status: 404, cache: 'no-store' })
+    if (!row) return htmlResponse(res, injectMeta(html, { title: 'Article introuvable · Guillaume Rouyer', noindex: true }), { status: 404, cache: 'no-store' })
     return htmlResponse(res, injectMeta(html, articleMeta(row)), { cache: 'public, max-age=0, s-maxage=60' })
   } catch (e) {
     console.error('veille_article_meta_error', e.message)

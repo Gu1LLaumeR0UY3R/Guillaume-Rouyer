@@ -41,7 +41,7 @@ export function articleMeta(row) {
   const path = `/veille/${row.slug}`
   const image = /^https:\/\//i.test(row.cover_url ?? '') ? row.cover_url : undefined
   return {
-    title: `${row.title} · Er1gon359`, description: row.excerpt, type: 'article', path, image, publishedAt: row.published_at, updatedAt: row.updated_at,
+    title: `${row.title} · Guillaume Rouyer`, description: row.excerpt, type: 'article', path, image, publishedAt: row.published_at, updatedAt: row.updated_at,
     jsonLd: {
       '@context': 'https://schema.org', '@type': 'BlogPosting', headline: cut(row.title, 110), description: cut(row.excerpt, 200), inLanguage: 'fr',
       datePublished: iso(row.published_at), dateModified: iso(row.updated_at), mainEntityOfPage: SITE + path, ...(image && { image: [image] }),
@@ -51,8 +51,8 @@ export function articleMeta(row) {
 }
 
 export const listMeta = {
-  title: 'Veille technologique · Er1gon359', path: '/veille', type: 'website',
-  description: 'Veille technologique de Guillaume Rouyer (Er1gon359) : articles sur le développement web, le self-hosting, l\'IA et tout ce qui le passionne.',
+  title: 'Veille technologique · Guillaume Rouyer', path: '/veille', type: 'website',
+  description: 'Veille technologique de Guillaume Rouyer : articles sur le développement web, le self-hosting, l\'IA et tout ce qui le passionne.',
 }
 
 // Réponse HTML modifiée : on garde les en-têtes de sécurité de la page d'origine (CSP...), on retire ceux qui ne valent plus.
