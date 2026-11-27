@@ -1,5 +1,6 @@
 <script setup>
 import { ref, watch } from 'vue'
+import { usePageMeta } from '../composables/usePageMeta.js'
 import { useRoute, useRouter } from 'vue-router'
 import { adminPreviewText, bannerBackground, loadAdminProject, loadDetail, safeUrl, statusLabel } from '../content/projects.js'
 import AdminPreviewFlag from '../components/AdminPreviewFlag.vue'
@@ -10,6 +11,8 @@ const router = useRouter()
 const project = ref(null)
 const preview = ref('')
 const loading = ref(true)
+
+usePageMeta(() => project.value ? { title: project.value.name, description: String(project.value.desc ?? '').slice(0, 160), canonical: `/projets/${project.value.slug}` } : {})
 
 // Public : un projet masqué ou introuvable renvoie vers l'accueil, un projet en maintenance affiche la page de maintenance.
 // Administrateur connecté : il voit toujours le projet, avec un rappel de son statut.

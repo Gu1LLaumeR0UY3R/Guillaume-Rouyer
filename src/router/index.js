@@ -4,22 +4,27 @@ import { checkSession } from '../admin/api.js'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView, meta: { title: 'Accueil' } },
-  { path: '/projets', name: 'projects', component: () => import('../views/ProjectsView.vue'), meta: { title: 'Projets' } },
-  { path: '/veille', name: 'veille', component: () => import('../views/VeilleView.vue'), meta: { title: 'Veille technologique' } },
+  { path: '/projets', name: 'projects', component: () => import('../views/ProjectsView.vue'), meta: { desc: "Tous mes projets : web, API, 3D, mobile, IA et self-hosting, avec les technologies utilisées pour chacun.", title: 'Projets' } },
+  { path: '/veille', name: 'veille', component: () => import('../views/VeilleView.vue'), meta: { desc: "Ma veille technologique : articles et sujets suivis sur le développement, la cybersécurité et l’IA.", title: 'Veille technologique' } },
   { path: '/veille/:slug', name: 'veille-article', component: () => import('../views/VeilleArticleView.vue'), meta: { title: 'Veille technologique' } },
+<<<<<<< HEAD
   { path: '/cybersecurite', name: 'cyber', component: () => import('../views/CyberView.vue'), meta: { title: 'Cybersécurité' } },
   { path: '/a-propos', name: 'about', component: () => import('../views/AboutView.vue'), meta: { title: 'À propos' } },
   { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue'), meta: { title: 'Contact' } },
+=======
+  { path: '/a-propos', name: 'about', component: () => import('../views/AboutView.vue'), meta: { desc: "Mon parcours, ma formation en alternance et ma façon de travailler : développeur full stack et cybersécurité.", title: 'À propos' } },
+  { path: '/contact', name: 'contact', component: () => import('../views/ContactView.vue'), meta: { desc: "Contacte-moi pour un projet, une mission ou une question : formulaire, e-mail, GitHub et LinkedIn.", title: 'Contact' } },
+>>>>>>> origin/admin-v2
   { path: '/projets/spidernet', redirect: '/projets/spidernet/tableau' },
   { path: '/projets/spidernet/tableau', name: 'spidernet-board', component: () => import('../views/ProjectGate.vue'), meta: { title: "SpiderNet, tableau d'enquête", fullscreen: true, project: 'spidernet', view: () => import('../views/SpiderNetBoardView.vue') } },
-  { path: '/projets/bataille-navale', name: 'bataille-navale', component: () => import('../views/BatailleNavaleView.vue'), meta: { title: 'Bataille Navale' } },
-  { path: '/projets/goodnight', name: 'goodnight', component: () => import('../views/ProjectGate.vue'), meta: { title: 'Goodnight', project: 'goodnight', view: () => import('../views/GoodnightView.vue') } },
+  { path: '/projets/bataille-navale', name: 'bataille-navale', component: () => import('../views/BatailleNavaleView.vue'), meta: { desc: "Bataille Navale : jeu jouable en ligne avec une IA à plusieurs niveaux, étude de cas technique du projet.", title: 'Bataille Navale' } },
+  { path: '/projets/goodnight', name: 'goodnight', component: () => import('../views/ProjectGate.vue'), meta: { desc: "Goodnight : plateforme de location immobilière en PHP MVC, trois rôles, tableaux de bord KPI et sécurité PDO/XSS.", title: 'Goodnight', project: 'goodnight', view: () => import('../views/GoodnightView.vue') } },
   { path: '/projets/:slug', name: 'project', component: () => import('../views/ProjectView.vue'), meta: { title: 'Projet' } },
-  { path: '/mentions-legales', name: 'legal', component: () => import('../views/LegalView.vue'), meta: { title: 'Mentions légales' } },
+  { path: '/mentions-legales', name: 'legal', component: () => import('../views/LegalView.vue'), meta: { desc: "Mentions légales du site er1gon359.com : éditeur, hébergeur et propriété intellectuelle.", title: 'Mentions légales' } },
   { path: '/maintenant', name: 'now', component: () => import('../views/InfoPageView.vue'), meta: { title: 'Maintenant', block: 'now', desc: 'Ce sur quoi je travaille et ce que j\'apprends en ce moment.' } },
   { path: '/outils', name: 'tools', component: () => import('../views/InfoPageView.vue'), meta: { title: 'Mes outils', block: 'tools', desc: 'Les langages, frameworks et outils que j\'utilise au quotidien.' } },
   { path: '/changelog', name: 'changelog', component: () => import('../views/InfoPageView.vue'), meta: { title: 'Changelog', block: 'changelog', desc: 'Le journal des évolutions de mon portfolio et de mes projets.' } },
-  { path: '/confidentialite', name: 'privacy', component: () => import('../views/PrivacyView.vue'), meta: { title: 'Confidentialité' } },
+  { path: '/confidentialite', name: 'privacy', component: () => import('../views/PrivacyView.vue'), meta: { desc: "Politique de confidentialité : données collectées, cookies, statistiques anonymes et tes droits.", title: 'Confidentialité' } },
   // Administration : jamais indexée, tableau de bord protégé par la session
   { path: '/admin', name: 'admin-login', component: () => import('../views/admin/AdminLoginView.vue'), meta: { title: 'Administration', noindex: true } },
   { path: '/admin/installation', name: 'admin-setup', component: () => import('../views/admin/AdminSetupView.vue'), meta: { title: 'Installation', noindex: true } },
@@ -46,6 +51,7 @@ const routes = [
   { path: '/admin/annonce', name: 'admin-announcement', component: () => import('../views/admin/AdminAnnouncementView.vue'), meta: { title: 'Annonce', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/journaux', name: 'admin-logs', component: () => import('../views/admin/AdminLogsView.vue'), meta: { title: 'Journaux', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/versions', name: 'admin-versions', component: () => import('../views/admin/AdminVersionsView.vue'), meta: { title: 'Versions et publication', noindex: true, admin: true, adminLayout: true } },
+  { path: '/admin/seo', name: 'admin-seo', component: () => import('../views/admin/AdminSeoView.vue'), meta: { title: 'SEO', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/sauvegarde', name: 'admin-backup', component: () => import('../views/admin/AdminBackupView.vue'), meta: { title: 'Sauvegarde', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/corbeille', name: 'admin-trash', component: () => import('../views/admin/AdminTrashView.vue'), meta: { title: 'Corbeille', noindex: true, admin: true, adminLayout: true } },
   { path: '/admin/reglages', name: 'admin-settings', component: () => import('../views/admin/AdminSettingsView.vue'), meta: { title: 'Réglages', noindex: true, admin: true, adminLayout: true } },
@@ -78,6 +84,19 @@ router.afterEach((to) => {
     m.content = 'noindex, nofollow'
   } else m?.remove()
   document.title = to.name === 'home' ? BASE_TITLE : `${to.meta.title} · Er1gon359`
+  if (!to.meta.noindex) {
+    // canonique et description par défaut de chaque page ; les pages dynamiques (article, projet) les précisent ensuite
+    const set = (sel, make, attr, v) => { let e = document.head.querySelector(sel); if (!e) { e = make(); document.head.append(e) } e.setAttribute(attr, v) }
+    const mk = (tag, a, b) => () => { const e = document.createElement(tag); e.setAttribute(a, b); return e }
+    const url = 'https://er1gon359.com' + (to.path === '/' ? '' : to.path.replace(/\/$/, ''))
+    set('link[rel="canonical"]', () => { const l = document.createElement('link'); l.rel = 'canonical'; return l }, 'href', url || 'https://er1gon359.com/')
+    set('meta[property="og:url"]', mk('meta', 'property', 'og:url'), 'content', url || 'https://er1gon359.com/')
+    if (to.meta.desc) {
+      set('meta[name="description"]', mk('meta', 'name', 'description'), 'content', to.meta.desc)
+      set('meta[property="og:description"]', mk('meta', 'property', 'og:description'), 'content', to.meta.desc)
+    }
+    set('meta[property="og:title"]', mk('meta', 'property', 'og:title'), 'content', document.title)
+  }
 })
 
 export default router

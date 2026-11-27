@@ -33,6 +33,7 @@ const groups = [
     { to: '/admin/sauvegarde', icon: 'backup', label: 'Sauvegarde', tip: 'Exporter ou importer tout le contenu en un fichier' },
   ] },
   { id: 'suivi', label: 'Suivi du site', icon: 'stats', items: [
+    { to: '/admin/seo', icon: 'stats', label: 'SEO', tip: 'Note sur 100 de chaque page et recommandations' },
     { to: '/admin/statistiques', icon: 'stats', label: 'Statistiques', tip: 'Visites, pays, appareils, temps passé, arbres plantés' },
     { to: '/admin/sante', icon: 'health', label: 'Santé du site', tip: 'Quotas Cloudflare, espace utilisé, erreurs récentes' },
     { to: '/admin/journaux', icon: 'logs', label: 'Journaux', tip: 'Historique détaillé, recherche et export CSV' },
