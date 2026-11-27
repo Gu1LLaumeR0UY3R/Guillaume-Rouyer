@@ -31,7 +31,7 @@ const STEPS = computed(() => G.value.steps)
 .journey{padding:88px 0;background:#ebe5d9}
 .grid{display:grid;grid-template-columns:minmax(240px,1fr) 2.4fr;gap:48px;align-items:start}
 @media (max-width:860px){.grid{grid-template-columns:1fr}}
-.kicker{margin:0 0 16px;color:var(--muted);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.kicker{margin:0 0 16px;color:var(--muted);font-size:12px;letter-spacing:.24em;text-transform:uppercase}
 h2{margin:0;font:500 clamp(28px,3.4vw,38px)/1.15 var(--serif)}
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:32px;margin:0;padding:0;list-style:none}
 .ico{display:grid;place-items:center;width:52px;height:52px;margin-bottom:18px;border-radius:50%;background:var(--sand)}

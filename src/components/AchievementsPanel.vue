@@ -108,10 +108,10 @@ ul{list-style:none;margin:0;padding:12px;display:grid;gap:8px;overflow:auto}
 .card:not(.done):hover{border-color:#c4bcaa}
 .card:focus-visible{outline:3px solid #7a5c14;outline-offset:2px}
 /* ornements d'angle sur les cartes obtenues */
-.card.done::before,.card.done::after{content:"✦";position:absolute;color:#c5a45d;font-size:11px;line-height:1}
+.card.done::before,.card.done::after{content:"✦";position:absolute;color:#c5a45d;font-size:12px;line-height:1}
 .card.done::before{left:5px;top:3px}.card.done::after{right:6px;bottom:3px;opacity:.7}
 .txt{display:grid;flex:1;min-width:0}
-.txt b{font:700 16px var(--font)} .txt small{color:#918879;font-size:14px} .txt em{font-style:normal;font-size:11px;letter-spacing:.2em;margin-top:2px}
+.txt b{font:700 16px var(--font)} .txt small{color:#918879;font-size:14px} .txt em{font-style:normal;font-size:12px;letter-spacing:.2em;margin-top:2px}
 .card:not(.done) .txt small{color:#7d7667}
 .state{display:grid;justify-items:end;gap:2px;color:#918879;font-size:12px;text-align:right}
 .chk{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#78a66a;color:#fff;font-style:normal;font-weight:700}

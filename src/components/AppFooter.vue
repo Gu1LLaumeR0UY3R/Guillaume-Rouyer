@@ -4,6 +4,7 @@ import { links, settings } from '../content/settings.js'
 import { track } from '../stats.js'
 import { reopenBanner } from '../consent.js'
 import { t } from '../i18n/index.js'
+const openSucces = () => window.dispatchEvent(new CustomEvent('open-succes'))
 </script>
 
 <template>
@@ -23,6 +24,7 @@ import { t } from '../i18n/index.js'
           <RouterLink to="/maintenant">Maintenant</RouterLink>
           <RouterLink to="/outils">Mes outils</RouterLink>
           <RouterLink to="/changelog">Changelog</RouterLink>
+          <button type="button" class="lk" @click="openSucces">Mes succès</button>
         </nav>
         <nav aria-label="Informations légales">
           <RouterLink to="/mentions-legales">Mentions légales</RouterLink>

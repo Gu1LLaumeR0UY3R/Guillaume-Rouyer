@@ -63,7 +63,7 @@ const counter = computed(() => `${pad(index.value + 1)} / ${pad(slides.length)}`
 .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(6,38,58,.78),rgba(6,38,58,.35) 55%,rgba(6,38,58,0))}
 .content{position:relative;padding-top:72px;padding-bottom:96px}
 .content>*{max-width:36rem}
-.kicker{margin:0 0 18px;font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:#bfe6ee}
+.kicker{margin:0 0 18px;font-size:12px;letter-spacing:.26em;text-transform:uppercase;color:#bfe6ee}
 h1{margin:0 0 14px;font:italic 500 clamp(54px,9vw,104px)/1 var(--serif);color:transparent;background:linear-gradient(100deg,#FFBD54 0%,#FFBD54 40%,#fff3cf 50%,#FFBD54 60%,#FFBD54 100%) 100% 0/250% 100%;-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 4px 24px rgba(0,0,0,.25));animation:shimmer 2.4s ease-in-out 1.3s 1 forwards}
 @keyframes shimmer{to{background-position:0 0}}
 .tagline{margin:0 0 14px;font:500 clamp(22px,3vw,30px)/1.25 var(--serif)}

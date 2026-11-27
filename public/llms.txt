@@ -1,0 +1,18 @@
+# Guillaume Rouyer (Er1gon359)
+
+> Portfolio d'un développeur full stack et cybersécurité en alternance (Vue 3, PHP/Laravel, Python/FastAPI, Cloudflare). Projets, veille technologique et laboratoire de cybersécurité interactif.
+
+## Pages principales
+
+- [Accueil](https://er1gon359.com/): présentation et projets en vedette
+- [Projets](https://er1gon359.com/projets): tous les projets avec technologies et études de cas
+- [Laboratoire cybersécurité](https://er1gon359.com/cybersecurite): démos interactives (hachage, JWT, injection SQL, XSS, en-têtes HTTP, TOTP)
+- [Veille technologique](https://er1gon359.com/veille): articles et sujets suivis
+- [À propos](https://er1gon359.com/a-propos): parcours et formation
+- [Contact](https://er1gon359.com/contact): formulaire et prise de rendez-vous
+
+## Optionnel
+
+- [Plan du site](https://er1gon359.com/sitemap.xml)
+- [Mentions légales](https://er1gon359.com/mentions-legales)
+- [Confidentialité](https://er1gon359.com/confidentialite)

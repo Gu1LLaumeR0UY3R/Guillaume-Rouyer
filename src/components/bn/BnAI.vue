@@ -111,7 +111,7 @@ const ranks = computed(() => {
 
 <style scoped>
 .ai{padding:96px 0;background:linear-gradient(180deg,#e4f1f1,#f4f1e6)}
-.kicker{margin:0 0 14px;color:#1d7a74;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
+.kicker{margin:0 0 14px;color:#1d7a74;font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
 h2{margin:0 0 14px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif);color:var(--deep)}
 .intro{max-width:44rem;margin:0 0 32px;color:var(--muted)}
 .tabs{display:flex;gap:10px;margin-bottom:24px}

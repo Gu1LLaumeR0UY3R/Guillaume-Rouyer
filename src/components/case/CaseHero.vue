@@ -53,7 +53,7 @@ const counter = computed(() => `${pad(index.value + 1)} / ${pad(slides.value.len
 .veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(245,241,233,.93),rgba(245,241,233,.6) 42%,rgba(245,241,233,0) 75%)}
 .content{position:relative;padding-top:72px;padding-bottom:96px}
 .content>*{max-width:34rem}
-.kicker{margin:0 0 20px;color:var(--muted);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.kicker{margin:0 0 20px;color:var(--muted);font-size:12px;letter-spacing:.24em;text-transform:uppercase}
 h1{margin:0 0 20px;font:600 clamp(56px,9vw,104px)/.95 var(--serif);letter-spacing:-.01em}
 .tagline{margin:0 0 14px;font:500 clamp(22px,3vw,30px)/1.25 var(--serif)}
 .text{margin:0 0 20px;color:var(--muted)}

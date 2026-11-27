@@ -26,7 +26,7 @@ const TECH = computed(() => G.value.tech)
 <style scoped>
 .tech{padding:96px 0;background:#ebe5d9}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:48px;align-items:start}
-.kicker{margin:0 0 16px;color:var(--muted);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
+.kicker{margin:0 0 16px;color:var(--muted);font-size:12px;letter-spacing:.24em;text-transform:uppercase}
 h2{margin:0 0 20px;font:500 clamp(28px,3.6vw,40px)/1.15 var(--serif)}
 .para{margin:0 0 14px;color:var(--muted)}
 .stack{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 0;padding:0;list-style:none}

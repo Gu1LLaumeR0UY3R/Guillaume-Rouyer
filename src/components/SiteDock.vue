@@ -11,6 +11,9 @@ const fire = (n) => () => window.dispatchEvent(new CustomEvent(n))
     <button type="button" aria-label="Rechercher (Ctrl K)" title="Rechercher (Ctrl K)" @click="fire('open-palette')()">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
     </button>
+    <button type="button" aria-label="Mes succès" title="Mes succès" aria-haspopup="dialog" @click="fire('open-succes')()">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0V4z"/><path d="M17 5h3v2a3 3 0 0 1-3 3M7 5H4v2a3 3 0 0 0 3 3"/></svg>
+    </button>
     <button type="button" aria-label="Accessibilité" title="Accessibilité" aria-haspopup="dialog" @click="fire('open-a11y')()">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4.5" r="1.6"/><path d="M5 8.5l7 1.5 7-1.5M12 10v4.5m0 0-3 5.5m3-5.5 3 5.5"/></svg>
     </button>

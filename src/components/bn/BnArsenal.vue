@@ -43,7 +43,7 @@ import { spotlight as vSpotlight } from '../../directives/spotlight.js'
 <style scoped>
 .play{padding:96px 0 88px;background:var(--paper)}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:48px;align-items:center;margin-bottom:64px}
-.kicker{margin:0 0 14px;color:#1d7a74;font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
+.kicker{margin:0 0 14px;color:#1d7a74;font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
 h2{margin:0 0 18px;font:500 clamp(30px,4vw,44px)/1.12 var(--serif);color:var(--deep)}
 .text p{margin:0 0 12px;color:var(--muted)}
 .fleet{display:flex;flex-wrap:wrap;gap:8px 18px;margin:20px 0 0;padding:0;list-style:none;font-size:13px}
@@ -68,7 +68,7 @@ h4{margin:0 0 8px;font:600 20px var(--serif);color:var(--deep)}
 .meta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding-top:12px;border-top:1px dashed #cfc29b;font-size:13px;color:var(--deep)}
 .price{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:#fff;font-weight:600}
 .recharge{display:inline-flex;align-items:center;gap:3px}
-.recharge small{margin-right:4px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.recharge small{margin-right:4px;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .recharge i{width:8px;height:8px;border-radius:50%;background:var(--ocean)}
 .turn{margin:10px 0 0;font-size:13px;font-weight:600}
 .costs{color:#a4572b}

@@ -139,14 +139,14 @@ onBeforeUnmount(() => { cancelAnimationFrame(raf); io?.disconnect(); window.remo
 <style scoped>
 .waves{padding:96px 0;background:linear-gradient(180deg,#126184,#0B3550);color:#e6f3f7}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:40px;align-items:start;margin-bottom:40px}
-.kicker{margin:0 0 14px;color:var(--sun);font-size:11px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
+.kicker{margin:0 0 14px;color:var(--sun);font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase}
 h2{margin:0 0 16px;font:italic 500 clamp(30px,4.4vw,48px)/1.1 var(--serif);color:#fff}
 .text p{margin:0 0 12px;color:#cfe6ee}
 .params{margin-top:18px;max-width:100%;overflow-x:auto;font-size:13px}
 .params summary{cursor:pointer;color:var(--sun);font-weight:600}
 .params table{width:100%;margin-top:10px;border-collapse:collapse}
 .params th,.params td{padding:8px 6px;border-bottom:1px solid rgba(255,255,255,.14);text-align:left;font-weight:500}
-.params thead th{color:#9fc3d0;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.params thead th{color:#9fc3d0;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
 .code{margin:0;overflow:hidden;border-radius:16px;background:rgba(6,30,46,.7);border:1px solid rgba(255,255,255,.12)}
 figcaption{padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.12);color:#9fc3d0;font-size:12px;letter-spacing:.06em}
 pre{margin:0;padding:16px 18px;overflow-x:auto;font:12.5px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
