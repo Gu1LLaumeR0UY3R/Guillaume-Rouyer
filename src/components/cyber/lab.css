@@ -1,16 +1,16 @@
 /* Styles communs des démos du labo cybersécurité (préfixe .lab-). Couleurs du thème du site : clair et sombre. */
 .lab{display:grid;gap:18px;text-align:left}
-.lab h3{margin:0 0 4px;font:600 18px var(--serif)}
+.lab h3{margin:0 0 4px;font:600 19px var(--serif)}
 .lab p{margin:0}
-.lab-card{display:grid;gap:12px;padding:20px;border:1px solid var(--line);border-radius:var(--radius);background:var(--card)}
+.lab-card{display:grid;gap:12px;padding:22px;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 1px 0 color-mix(in srgb,var(--fg) 4%,transparent),0 8px 24px -16px color-mix(in srgb,var(--fg) 30%,transparent)}
 .lab-row{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center}
 .lab-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px}
-.lab label{display:grid;gap:6px;font-weight:600;font-size:14px}
+.lab label{display:grid;align-content:start;gap:6px;font-weight:600;font-size:14px}
 .lab-row>label{display:flex;align-items:center;gap:8px;font-weight:500}
 .lab-input,.lab textarea,.lab select{width:100%;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--fg);font:inherit;font-weight:400}
 .lab textarea{resize:vertical;min-height:90px;font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
 .lab-input:focus,.lab textarea:focus,.lab select:focus{outline:3px solid var(--neon);outline-offset:1px}
-.lab-out{margin:0;padding:10px 12px;border-radius:10px;background:color-mix(in srgb,var(--fg) 7%,transparent);font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere;white-space:pre-wrap}
+.lab-out{margin:0;padding:10px 12px;border:1px solid var(--line);border-left:3px solid var(--green);border-radius:8px;background:color-mix(in srgb,var(--fg) 5%,var(--bg));font:13px/1.5 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;overflow-wrap:anywhere;white-space:pre-wrap}
 .lab-note{color:var(--muted);font-size:14px}
 .lab-btn{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 16px;border:1px solid var(--green);border-radius:10px;background:transparent;color:var(--fg);font:600 14px var(--font);cursor:pointer}
 .lab-btn:hover{background:color-mix(in srgb,var(--green) 12%,transparent)}
