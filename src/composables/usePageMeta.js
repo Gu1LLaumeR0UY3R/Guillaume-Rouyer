@@ -1,7 +1,7 @@
 // Titre et balises <head> d'une page (description, Open Graph, canonical, noindex). Tout est remis comme avant quand la page se ferme.
 import { onBeforeUnmount, toValue, watchEffect } from 'vue'
 
-export const SITE = 'https://er1gon359.com'
+export const SITE = 'https://guillaume-rouyer.pages.dev'
 
 export function usePageMeta(source) {
   const saved = new Map() // élément -> { attr, old (null = créé ici), mine (valeur posée) }

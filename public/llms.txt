@@ -4,15 +4,15 @@
 
 ## Pages principales
 
-- [Accueil](https://er1gon359.com/): présentation et projets en vedette
-- [Projets](https://er1gon359.com/projets): tous les projets avec technologies et études de cas
-- [Laboratoire cybersécurité](https://er1gon359.com/cybersecurite): démos interactives (hachage, JWT, injection SQL, XSS, en-têtes HTTP, TOTP)
-- [Veille technologique](https://er1gon359.com/veille): articles et sujets suivis
-- [À propos](https://er1gon359.com/a-propos): parcours et formation
-- [Contact](https://er1gon359.com/contact): formulaire et prise de rendez-vous
+- [Accueil](https://guillaume-rouyer.pages.dev/): présentation et projets en vedette
+- [Projets](https://guillaume-rouyer.pages.dev/projets): tous les projets avec technologies et études de cas
+- [Laboratoire cybersécurité](https://guillaume-rouyer.pages.dev/cybersecurite): démos interactives (hachage, JWT, injection SQL, XSS, en-têtes HTTP, TOTP)
+- [Veille technologique](https://guillaume-rouyer.pages.dev/veille): articles et sujets suivis
+- [À propos](https://guillaume-rouyer.pages.dev/a-propos): parcours et formation
+- [Contact](https://guillaume-rouyer.pages.dev/contact): formulaire et prise de rendez-vous
 
 ## Optionnel
 
-- [Plan du site](https://er1gon359.com/sitemap.xml)
-- [Mentions légales](https://er1gon359.com/mentions-legales)
-- [Confidentialité](https://er1gon359.com/confidentialite)
+- [Plan du site](https://guillaume-rouyer.pages.dev/sitemap.xml)
+- [Mentions légales](https://guillaume-rouyer.pages.dev/mentions-legales)
+- [Confidentialité](https://guillaume-rouyer.pages.dev/confidentialite)

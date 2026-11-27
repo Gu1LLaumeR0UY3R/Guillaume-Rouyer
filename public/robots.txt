@@ -2,5 +2,5 @@ User-agent: *
 Allow: /
 Disallow: /admin
 Disallow: /api/
-Sitemap: https://er1gon359.com/sitemap.xml
-Sitemap: https://er1gon359.com/sitemap-veille.xml
+Sitemap: https://guillaume-rouyer.pages.dev/sitemap.xml
+Sitemap: https://guillaume-rouyer.pages.dev/sitemap-veille.xml

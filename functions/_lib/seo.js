@@ -1,6 +1,6 @@
 // Balises de référencement injectées dans le HTML de l'application avant de l'envoyer : les robots et les aperçus de liens
 // (réseaux sociaux, messageries) voient le bon titre, la bonne description et la bonne image sans exécuter de JavaScript.
-export const SITE = 'https://er1gon359.com'
+export const SITE = 'https://guillaume-rouyer.pages.dev'
 export const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')

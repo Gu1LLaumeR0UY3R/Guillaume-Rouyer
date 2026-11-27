@@ -15,7 +15,7 @@ const routes = [
   { path: '/projets/bataille-navale', name: 'bataille-navale', component: () => import('../views/BatailleNavaleView.vue'), meta: { desc: "Bataille Navale : jeu jouable en ligne avec une IA à plusieurs niveaux, étude de cas technique du projet.", title: 'Bataille Navale' } },
   { path: '/projets/goodnight', name: 'goodnight', component: () => import('../views/ProjectGate.vue'), meta: { desc: "Goodnight : plateforme de location immobilière en PHP MVC, trois rôles, tableaux de bord KPI et sécurité PDO/XSS.", title: 'Goodnight', project: 'goodnight', view: () => import('../views/GoodnightView.vue') } },
   { path: '/projets/:slug', name: 'project', component: () => import('../views/ProjectView.vue'), meta: { title: 'Projet' } },
-  { path: '/mentions-legales', name: 'legal', component: () => import('../views/LegalView.vue'), meta: { desc: "Mentions légales du site er1gon359.com : éditeur, hébergeur et propriété intellectuelle.", title: 'Mentions légales' } },
+  { path: '/mentions-legales', name: 'legal', component: () => import('../views/LegalView.vue'), meta: { desc: "Mentions légales du site guillaume-rouyer.pages.dev : éditeur, hébergeur et propriété intellectuelle.", title: 'Mentions légales' } },
   { path: '/maintenant', name: 'now', component: () => import('../views/InfoPageView.vue'), meta: { title: 'Maintenant', block: 'now', desc: 'Ce sur quoi je travaille et ce que j\'apprends en ce moment.' } },
   { path: '/outils', name: 'tools', component: () => import('../views/InfoPageView.vue'), meta: { title: 'Mes outils', block: 'tools', desc: 'Les langages, frameworks et outils que j\'utilise au quotidien.' } },
   { path: '/changelog', name: 'changelog', component: () => import('../views/InfoPageView.vue'), meta: { title: 'Changelog', block: 'changelog', desc: 'Le journal des évolutions de mon portfolio et de mes projets.' } },
@@ -83,9 +83,9 @@ router.afterEach((to) => {
     // canonique et description par défaut de chaque page ; les pages dynamiques (article, projet) les précisent ensuite
     const set = (sel, make, attr, v) => { let e = document.head.querySelector(sel); if (!e) { e = make(); document.head.append(e) } e.setAttribute(attr, v) }
     const mk = (tag, a, b) => () => { const e = document.createElement(tag); e.setAttribute(a, b); return e }
-    const url = 'https://er1gon359.com' + (to.path === '/' ? '' : to.path.replace(/\/$/, ''))
-    set('link[rel="canonical"]', () => { const l = document.createElement('link'); l.rel = 'canonical'; return l }, 'href', url || 'https://er1gon359.com/')
-    set('meta[property="og:url"]', mk('meta', 'property', 'og:url'), 'content', url || 'https://er1gon359.com/')
+    const url = 'https://guillaume-rouyer.pages.dev' + (to.path === '/' ? '' : to.path.replace(/\/$/, ''))
+    set('link[rel="canonical"]', () => { const l = document.createElement('link'); l.rel = 'canonical'; return l }, 'href', url || 'https://guillaume-rouyer.pages.dev/')
+    set('meta[property="og:url"]', mk('meta', 'property', 'og:url'), 'content', url || 'https://guillaume-rouyer.pages.dev/')
     if (to.meta.desc) {
       set('meta[name="description"]', mk('meta', 'name', 'description'), 'content', to.meta.desc)
       set('meta[property="og:description"]', mk('meta', 'property', 'og:description'), 'content', to.meta.desc)
